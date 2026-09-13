@@ -676,7 +676,7 @@
     <script>
         // Data State
         let userData = {
-            signupBonus: 1500,
+            signupBonus: 150,
             adEarning: 0,
             refEarning: 0,
             adsWatchedToday: 0,
@@ -896,7 +896,7 @@
                     <b>ফি মেথড:</b> ${req.gateway} | <b>TrxID:</b> ${req.trx}<br>
                     <div class="action-btns">
                         <button class="btn-approve" onclick="approveRequest(${req.id}, ${req.amount})">Approve</button>
-                        <button class="btn-deny" onclick="denyRequest(${req.id})">Denied</button>
+<button class="btn-deny" onclick="denyRequest(${req.id})">Denied</button>
                     </div>
                 `;
                 container.appendChild(div);
@@ -904,33 +904,46 @@
         }
 
         function approveRequest(id, amount) {
-            adminStats.pendingReqs = adminStats.pendingReqs.filter(r => r.id !== id);
-            adminStats.totalPaid += parseFloat(amount);
-            
-            // Notify User
-            let statusBanner = document.getElementById('withdraw-status-banner');
-            statusBanner.style.display = 'block';
-            statusBanner.style.background = '#e8f5e9';
-            statusBanner.style.color = '#2e7d32';
-            statusBanner.innerText = "আপনার প্রস্তাবিত পেমেন্ট অনুরোধটি অনুমোদন করা হয়েছে (Approved)।";
+    adminStats.pendingReqs = adminStats.pendingReqs.filter(r => r.id !== id);
+    adminStats.totalPaid += parseFloat(amount);
+    
+    // Notify User
+    let statusBanner = document.getElementById('withdraw-status-banner');
+    if (statusBanner) {
+        statusBanner.style.display = 'block';
+        statusBanner.style.background = '#e8f5e9';
+        statusBanner.style.color = '#2e7d32';
+        statusBanner.innerText = "আপনার প্রস্তাবিত পেমেন্ট অনুরোধটি অনুমোদন করা হয়েছে (Approved)।";
+    }
 
-            renderAdminRequests();
-            updateUI();
-        }
+    renderAdminRequests();
+    updateUI();
+}
 
-        function denyRequest(id) {
-            adminStats.pendingReqs = adminStats.pendingReqs.filter(r => r.id !== id);
-            
-            // Notify User
-            let statusBanner = document.getElementById('withdraw-status-banner');
-            statusBanner.style.display = 'block';
-            statusBanner.style.background = '#ffebee';
-            statusBanner.style.color = '#c62828';
-            statusBanner.innerText = "আপনার অনুরোধটির অনুমোদন ব্যর্থ হয়েছে (Denied)।";
+function denyRequest(id) {
+    let req = adminStats.pendingReqs.find(r => r.id === id);
+    
+    if (req) {
+        // ডিনাই (Denied) করলে টাকা পুনরায় ইউজারের ওয়ালেটে (Ad Earning) ফেরত যাবে
+        userData.adEarning += parseFloat(req.amount);
+    }
 
-            renderAdminRequests();
-            updateUI();
-        }
+    adminStats.pendingReqs = adminStats.pendingReqs.filter(r => r.id !== id);
+    
+    // Notify User
+    let statusBanner = document.getElementById('withdraw-status-banner');
+    if (statusBanner) {
+        statusBanner.style.display = 'block';
+        statusBanner.style.background = '#ffebee';
+        statusBanner.style.color = '#c62828';
+        statusBanner.innerText = "আপনার অনুরোধটির অনুমোদন ব্যর্থ হয়েছে (Denied)। টাকা আপনার অ্যাকাউন্টে ফেরত দেওয়া হয়েছে।";
+    }
+
+    renderAdminRequests();
+    updateUI();
+}
+
+        
 
         function removeUser(username) {
             if(confirm(`আপনি কি সত্যিই ${username} ইউজারকে রিমুভ করতে চান?`)) {
