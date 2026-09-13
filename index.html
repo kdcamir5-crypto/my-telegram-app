@@ -537,12 +537,126 @@
         }
 
         function openTelegramLink(url) {
-            if(tg && tg.openTelegramLink) {
-                tg.openTelegramLink(url);
-            } else {
-                window.open(url, '_blank');
+        if(tg && tg.openTelegramLink) {
+            tg.openTelegramLink(url);
+        } else {
+            window.open(url, '_blank');
+        }
+    }
+
+    // --- DEMO AD SYSTEM (20 UNIQUE ADS) ---
+    const TOTAL_DAILY_ADS = 20;
+    const REWARD_PER_AD = 20;
+    const AD_DURATION = 10; // 10 Seconds
+
+    const demoAdsList = [
+        { title: "📢 ডেমো এড ১: অনলাইন ইনকাম কোর্স", body: "আজই ঘরে বসে আয় করার নিয়মগুলো শিখে নিন।" },
+        { title: "📱 ডেমো এড ২: সেরা স্মার্টফোন অফার", body: "সর্বোচ্চ ৫০% ছাড়ে নতুন স্মার্টফোন কিনুন।" },
+        { title: "🎮 ডেমো এড ৩: গেম খেলুন ও পুরস্কার জিতুন", body: "প্রতিদিনের ফ্রি টুর্নামেন্টে অংশ নিন।" },
+        { title: "🛍️ ডেমো এড ৪: অনলাইন শপিং ক্যাশব্যাক", body: "প্রতি কেনাকাটায় ১০% পর্যন্ত ক্যাশব্যাক অফার।" },
+        { title: "✈️ ডেমো এড ৫: ট্রাভেল ও হোটেল ডিসকাউন্ট", body: "কম খরচে আপনার পছন্দের স্থানে ঘুরে আসুন।" },
+        { title: "💻 ডেমো এড ৬: ফ্রিল্যান্সিং গাইডলাইন", body: "দক্ষতা তৈরি করে আন্তর্জাতিক মার্কেটে কাজ করুন।" },
+        { title: "🍔 ডেমো এড ৭: ফুড ডেলিভারি প্রোমো", body: "প্রথম ৩টি অর্ডারে ৫০% ছাড় পান।" },
+        { title: "🚀 ডেমো এড ৮: দ্রুতগতির ইন্টারনেট প্যাকেজ", body: "সীমহীন ডাটা অফার একদম সাশ্রয়ী মূল্যে।" },
+        { title: "📖 ডেমো এড ৯: ই-লার্নিং স্কলারশিপ", body: "ফ্রি কোর্সে এনরোল করুন এবং সার্টিফিকেট পান।" },
+        { title: "💳 ডেমো এড ১০: বিশেষ ক্রেডিট কার্ড অফার", body: "জিরো এনুয়াল ফি ও আকর্ষনীয় সুবিধা।" },
+        { title: "🎧 ডেমো এড ১১: মিউজিক প্রিমিয়াম সার্ভিস", body: "বিজ্ঞাপন ছাড়া গান শুনুন একদম নিখরচায়।" },
+        { title: "🚗 ডেমো এড ১২: কার ও বাইক বুকিং", body: "সহজে রাইড শেয়ারিং অ্যাপ ব্যবহার করুন।" },
+        { title: "🏥 ডেমো এড ১৩: অনলাইন ডক্টর কনসালটেশন", body: "ঘরে বসেই অভিজ্ঞ ডাক্তারের পরামর্শ নিন।" },
+        { title: "🔒 ডেমো এড ১৪: সিকিউরিটি ও ভিপিএন অ্যাপ", body: "আপনার ইন্টারনেট ব্যবহার রাখুন ১০০% নিরাপদ।" },
+        { title: "🏠 ডেমো এড ১৫: প্রপার্টি ও বাসা ভাড়া", body: "শহরের সেরা দামে ফ্ল্যাট খুঁজে নিন।" },
+        { title: "👟 ডেমো এড ১৬: ফ্যাশন ও লাইফস্টাইল", body: "নতুন কালেকশনের জুতো ও পোশাক ব্র্যান্ডের অফার।" },
+        { title: "⚡ ডেমো এড ১৭: রিচার্জ ও বিল পেমেন্ট", body: "ক্যাশব্যাক সহ মোবাইল রিচার্জ ও বিদ্যুৎ বিল দিন।" },
+        { title: "📊 ডেমো এড ১৮: ক্রিপ্টো ও ট্রেডিং গাইড", body: "মার্কেট ট্রেন্ড শিখুন ও নিরাপদে ইনভেস্ট করুন।" },
+        { title: "🎬 ডেমো এড ১৯: ওটিটি প্ল্যাটফর্ম সাবস্ক্রিপশন", body: "এইচডি কোয়ালিটিতে সিনেমা ও ওয়েব সিরিজ দেখুন।" },
+        { title: "🎁 ডেমো এড ২০: ডেইলি লাকি ড্র contest", body: "অংশগ্রহণ করে জিতে নিন মেগা প্রাইস!" }
+    ];
+
+    function getTodayKey() {
+        const today = new Date();
+        return `task_date_${today.getFullYear()}_${today.getMonth() + 1}_${today.getDate()}`;
+    }
+
+    function initDailyTaskSystem() {
+        const todayKey = getTodayKey();
+        const savedDate = localStorage.getItem("last_task_date");
+        
+        if (savedDate !== todayKey) {
+            localStorage.setItem("last_task_date", todayKey);
+            localStorage.setItem("remaining_ads", TOTAL_DAILY_ADS);
+        }
+
+        updateTaskUI();
+    }
+
+    function updateTaskUI() {
+        const remainingAds = parseInt(localStorage.getItem("remaining_ads") || "20");
+        const countDisplay = document.getElementById("daily-ad-count");
+        const adBtn = document.getElementById("daily-ad-btn");
+        const statusBox = document.getElementById("task-status-box");
+
+        if (remainingAds > 0) {
+            if (countDisplay) countDisplay.innerText = remainingAds;
+            if (adBtn) {
+                adBtn.disabled = false;
+                adBtn.innerText = "▶ বিজ্ঞাপন দেখুন";
+                adBtn.style.backgroundColor = "#177a6d";
+            }
+        } else {
+            if (statusBox) statusBox.innerHTML = "<span style='color: #d9534f;'>আজকের মতো আপনার লিমিট শেষ, কালকে আবার চেষ্টা করুন।</span>";
+            if (adBtn) {
+                adBtn.disabled = true;
+                adBtn.innerText = "আজকের টাস্ক সম্পন্ন";
+                adBtn.style.backgroundColor = "#cccccc";
             }
         }
-    </script>
+    }
+
+    function startDemoAd() {
+        let remainingAds = parseInt(localStorage.getItem("remaining_ads") || "20");
+        
+        if (remainingAds <= 0) {
+            alert("আজকের মতো আপনার লিমিট শেষ, কালকে আবার চেষ্টা করুন।");
+            return;
+        }
+
+        const adIndex = TOTAL_DAILY_ADS - remainingAds;
+        const currentAd = demoAdsList[adIndex] || demoAdsList[0];
+
+        const modal = document.getElementById("ad-modal");
+        const adTitle = document.getElementById("demo-ad-title");
+        const adBody = document.getElementById("demo-ad-body");
+        const timerDisplay = document.getElementById("demo-timer");
+
+        adTitle.innerText = currentAd.title;
+        adBody.innerText = currentAd.body;
+        modal.style.display = "flex";
+
+        let timeLeft = AD_DURATION;
+        timerDisplay.innerText = timeLeft;
+
+        const interval = setInterval(() => {
+            timeLeft--;
+            timerDisplay.innerText = timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(interval);
+                modal.style.display = "none";
+                
+                remainingAds--;
+                localStorage.setItem("remaining_ads", remainingAds);
+
+                let currentBalance = parseFloat(localStorage.getItem("user_balance") || "0");
+                currentBalance += REWARD_PER_AD;
+                localStorage.setItem("user_balance", currentBalance);
+
+                alert(`অভিনন্দন! আপনি ডেমো এড দেখে ৳${REWARD_PER_AD} পেয়েছেন।`);
+                updateTaskUI();
+            }
+        }, 1000);
+    }
+
+    document.addEventListener("DOMContentLoaded", initDailyTaskSystem);
+</script>
 </body>
 </html>
