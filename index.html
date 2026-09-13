@@ -91,13 +91,161 @@
             display: block;
         }
 
-        /* Home Banner */
+        /* Banner */
         .home-banner {
             width: 100%;
             border-radius: 12px;
             margin-bottom: 15px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.08);
             display: block;
+        }
+
+        /* Home Middle 4 Feature Grid Icons */
+        .middle-feature-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .feature-box {
+            background: #ffffff;
+            padding: 12px 6px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .feature-box:active {
+            transform: scale(0.95);
+        }
+
+        .feature-icon-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
+
+        .feature-box span {
+            font-size: 11px;
+            font-weight: bold;
+            color: #333;
+            line-height: 1.2;
+        }
+
+        /* Sub-feature views */
+        .sub-feature-view {
+            display: none;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .sub-feature-view.active {
+            display: block;
+        }
+
+        /* Earning Overview Cards Grid */
+        .earning-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .earning-card {
+            background: #ffffff;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        .earning-card h5 {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .earning-card p {
+            font-size: 16px;
+            font-weight: bold;
+            color: #177a6d;
+        }
+
+        /* Ad Card */
+        .ad-card {
+            background: linear-gradient(135deg, #177a6d, #11584e);
+            color: white;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 15px;
+            box-shadow: 0 6px 15px rgba(23, 122, 109, 0.2);
+        }
+
+        .btn-watch-ad {
+            background: #20b2aa;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        /* Ad Player Simulation Screen */
+        .ad-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .ad-box {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            width: 90%;
+            max-width: 350px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .timer-circle {
+            font-size: 28px;
+            font-weight: bold;
+            color: #177a6d;
+            margin: 15px 0;
         }
 
         /* Telegram Info Card */
@@ -123,33 +271,17 @@
             margin-top: 8px;
         }
 
-        /* Ad Card */
-        .ad-card {
-            background: linear-gradient(135deg, #177a6d, #11584e);
-            color: white;
-            border-radius: 14px;
-            padding: 25px 20px;
-            text-align: center;
-            margin-bottom: 15px;
-            box-shadow: 0 6px 15px rgba(23, 122, 109, 0.2);
-        }
-
-        .btn-watch-ad {
-            background: #20b2aa;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
+        /* Notice Card Styling */
+        .notice-card {
+            background: #ffffff;
+            padding: 18px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
             margin-top: 15px;
-            transition: transform 0.2s, background 0.2s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        }
-
-        .btn-watch-ad:active {
-            transform: scale(0.97);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            line-height: 1.8;
+            font-size: 14px;
+            color: #333;
         }
 
         /* Bottom Navigation Bar */
@@ -190,7 +322,7 @@
             margin-bottom: 3px;
         }
 
-        /* Utility Form Inputs */
+        /* Form Inputs */
         .form-group {
             margin-bottom: 15px;
         }
@@ -244,17 +376,94 @@
 
         <!-- 1. HOME TAB -->
         <div id="home" class="tab-content active">
+            <!-- Top Banner -->
             <img class="home-banner" src="https://i.ibb.co/vvM61Pqt/Gemini-Generated-Image-81bv8q81bv8q81bv.jpg" alt="Banner">
-            
-            <!-- Ad Watching Box -->
-            <h4 style="margin-bottom: 10px; color: #333;">📺 বিজ্ঞাপন দেখুন</h4>
-            <div class="ad-card">
-                <p style="font-size: 14px; opacity: 0.9;">প্রতি বিজ্ঞাপনে নিশ্চিত আয়</p>
-                <h2 style="font-size: 32px; margin: 8px 0; font-weight: bold;">৳ <span id="ad-reward-display">15.00</span></h2>
-                <button class="btn-watch-ad" onclick="watchAd()">▶ বিজ্ঞাপন শুরু করুন</button>
+
+            <!-- Middle Section: 4 Feature Icons (Daily Task, Earning, Referral Earning, Bonus) -->
+            <div class="middle-feature-grid">
+                <div class="feature-box" onclick="showSubFeature('daily-task-feature')">
+                    <div class="feature-icon-circle" style="background: #e8f5e9; color: #2e7d32;">📺</div>
+                    <span>ডেইলি টাস্ক</span>
+                </div>
+                <div class="feature-box" onclick="showSubFeature('earning-feature')">
+                    <div class="feature-icon-circle" style="background: #e3f2fd; color: #1565c0;">📊</div>
+                    <span>আর্নিং</span>
+                </div>
+                <div class="feature-box" onclick="showSubFeature('referral-feature')">
+                    <div class="feature-icon-circle" style="background: #fff3e0; color: #ef6c00;">👥</div>
+                    <span>রেফার আর্নিং</span>
+                </div>
+                <a href="https://t.me/Kdcariyan" target="_blank" class="feature-box">
+                    <div class="feature-icon-circle" style="background: #f3e5f5; color: #7b1fa2;">🎁</div>
+                    <span>Admin কে মেসেজ করুন</span>
+                </a>
             </div>
 
-            <!-- Telegram Channel Notice -->
+            <!-- Sub Feature 1: Daily Task -->
+            <div id="daily-task-feature" class="sub-feature-view active">
+                <h4 style="margin-bottom: 10px; color: #333;">📺 ডেইলি টাস্ক (বিজ্ঞাপন দেখুন)</h4>
+                <div class="ad-card">
+                    <p style="font-size: 14px; opacity: 0.9;">প্রতি ১০ সেকেন্ড বিজ্ঞাপনে নিশ্চিত আয়</p>
+                    <h2 style="font-size: 32px; margin: 6px 0; font-weight: bold;">৳ 20.00</h2>
+                    <button id="start-ad-btn" class="btn-watch-ad" onclick="startAdTimer()">▶ বিজ্ঞাপন শুরু করুন</button>
+                </div>
+            </div>
+
+            <!-- Sub Feature 2: Earning Detailed Record -->
+            <div id="earning-feature" class="sub-feature-view">
+                <h4 style="margin-bottom: 12px; color: #177a6d;">📊 আয় বিবরণী (Income Record)</h4>
+                <div class="earning-grid">
+                    <div class="earning-card">
+                        <h5>🎁 ওয়েলকাম বোনাস</h5>
+                        <p>৳ 150.00</p>
+                    </div>
+                    <div class="earning-card">
+                        <h5>📺 বিজ্ঞাপন আয়</h5>
+                        <p>৳ <span id="sub-ad-earning">0.00</span></p>
+                    </div>
+                    <div class="earning-card">
+                        <h5>👥 রেফার আয়</h5>
+                        <p>৳ <span id="sub-ref-earning">0.00</span></p>
+                    </div>
+                    <div class="earning-card">
+                        <h5>📊 বাকি টাস্ক</h5>
+                        <p><span id="home-remaining-tasks">20</span>/20</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sub Feature 3: Referral Earning & Notice -->
+            <div id="referral-feature" class="sub-feature-view">
+                <h4 style="margin-bottom: 10px; color: #177a6d;">👥 রেফারেল আর্নিং</h4>
+                <div style="background: #f9f9f9; padding: 12px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px;">
+                    <label style="font-size: 12px; font-weight: bold; color: #555; display: block; margin-bottom: 6px;">আপনার রেফারেল লিংক:</label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="text" id="homeRefLink" value="https://t.me/CommunityTask_bot?start=12345" readonly class="form-control" style="background: #fff;">
+                        <button onclick="copyReferLink('homeRefLink')" style="background: #177a6d; color: white; border: none; padding: 10px 14px; border-radius: 8px; font-size: 14px; cursor: pointer;">📋</button>
+                    </div>
+                </div>
+
+                <!-- Notice Inside Referral Feature -->
+                <div class="notice-card">
+                    <h3 style="margin: 0 0 10px 0; color: #177a6d; font-size: 16px; border-bottom: 2px solid #177a6d; padding-bottom: 6px;">
+                        📢 অফিশিয়াল নোটিশ
+                    </h3>
+                    <p style="margin: 0 0 6px 0; font-weight: bold; font-size: 14px; color: #2c3e50;">🪙 Communitytask</p>
+                    <p style="margin: 0 0 4px 0;">✨ আমাদের প্ল্যাটফর্মে ইনকাম করা এখন আগের চেয়ে আরও সহজ ও বিশ্বাসযোগ্য।</p>
+                    <p style="margin: 0 0 4px 0;">🚀 ঘরে বসেই অল্প সময় দিয়ে আয় করার দারুণ সুযোগ।</p>
+                    <p style="margin: 0 0 4px 0;">👉 দ্রুত পেমেন্ট সিস্টেম।</p>
+                    <p style="margin: 0 0 8px 0;">🌟 নতুনদের জন্য সহজ এবং সবার জন্য লাভজনক একটি প্ল্যাটফর্ম।</p>
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 8px; border-left: 4px solid #177a6d; margin: 8px 0;">
+                        <p style="margin: 0 0 4px 0; font-weight: bold; color: #1565c0;">💸 প্রতিটি রেফারে পাবেন 180টাকা।</p>
+                        <p style="margin: 0 0 4px 0; font-weight: bold; color: #2e7d32;">📺 প্রতিটি বিজ্ঞাপন দেখলে পাবেন 20 টাকা।</p>
+                        <p style="margin: 0 0 4px 0; font-weight: bold; color: #d97706;">🎁 একাউন্ট খুললেই সাথে সাথে 150 টাকা বোনাস।</p>
+                        <p style="margin: 0; font-weight: bold; color: #c62828;">🏦 1000 টাকা হলেই উত্তোলন করতে পারবেন বিকাশ ও নগদের মাধ্যমে। (সম্পূর্ণ অটোমেশন সিস্টেম)</p>
+                    </div>
+                    <p style="margin: 8px 0 0 0; font-weight: bold; color: #177a6d; text-align: center;">👉 আয় শুরু করুন আজ থেকেই 💚</p>
+                </div>
+            </div>
+
+            <!-- Telegram Channel Join Banner -->
             <div class="info-card">
                 <h4 style="color: #0088cc; margin-bottom: 8px;">📢 আমাদের টেলিগ্রাম চ্যানেলে জয়েন করুন</h4>
                 <p style="font-size: 13px; color: #555;">সব ধরনের আপডেট, পেমেন্ট প্রুফ ও নতুন কাজের খবর সবার আগে পেতে আমাদের টেলিগ্রাম চ্যানেলে যুক্ত থাকুন।</p>
@@ -262,79 +471,68 @@
                     Join Telegram Channel
                 </a>
             </div>
-
-            <!-- Official Notice (Home Bottom) -->
-            <div style="background: #ffffff; padding: 18px; border-radius: 12px; border: 1px solid #e0e0e0; margin-top: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); line-height: 1.8; font-size: 14px; color: #333;">
-                <h3 style="margin: 0 0 10px 0; color: #177a6d; font-size: 17px; border-bottom: 2px solid #177a6d; padding-bottom: 6px;">
-                    📢 অফিশিয়াল নোটিশ
-                </h3>
-                
-                <p style="margin: 0 0 8px 0; font-weight: bold; font-size: 15px; color: #2c3e50;">
-                    🪙 Communitytask
-                </p>
-                
-                <p style="margin: 0 0 5px 0;">✨ আমাদের প্ল্যাটফর্মে ইনকাম করা এখন আগের চেয়ে আরও সহজ ও বিশ্বাসযোগ্য।</p>
-                <p style="margin: 0 0 5px 0;">🚀 ঘরে বসেই অল্প সময় দিয়ে আয় করার দারুণ সুযোগ।</p>
-                <p style="margin: 0 0 5px 0;">👉 দ্রুত পেমেন্ট সিস্টেম।</p>
-                <p style="margin: 0 0 10px 0;">🌟 নতুনদের জন্য সহজ এবং সবার জন্য লাভজনক একটি প্ল্যাটফর্ম।</p>
-
-                <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; border-left: 4px solid #177a6d; margin: 10px 0;">
-                    <p style="margin: 0 0 5px 0; font-weight: bold; color: #1565c0;">💸 প্রতিটি রেফারে পাবেন 180টাকা।</p>
-                    <p style="margin: 0 0 5px 0; font-weight: bold; color: #2e7d32;">📺 প্রতিটি বিজ্ঞাপন দেখলে পাবেন 15 টাকা।</p>
-                    <p style="margin: 0 0 5px 0; font-weight: bold; color: #d97706;">🎁 একাউন্ট খুললেই সাথে সাথে 150 টাকা বোনাস।</p>
-                    <p style="margin: 0; font-weight: bold; color: #c62828;">🏦 1000 টাকা হলেই উত্তোলন করতে পারবেন বিকাশ ও নগদের মাধ্যমে। (সম্পূর্ণ অটোমেশন সিস্টেম)</p>
-                </div>
-
-                <p style="margin: 10px 0 0 0; font-weight: bold; color: #177a6d; text-align: center;">
-                    👉 আয় শুরু করুন আজ থেকেই 💚
-                </p>
-            </div>
         </div>
 
-        <!-- 2. EARNING TAB -->
+        <!-- 2. EARNING TAB (Bottom Navigation) -->
         <div id="earning" class="tab-content">
             <h3 style="color: #177a6d; margin-bottom: 15px;">💰 আয় করুন</h3>
 
-            <!-- Referral Link Card -->
-            <div style="background: #ffffff; padding: 15px; border-radius: 12px; border: 1px solid #e0e0e0; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <div style="background: linear-gradient(135deg, #177a6d, #0088cc); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 15px;">
+                <p style="font-size: 13px; opacity: 0.9;">সর্বমোট আয়</p>
+                <h2 style="font-size: 30px; margin-top: 5px; font-weight: bold;">৳ <span id="total-earning-amount">150.00</span></h2>
+            </div>
+
+            <div style="background: #ffffff; padding: 15px; border-radius: 12px; border: 1px solid #e0e0e0; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                 <label style="font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 8px;">আপনার রেফারেল লিংক:</label>
                 <div style="display: flex; gap: 8px; align-items: center;">
-                    <input type="text" id="refLink" value="https://t.me/CommunityTask_bot?start=12345" readonly class="form-control" style="background: #f9f9f9;">
-                    <button onclick="copyReferLink()" style="background: #177a6d; color: white; border: none; padding: 12px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; shrink: 0;">
+                    <input type="text" id="tabRefLink" value="https://t.me/CommunityTask_bot?start=12345" readonly class="form-control" style="background: #f9f9f9;">
+                    <button onclick="copyReferLink('tabRefLink')" style="background: #177a6d; color: white; border: none; padding: 12px 16px; border-radius: 8px; font-size: 14px; cursor: pointer;">
                         📋
                     </button>
                 </div>
             </div>
 
-            <!-- Total Balance Display -->
-            <div style="background: linear-gradient(135deg, #177a6d, #0088cc); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px;">
-                <p style="font-size: 13px; opacity: 0.9;">সর্বমোট আয়</p>
-                <h2 style="font-size: 30px; margin-top: 5px; font-weight: bold;">৳ <span id="total-earning-amount">150.00</span></h2>
-            </div>
-
-            <!-- Income Breakdowns -->
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
-                <div style="background: #ffffff; padding: 15px; border-radius: 10px; border: 1px solid #e0e0e0; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
+                <div style="background: #ffffff; padding: 12px 15px; border-radius: 10px; border: 1px solid #e0e0e0; display: flex; align-items: center; justify-content: space-between;">
                     <div style="display: flex; align-items: center; gap: 12px;">
-                        <div style="font-size: 22px; background: #e8f5e9; padding: 8px; border-radius: 50%;">📺</div>
+                        <div style="font-size: 20px; background: #e8f5e9; padding: 8px; border-radius: 50%;">📺</div>
                         <div>
-                            <h4 style="margin: 0; font-size: 14px; color: #333;">বিজ্ঞাপন থেকে আয়</h4>
+                            <h4 style="margin: 0; font-size: 13px; color: #333;">বিজ্ঞাপন থেকে আয়</h4>
                             <p style="margin: 0; font-size: 11px; color: #777;">টাস্ক সম্পন্ন</p>
                         </div>
                     </div>
                     <div style="font-weight: bold; color: #2e7d32; font-size: 15px;">৳ <span id="ad-earning-amount">0.00</span></div>
                 </div>
 
-                <div style="background: #ffffff; padding: 15px; border-radius: 10px; border: 1px solid #e0e0e0; display: flex; align-items: center; justify-content: space-between;">
+                <div style="background: #ffffff; padding: 12px 15px; border-radius: 10px; border: 1px solid #e0e0e0; display: flex; align-items: center; justify-content: space-between;">
                     <div style="display: flex; align-items: center; gap: 12px;">
-                        <div style="font-size: 22px; background: #e3f2fd; padding: 8px; border-radius: 50%;">👥</div>
+                        <div style="font-size: 20px; background: #e3f2fd; padding: 8px; border-radius: 50%;">👥</div>
                         <div>
-                            <h4 style="margin: 0; font-size: 14px; color: #333;">রেফার থেকে আয়</h4>
+                            <h4 style="margin: 0; font-size: 13px; color: #333;">রেফার থেকে আয়</h4>
                             <p style="margin: 0; font-size: 11px; color: #777;">ইনভাইট বোনাস</p>
                         </div>
                     </div>
                     <div style="font-weight: bold; color: #1565c0; font-size: 15px;">৳ <span id="ref-earning-amount">0.00</span></div>
                 </div>
+            </div>
+
+            <!-- Official Notice inside Earning Tab -->
+            <div class="notice-card">
+                <h3 style="margin: 0 0 10px 0; color: #177a6d; font-size: 16px; border-bottom: 2px solid #177a6d; padding-bottom: 6px;">
+                    📢 অফিশিয়াল নোটিশ
+                </h3>
+                <p style="margin: 0 0 6px 0; font-weight: bold; font-size: 14px; color: #2c3e50;">🪙 Communitytask</p>
+                <p style="margin: 0 0 4px 0;">✨ আমাদের প্ল্যাটফর্মে ইনকাম করা এখন আগের চেয়ে আরও সহজ ও বিশ্বাসযোগ্য।</p>
+                <p style="margin: 0 0 4px 0;">🚀 ঘরে বসেই অল্প সময় দিয়ে আয় করার দারুণ সুযোগ।</p>
+                <p style="margin: 0 0 4px 0;">👉 দ্রুত পেমেন্ট সিস্টেম।</p>
+                <p style="margin: 0 0 8px 0;">🌟 নতুনদের জন্য সহজ এবং সবার জন্য লাভজনক একটি প্ল্যাটফর্ম।</p>
+                <div style="background: #f8f9fa; padding: 10px; border-radius: 8px; border-left: 4px solid #177a6d; margin: 8px 0;">
+                    <p style="margin: 0 0 4px 0; font-weight: bold; color: #1565c0;">💸 প্রতিটি রেফারে পাবেন 180টাকা।</p>
+                    <p style="margin: 0 0 4px 0; font-weight: bold; color: #2e7d32;">📺 প্রতিটি বিজ্ঞাপন দেখলে পাবেন 20 টাকা।</p>
+                    <p style="margin: 0 0 4px 0; font-weight: bold; color: #d97706;">🎁 একাউন্ট খুললেই সাথে সাথে 150 টাকা বোনাস।</p>
+                    <p style="margin: 0; font-weight: bold; color: #c62828;">🏦 1000 টাকা হলেই উত্তোলন করতে পারবেন বিকাশ ও নগদের মাধ্যমে। (সম্পূর্ণ অটোমেশন সিস্টেম)</p>
+                </div>
+                <p style="margin: 8px 0 0 0; font-weight: bold; color: #177a6d; text-align: center;">👉 আয় শুরু করুন আজ থেকেই 💚</p>
             </div>
         </div>
 
@@ -384,7 +582,17 @@
 
     </div>
 
-    <!-- Bottom Navigation -->
+    <!-- Interactive Ad Simulation Modal Screen -->
+    <div id="adModal" class="ad-modal">
+        <div class="ad-box">
+            <h4 style="color: #333;" id="ad-title">📢 বিজ্ঞাপন দেখা হচ্ছে...</h4>
+            <p style="font-size: 13px; color: #666; margin-top: 5px;" id="ad-desc">অনুগ্রহ করে ১০ সেকেন্ড অপেক্ষা করুন।</p>
+            <div class="timer-circle" id="timer-display">10s</div>
+            <p style="font-size: 11px; color: #888;">বিজ্ঞাপন শেষ না হওয়া পর্যন্ত এটি বন্ধ করবেন না</p>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
     <div class="navbar">
         <button class="nav-item active" onclick="switchTab('home', this)">
             <span class="nav-icon">🏠</span>
@@ -410,11 +618,34 @@
 
     <!-- JavaScript Section -->
     <script>
-        const TOTAL_DAILY_ADS = 20;
-        const REWARD_PER_AD = 15;
-        const REFERRAL_BONUS_RATE = 180;
+        const REWARD_PER_AD = 20; // 20 Taka per ad
+        const REFERRAL_BONUS_RATE = 180; // 180 Taka per referral
+        
+        // 20 Random Ad Title List
+        const randomAds = [
+            "Tech Brand Special Demo Ad",
+            "Online E-learning Offer",
+            "Mobile App Promo Video",
+            "Shopping Discount Deal",
+            "Gadget Store Super Sale",
+            "Digital Marketing Agency",
+            "SaaS Software Trial Ad",
+            "Fintech Mobile Wallet Ad",
+            "Fast Delivery Service Banner",
+            "Crypto Trading Academy",
+            "E-commerce Mega Voucher",
+            "Web Development Bootcamp",
+            "Smart Electronics Showcase",
+            "Freelance Marketplace Ad",
+            "Online Gaming Subscription",
+            "Travel & Flight Offer Banner",
+            "Fitness App Special Demo",
+            "Food Delivery Offer",
+            "Cloud Hosting Services",
+            "Community Task Premium Offer"
+        ];
 
-        // Initialize Telegram WebApp Data
+        // Telegram WebApp Integration
         window.addEventListener('DOMContentLoaded', () => {
             if (window.Telegram && window.Telegram.WebApp) {
                 const tg = window.Telegram.WebApp;
@@ -431,14 +662,16 @@
                         document.getElementById('profile-tab-avatar').src = user.photo_url;
                     }
                     if (user.id) {
-                        document.getElementById('refLink').value = `https://t.me/CommunityTask_bot?start=${user.id}`;
+                        const refUrl = `https://t.me/CommunityTask_bot?start=${user.id}`;
+                        document.getElementById('homeRefLink').value = refUrl;
+                        document.getElementById('tabRefLink').value = refUrl;
                     }
                 }
             }
             updateEarningsDisplay();
         });
 
-        // Tab Switcher
+        // Bottom Tab Switcher
         function switchTab(tabId, element) {
             const tabs = document.querySelectorAll('.tab-content');
             tabs.forEach(tab => tab.classList.remove('active'));
@@ -450,9 +683,17 @@
             element.classList.add('active');
         }
 
+        // Sub Feature Switcher in Home Middle
+        function showSubFeature(featureId) {
+            const subViews = document.querySelectorAll('.sub-feature-view');
+            subViews.forEach(view => view.classList.remove('active'));
+
+            document.getElementById(featureId).classList.add('active');
+        }
+
         // Copy Referral Link
-        function copyReferLink() {
-            const copyText = document.getElementById("refLink");
+        function copyReferLink(elementId) {
+            const copyText = document.getElementById(elementId);
             if (copyText) {
                 copyText.select();
                 copyText.setSelectionRange(0, 99999);
@@ -461,28 +702,48 @@
             }
         }
 
-        // Ad Click & Watch Simulation
-        function watchAd() {
+        // 10-Second Ad Watching Countdown System
+        function startAdTimer() {
             let remainingAds = parseInt(localStorage.getItem("remaining_ads") || "20");
+            
             if (remainingAds <= 0) {
-                alert("আজকের দিনের সবকটি বিজ্ঞাপনের সীমা শেষ! আগামীকাল আবার চেষ্টা করুন।");
+                alert("আজকের ২৪ ঘণ্টার ২০টি বিজ্ঞাপনের সীমা শেষ! আগামীকাল আবার চেষ্টা করুন।");
                 return;
             }
 
-            alert("বিজ্ঞাপন দেখা হচ্ছে... ৩ সেকেন্ড অপেক্ষা করুন।");
-            setTimeout(() => {
-                remainingAds--;
-                localStorage.setItem("remaining_ads", remainingAds);
-                
-                let completedAds = parseInt(localStorage.getItem("completed_ads") || "0") + 1;
-                localStorage.setItem("completed_ads", completedAds);
+            // Pick a random ad title from list
+            const randomAdTitle = randomAds[Math.floor(Math.random() * randomAds.length)];
+            document.getElementById("ad-title").innerText = randomAdTitle;
 
-                alert(`অভিনন্দন! আপনি ১৫ টাকা পেয়েছেন। আজ আর ${remainingAds}টি বিজ্ঞাপন বাকি আছে।`);
-                updateEarningsDisplay();
-            }, 3000);
+            const modal = document.getElementById("adModal");
+            const timerDisplay = document.getElementById("timer-display");
+            modal.style.display = "flex";
+
+            let timeLeft = 10;
+            timerDisplay.innerText = timeLeft + "s";
+
+            const countdown = setInterval(() => {
+                timeLeft--;
+                timerDisplay.innerText = timeLeft + "s";
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    modal.style.display = "none";
+
+                    // Update local storage
+                    remainingAds--;
+                    localStorage.setItem("remaining_ads", remainingAds);
+
+                    let completedAds = parseInt(localStorage.getItem("completed_ads") || "0") + 1;
+                    localStorage.setItem("completed_ads", completedAds);
+
+                    alert(`🎉 অভিনন্দন! বিজ্ঞাপনটি ১০ সেকেন্ড দেখার জন্য আপনি ২০ টাকা পেয়েছেন। আজকের কাজের সুযোগ বাকি: ${remainingAds}টি`);
+                    updateEarningsDisplay();
+                }
+            }, 1000);
         }
 
-        // Update Total Balance Calculator
+        // Update Balance & Dashboard
         function updateEarningsDisplay() {
             const completedAds = parseInt(localStorage.getItem("completed_ads") || "0");
             const adEarnings = completedAds * REWARD_PER_AD;
@@ -490,12 +751,20 @@
             const totalReferrals = parseInt(localStorage.getItem("user_referral_count") || "0");
             const refEarnings = totalReferrals * REFERRAL_BONUS_RATE;
 
+            const remainingAds = parseInt(localStorage.getItem("remaining_ads") || "20");
+
             // Welcome Bonus 150 TK + Ads + Referrals
             const totalEarnings = 150 + adEarnings + refEarnings;
 
             localStorage.setItem("user_balance", totalEarnings);
 
+            // Update Header & Dashboard
             document.getElementById("grid-total-earning").innerText = totalEarnings.toFixed(2);
+            document.getElementById("sub-ad-earning").innerText = adEarnings.toFixed(2);
+            document.getElementById("sub-ref-earning").innerText = refEarnings.toFixed(2);
+            document.getElementById("home-remaining-tasks").innerText = remainingAds;
+
+            // Update Earning Tab Details
             document.getElementById("total-earning-amount").innerText = totalEarnings.toFixed(2);
             document.getElementById("ad-earning-amount").innerText = adEarnings.toFixed(2);
             document.getElementById("ref-earning-amount").innerText = refEarnings.toFixed(2);
