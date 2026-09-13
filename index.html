@@ -252,15 +252,29 @@
         <span>Join Telegram Channel</span>
     </a>
 </div>
-            <h3 style="margin-bottom: 8px; font-size: 18px; color: #177a6d;">📺 বিজ্ঞাপন দেখুন</h3>
+            <!-- 2. TASK TAB -->
+        <div id="task" class="tab-content">
+            <h3 style="color: #177a6d; margin-bottom: 12px;">📋 ডেইলি টাস্ক</h3>
+            
+            <div class="ad-card" style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e0e0e0; text-align: center;">
+                <p style="font-weight: bold; font-size: 16px; color: #333; margin-bottom: 5px;">প্রতি বিজ্ঞাপনে নিশ্চিত আয় ৳২০.০০</p>
+                <div class="ad-amount" style="font-size: 24px; font-weight: bold; color: #177a6d; margin: 10px 0;">আজকের মোট পুরষ্কার: ৳৪০০.০০</div>
+                
+                <!-- Status & Timer Display -->
+                <div id="task-status-box" style="margin: 15px 0; font-weight: bold; font-size: 15px; color: #0088cc;">
+                    আজকের টাস্ক বাকি: <span id="daily-ad-count">২০</span>টি
+                </div>
 
-            <!-- Ad Card -->
-            <div class="ad-card">
-                <p>প্রতি বিজ্ঞাপনে নিশ্চিত আয়</p>
-                <div class="ad-amount">৳20.00</div>
-                <button class="btn-ad" id="ad-btn" onclick="watchAd()">▶ বিজ্ঞাপন শুরু করুন →</button>
-                <div class="task-status">আজকের টাস্ক বাকি: <span id="ad-count">0</span>/20</div>
+                <div id="ad-timer-display" style="display: none; font-size: 18px; font-weight: bold; color: #d9534f; margin: 10px 0;">
+                    বিজ্ঞাপন দেখা হচ্ছে... <span id="timer-seconds">১০</span> সেকেন্ড অপেক্ষা করুন
+                </div>
+
+                <!-- Action Button -->
+                <button class="btn-ad" id="daily-ad-btn" onclick="startDailyAd()" style="background-color: #177a6d; color: #fff; border: none; padding: 12px 24px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%;">
+                    ▶ বিজ্ঞাপন দেখুন
+                </button>
             </div>
+        </div>
 
             <!-- 4 Features Section (Middle Grid) -->
             <div class="features-grid">
