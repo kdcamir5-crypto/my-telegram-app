@@ -335,11 +335,44 @@
 
         <!-- 5. PROFILE TAB -->
         <div id="profile" class="tab-content">
-            <h3 style="color: #177a6d;">👤 প্রোফাইল তথ্য</h3>
-            <div class="info-card">
-                <p><strong>আইডি:</strong> <span id="prof-id">12345678</span></p>
-                <p style="margin-top: 8px;"><strong>বর্তমান ব্যালেন্স:</strong> ৳ <span id="prof-balance">0.00</span></p>
-                <p style="margin-top: 8px;"><strong>মোট দেখা বিজ্ঞাপন:</strong> <span id="prof-ads">0</span> টি</p>
+            <h3 style="color: #177a6d; margin-bottom: 15px;">👤 ইউজার প্রোফাইল</h3>
+            
+            <div class="info-card" style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e0e0e0; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <!-- User Avatar Header -->
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="width: 70px; height: 70px; background-color: #177a6d; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; margin: 0 auto 10px auto;">
+                        👤
+                    </div>
+                    <h4 style="margin: 0; color: #333; font-size: 18px;" id="user-display-name">User Name</h4>
+                </div>
+
+                <!-- Profile Info Details -->
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px;">
+                        <span style="color: #666; font-size: 14px; font-weight: 500;">📛 Name:</span>
+                        <span style="color: #222; font-size: 14px; font-weight: bold;" id="profile-name">Not Set</span>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px;">
+                        <span style="color: #666; font-size: 14px; font-weight: 500;">📧 Email:</span>
+                        <span style="color: #222; font-size: 14px; font-weight: bold;" id="profile-email">Not Set</span>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px;">
+                        <span style="color: #666; font-size: 14px; font-weight: 500;">📱 Phone Number:</span>
+                        <span style="color: #222; font-size: 14px; font-weight: bold;" id="profile-phone">Not Set</span>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px;">
+                        <span style="color: #666; font-size: 14px; font-weight: 500;">🎂 Birthdate:</span>
+                        <span style="color: #222; font-size: 14px; font-weight: bold;" id="profile-birthdate">Not Set</span>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; padding-bottom: 4px;">
+                        <span style="color: #666; font-size: 14px; font-weight: 500;">🏠 Address:</span>
+                        <span style="color: #222; font-size: 14px; font-weight: bold;" id="profile-address">Not Set</span>
+                    </div>
+                </div>
             </div>
         </div>
 
