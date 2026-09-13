@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Mini App</title>
+
+    <!-- Telegram WebApp Script -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* App Header */
+        .header {
+            background-color: #1f1f1f;
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .header h2 {
+            font-size: 20px;
+            color: #24A1DE;
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .tab-content {
+            display: none;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card-title {
+            color: #24A1DE;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        /* Buttons & Forms */
+        .btn {
+            background-color: #24A1DE;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .btn:active {
+            opacity: 0.8;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background: #2b2b2b;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 8px;
+        }
+
+        /* Bottom Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-around;
+            background-color: #1f1f1f;
+            padding: 10px 0;
+            border-top: 1px solid #333;
+            position: sticky;
+            bottom: 0;
+        }
+
+        .nav-item {
+            color: #888;
+            text-decoration: none;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .nav-item.active {
+            color: #24A1DE;
+            font-weight: bold;
+        }
+
+        .nav-item span {
+            font-size: 18px;
+            margin-bottom: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <h2>Reward Mini App</h2>
+    </div>
+
+    <!-- Main Content Body -->
+    <div class="content">
+
+        <!-- 1. Wallet Tab -->
+        <div id="wallet" class="tab-content active">
+            <h3 class="card-title">💳 Wallet</h3>
+            <p>আপনার বর্তমান ব্যালেন্স:</p>
+            <h1 style="color: #4CAF50; margin: 15px 0;">৳ <span id="balance">150.00</span></h1>
+            <p>মোট রেফারেল: <strong id="refer-count">5</strong> জন</p>
+        </div>
+
+        <!-- 2. Earning Tab -->
+        <div id="earning" class="tab-content">
+            <h3 class="card-title">🎯 Earning</h3>
+            <p>দৈনিক টাস্ক সম্পন্ন করে পয়েন্ট আয় করুন।</p>
+            <button class="btn" onclick="claimDailyReward()">🎁 ডেইলি রিওয়ার্ড গ্রহণ করুন (+৳10)</button>
+        </div>
+
+        <!-- 3. Withdraw Tab -->
+        <div id="withdraw" class="tab-content">
+            <h3 class="card-title">💸 Withdraw</h3>
+            <label for="amount">টাকার পরিমাণ (নূন্যতম ৳১০০):</label>
+            <input type="number" id="amount" placeholder="পরিমাণ লিখুন">
+            
+            <label for="method" style="margin-top: 10px; display: block;">পেমেন্ট মেথড:</label>
+            <input type="text" id="method" placeholder="বিকাশ / নগদ নম্বর">
+
+            <button class="btn" onclick="submitWithdraw()">উইথড্র রিকোয়েস্ট পাঠান</button>
+        </div>
+
+        <!-- 4. Referral Tab -->
+        <div id="referral" class="tab-content">
+            <h3 class="card-title">👥 Referral Program</h3>
+            <p>আপনার বন্ধুদের আমন্ত্রণ জানান এবং প্রতি সফল রেফারে ৫০ টাকা আয় করুন!</p>
+            <input type="text" value="https://t.me/your_bot?start=12345" id="refLink" readonly>
+            <button class="btn" onclick="copyReferLink()">লিংক কপি করুন</button>
+        </div>
+
+        <!-- 5. Support Tab -->
+        <div id="support" class="tab-content">
+            <h3 class="card-title">🎧 Customer Support</h3>
+            <p>যেকোনো সমস্যা বা সহায়তার জন্য আমাদের সাথে যোগাযোগ করুন।</p>
+            <button class="btn" onclick="openSupport()">টেলিগ্রাম সাপোর্টে নক দিন</button>
+        </div>
+
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="navbar">
+        <button class="nav-item active" onclick="switchTab('wallet', this)">
+            <span>💳</span> Wallet
+        </button>
+        <button class="nav-item" onclick="switchTab('earning', this)">
+            <span>🎯</span> Earn
+        </button>
+        <button class="nav-item" onclick="switchTab('withdraw', this)">
+            <span>💸</span> Withdraw
+        </button>
+        <button class="nav-item" onclick="switchTab('referral', this)">
+            <span>👥</span> Refer
+        </button>
+        <button class="nav-item" onclick="switchTab('support', this)">
+            <span>🎧</span> Support
+        </button>
+    </div>
+
+    <script>
+        // Initialize Telegram WebApp
+        window.Telegram.WebApp.ready();
+
+        // Switch Tabs Function
+        function switchTab(tabId, element) {
+            let tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            let navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+        }
+
+        // Demo Functions
+        function claimDailyReward() {
+            alert("আপনি আজ ৳১০ রিওয়ার্ড পেয়েছেন!");
+        }
+
+        function submitWithdraw() {
+            alert("আপনার উইথড্র রিকোয়েস্ট গ্রহণ করা হয়েছে।");
+        }
+
+        function copyReferLink() {
+            let link = document.getElementById("refLink");
+            link.select();
+            document.execCommand("copy");
+            alert("রেফারেল লিংক কপি করা হয়েছে!");
+        }
+
+        function openSupport() {
+            window.Telegram.WebApp.openTelegramLink("https://t.me/your_support_username");
+        }
+    </script>
+</body>
+</html>
