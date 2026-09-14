@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freelancing with Ariyan - Mini App</title>
+    <title>Freelancing with Ariyan</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -26,43 +26,67 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             padding-bottom: 75px;
-            user-select: none;
-        }
-
-        /* Header / Banner */
-        .header-banner {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 20px 15px;
-            text-align: center;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        }
-
-        .header-banner h1 {
-            font-size: 22px;
-            margin-bottom: 5px;
-        }
-
-        .balance-badge {
-            background: rgba(255, 255, 255, 0.2);
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 20px;
-            margin-top: 8px;
-            font-weight: bold;
-            font-size: 15px;
         }
 
         /* Container */
         .container {
-            padding: 15px;
-            max-width: 600px;
+            padding: 12px;
+            max-width: 500px;
             margin: 0 auto;
         }
 
-        /* View Section Handling */
+        /* Responsive Adjustable Banner (Inside Home Page Only) */
+        .header-banner-container {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+            margin-bottom: 10px;
+            background: #000;
+        }
+
+        .header-banner-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .balance-badge {
+            background: rgba(23, 122, 109, 0.1);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            display: block;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 10px 0;
+            font-weight: bold;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        /* Running Announcement Bar */
+        .ticker-wrap {
+            width: 100%;
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            padding: 8px 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+        }
+
+        .ticker-wrap marquee {
+            width: 100%;
+        }
+
+        /* View Control */
         .view-section {
             display: none;
         }
@@ -76,8 +100,8 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
-            margin-top: 15px;
-            margin-bottom: 20px;
+            margin-top: 10px;
+            margin-bottom: 18px;
             text-align: center;
         }
 
@@ -103,17 +127,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 8px auto;
+            margin: 0 auto 6px auto;
             font-size: 20px;
         }
 
         .feature-card span {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             display: block;
         }
 
-        /* Telegram Channel Link */
+        /* Telegram Join Button */
         .telegram-btn-box {
             background: #0088cc;
             color: white;
@@ -155,7 +179,7 @@
             margin: 10px 0;
         }
 
-        /* Cards & Components */
+        /* Cards & Interfaces */
         .card {
             background: var(--card-bg);
             padding: 18px;
@@ -175,10 +199,6 @@
             font-weight: bold;
             cursor: pointer;
             margin-top: 10px;
-        }
-
-        .btn:active {
-            opacity: 0.9;
         }
 
         .btn-secondary {
@@ -216,7 +236,7 @@
             padding: 10px 0;
             border-top: 1px solid #e0e0e0;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-            max-width: 600px;
+            max-width: 500px;
             margin: 0 auto;
             z-index: 99;
         }
@@ -227,7 +247,6 @@
             text-decoration: none;
             font-size: 11px;
             cursor: pointer;
-            flex: 1;
         }
 
         .nav-item i {
@@ -241,7 +260,7 @@
             font-weight: bold;
         }
 
-        /* Modal Dialog Overlay */
+        /* Modal Overlay */
         .modal {
             display: none;
             position: fixed;
@@ -271,19 +290,14 @@
         .secret-admin-trigger {
             position: fixed;
             bottom: 75px;
-            right: 12px;
-            opacity: 0.2;
-            font-size: 20px;
-            color: var(--primary-color);
+            right: 10px;
+            opacity: 0.15;
+            font-size: 18px;
             cursor: pointer;
             z-index: 90;
-            background: #fff;
-            padding: 6px;
-            border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        /* Admin Dashboard Grid */
+        /* Admin Tab Styling */
         .admin-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -302,12 +316,11 @@
         .req-box {
             background: #fdfdfd;
             border: 1px solid #e0e0e0;
-            padding: 12px;
+            padding: 10px;
             border-radius: 8px;
             margin-bottom: 10px;
             text-align: left;
             font-size: 13px;
-            line-height: 1.6;
         }
 
         .action-btns {
@@ -319,25 +332,21 @@
         .btn-approve {
             background: #2e7d32;
             color: white;
-            padding: 8px 12px;
+            padding: 6px 12px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 12px;
-            font-weight: bold;
-            flex: 1;
         }
 
         .btn-deny {
             background: #c62828;
             color: white;
-            padding: 8px 12px;
+            padding: 6px 12px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 12px;
-            font-weight: bold;
-            flex: 1;
         }
 
         .profile-img-preview {
@@ -352,21 +361,33 @@
 </head>
 <body>
 
-    <!-- Top Header Banner -->
-    <div class="header-banner">
-        <h1>Freelancing with Ariyan</h1>
-        <div class="balance-badge">
-            মোট ব্যালেন্স: <span id="user-total-balance">1000</span> টাকা
-        </div>
-    </div>
-
-    <!-- MAIN APP CONTAINER -->
+    <!-- MAIN CONTAINER -->
     <div class="container">
 
         <!-- ==================== HOME TAB ==================== -->
         <div id="tab-home" class="view-section active">
             
-            <!-- 4 Circular Feature Buttons -->
+            <!-- Banner Image (Only in Home Tab, Auto-Adjusted Size) -->
+            <div class="header-banner-container">
+                <a href="https://ibb.co.com/fGTzMpFc" target="_blank">
+                    <img src="https://i.ibb.co.com/vvM61Pqt/Gemini-Generated-Image-8lbv8q8lbv8q8lbv-640x360.jpg" alt="Freelancing with Ariyan Banner" border="0">
+                </a>
+            </div>
+
+            <!-- Total Balance Badge -->
+            <div class="balance-badge">
+                মোট ব্যালেন্স: <span id="user-total-balance">150</span> টাকা
+            </div>
+
+            <!-- Dynamic Running Marquee Text -->
+            <div class="ticker-wrap">
+                <i class="fas fa-bullhorn"></i>
+                <marquee id="task-marquee" behavior="scroll" direction="left" scrollamount="5">
+                    আজকের টাস্কটি সম্পূর্ণ করুন
+                </marquee>
+            </div>
+
+            <!-- 4 Grid Features -->
             <div class="features-grid">
                 <div class="feature-card" onclick="openSubView('view-daily-task')">
                     <div class="icon-circle"><i class="fas fa-tasks"></i></div>
@@ -388,7 +409,7 @@
 
             <!-- Telegram Channel Link -->
             <a href="https://t.me/bechelor_point_season" target="_blank" class="telegram-btn-box">
-                <i class="fab fa-telegram"></i> আমাদের টেলিগ্রাম চ্যানেলে জয়েন করুন
+                <i class="fab fa-telegram-plane"></i> আমাদের টেলিগ্রাম চ্যানেলে জয়েন করুন
             </a>
 
             <!-- Notice Board -->
@@ -403,7 +424,7 @@
                 <div class="notice-highlight">
                     <p style="color: #1565c0; font-weight: bold;">💸 প্রতিটি রেফারে পাবেন 100টাকা।</p>
                     <p style="color: #2e7d32; font-weight: bold;">📺 প্রতিটি বিজ্ঞাপন দেখলে পাবেন 20 টাকা।</p>
-                    <p style="color: #d97706; font-weight: bold;">🎁 একাউন্ট খুললেই সাথে সাথে বোনাস।</p>
+                    <p style="color: #d97706; font-weight: bold;">🎁 একাউন্ট খুললেই সাথে সাথে 150 টাকা বোনাস।</p>
                     <p style="color: #c62828; font-weight: bold;">🏦 1000 টাকা হলেই উত্তোলন করতে পারবেন বিকাশ ও নগদের মাধ্যমে। (সম্পূর্ণ অটোমেশন সিস্টেম)</p>
                 </div>
                 <p style="text-align: center; font-weight: bold; color: var(--primary-color);">👉 আয় শুরু করুন আজ থেকেই 💚</p>
@@ -411,9 +432,9 @@
         </div>
 
 
-        <!-- ==================== HOME SUB VIEWS ==================== -->
+        <!-- ==================== SUB VIEWS (FROM HOME) ==================== -->
 
-        <!-- Daily Task View -->
+        <!-- 1. Daily Task View -->
         <div id="view-daily-task" class="view-section">
             <div class="card">
                 <h2>📺 ডেইলি টাস্ক (বিজ্ঞাপন দেখে আয়)</h2>
@@ -425,26 +446,26 @@
             </div>
         </div>
 
-        <!-- Earning Details View -->
+        <!-- 2. Earning Details View -->
         <div id="view-earning" class="view-section">
             <div class="card">
                 <h2>📊 আপনার ইনকাম হিস্ট্রি</h2>
                 <div style="margin-top: 15px; line-height: 2;">
-                    <p>📺 বিজ্ঞাপন থেকে আয়: <b><span id="ad-earning-text">0</span> টাকা</b></p>
-                    <p>💸 রেফার থেকে আয়: <b><span id="ref-earning-text">0</span> টাকা</b></p>
-                    <p>🎁 সাইনআপ বোনাস: <b><span id="bonus-earning-text">1000</span> টাকা</b></p>
+                    <p>📺 আপনি বিজ্ঞাপন থেকে আয় করেছেন: <b><span id="ad-earning-text">0</span> টাকা</b></p>
+                    <p>💸 আপনি রেফার করে আয় করেছেন: <b><span id="ref-earning-text">0</span> টাকা</b></p>
+                    <p>🎁 সাইনআপ বোনাস: <b><span id="signup-bonus-text">150</span> টাকা</b></p>
                     <hr style="margin: 10px 0;">
-                    <p style="font-size: 16px; color: var(--primary-color);"><b>বর্তমান মোট ব্যালেন্স: <span id="total-earning-text">1000</span> টাকা</b></p>
+                    <p style="font-size: 16px; color: var(--primary-color);"><b>সর্বমোট ব্যালেন্স: <span id="total-earning-text">150</span> টাকা</b></p>
                 </div>
                 <button class="btn btn-secondary" onclick="backToHome()">হোমে ফিরে যান</button>
             </div>
         </div>
 
-        <!-- Referral Earning View -->
+        <!-- 3. Referral Earning View -->
         <div id="view-referral" class="view-section">
             <div class="card">
                 <h2>🔗 রেফারেল আয় করুন</h2>
-                <p style="margin-top: 5px;">রেফার করে আয় করুন, লিংক শেয়ার করুন। প্রতিটি সফল রেফারে পাবেন <b>100 টাকা</b>।</p>
+                <p style="margin-top: 5px;">রেফার করে আয় করুন, শেয়ার করুন। প্রতিটি সফল রেফারে পাবেন <b>100 টাকা</b>।</p>
                 
                 <div class="input-group" style="margin-top: 15px;">
                     <label>আপনার রেফারেল লিঙ্ক:</label>
@@ -457,19 +478,19 @@
                 <div class="notice-highlight" style="font-size: 13px; line-height: 1.8;">
                     💸 প্রতিটি রেফারে পাবেন 100টাকা।<br>
                     📺 প্রতিটি বিজ্ঞাপন দেখলে পাবেন 20 টাকা।<br>
-                    🎁 একাউন্ট খুললেই পাচ্ছেন আকর্ষণীয় বোনাস।<br>
-                    🏦 1000 টাকা হলেই উত্তোলন করতে পারবেন বিকাশ ও নগদের মাধ্যমে।
+                    🎁 একাউন্ট খুললেই সাথে সাথে 150 টাকা বোনাস।<br>
+                    🏦 1000 টাকা হলেই উত্তোলন করতে পারবেন বিকাশ ও নগদের মাধ্যমে। (সম্পূর্ণ অটোমেশন সিস্টেম)
                 </div>
 
                 <button class="btn btn-secondary" onclick="backToHome()">হোমে ফিরে যান</button>
             </div>
         </div>
 
-        <!-- Bonus View -->
+        <!-- 4. Bonus View -->
         <div id="view-bonus" class="view-section">
             <div class="card" style="text-align: center;">
                 <h2>🎁 বোনাস সেকশন</h2>
-                <p style="margin: 15px 0;">বোনাস ক্লেইম করতে বা যেকোনো প্রয়োজনে অ্যাডমিনকে সরাসরি মেসেজ দিন।</p>
+                <p style="margin: 15px 0;">বোনাস পেতে অ্যাডমিনকে মেসেজ করুন।</p>
                 <a href="https://t.me/Kdcariyan" target="_blank" class="btn" style="text-decoration: none; display: inline-block;">
                     <i class="fab fa-telegram"></i> Telegram এ মেসেজ দিন
                 </a>
@@ -485,11 +506,11 @@
             <div class="card">
                 <h2>👛 ওয়ালেট (Wallet)</h2>
                 <div style="margin-top: 15px; line-height: 2.2;">
-                    <p>📺 বিজ্ঞাপন থেকে ইনকাম: <b><span id="wallet-ad-earn">0</span> টাকা</b></p>
-                    <p>👥 রেফারেল থেকে ইনকাম: <b><span id="wallet-ref-earn">0</span> টাকা</b></p>
-                    <p>🎁 বোনাস ব্যালেন্স: <b><span id="wallet-bonus-earn">1000</span> টাকা</b></p>
+                    <p>📺 আপনি বিজ্ঞাপন থেকে আয় করেছেন: <b><span id="wallet-ad-earn">0</span> টাকা</b></p>
+                    <p>👥 আপনি রেফার থেকে আয় করেছেন: <b><span id="wallet-ref-earn">0</span> টাকা</b></p>
+                    <p>🎁 সাইনআপ বোনাস: <b><span id="wallet-signup-bonus">150</span> টাকা</b></p>
                     <hr>
-                    <h3 style="color: var(--primary-color); margin-top: 8px;">বর্তমান মোট ব্যালেন্স: <span id="wallet-total-balance">1000</span> টাকা</h3>
+                    <h3 style="color: var(--primary-color); margin-top: 8px;">আপনার টোটাল ব্যালেন্স আছে: <span id="wallet-total-balance">150</span> টাকা</h3>
                 </div>
             </div>
         </div>
@@ -499,8 +520,7 @@
             <div class="card">
                 <h2>🏦 টাকা উত্তোলন (Withdraw)</h2>
                 
-                <!-- Status Message Banner -->
-                <div id="withdraw-status-banner" style="display:none; padding: 12px; border-radius: 8px; margin: 12px 0; font-size: 13px; font-weight: bold; text-align: center;"></div>
+                <div id="withdraw-status-banner" style="display:none; padding: 10px; border-radius: 6px; margin: 10px 0; font-size: 13px;"></div>
 
                 <div class="input-group" style="margin-top: 15px;">
                     <label>পেমেন্ট মেথড সিলেক্ট করুন:</label>
@@ -517,7 +537,7 @@
 
                 <div class="input-group">
                     <label>উইথড্র পরিমাণ (টাকা):</label>
-                    <input type="number" id="withdraw-amount" placeholder="সর্বনিম্ন 1000 টাকা" value="1000">
+                    <input type="number" id="withdraw-amount" placeholder="সর্বনিম্ন 1000 টাকা">
                 </div>
 
                 <button class="btn" onclick="handleWithdrawClick()">উইথড্র করুন</button>
@@ -528,7 +548,7 @@
         <div id="tab-support" class="view-section">
             <div class="card" style="text-align: center;">
                 <h2>🎧 কাস্টমার সাপোর্ট</h2>
-                <p style="margin: 15px 0; font-size: 15px;">সাপোর্ট এর জন্য অ্যাডমিনকে নক দিন</p>
+                <p style="margin: 15px 0; font-size: 16px;">সাপোর্ট এর জন্য অ্যাডমিন কে নক দিন</p>
                 <a href="https://t.me/Kdcariyan" target="_blank" class="btn" style="text-decoration: none; display: block; margin-bottom: 15px;">
                     <i class="fab fa-telegram"></i> অ্যাডমিন টেলিগ্রাম লিঙ্ক
                 </a>
@@ -547,7 +567,7 @@
                 </div>
 
                 <div class="input-group" style="text-align: left;">
-                    <label>ইউজার নেম (Username):</label>
+                    <label>ইউজার নেম (Name):</label>
                     <input type="text" id="prof-username" value="ariyan99">
                 </div>
                 <div class="input-group" style="text-align: left;">
@@ -559,7 +579,7 @@
                     <input type="text" id="prof-mobile" placeholder="017XXXXXXXX">
                 </div>
                 <div class="input-group" style="text-align: left;">
-                    <label>জন্ম তারিখ (Date of Birth):</label>
+                    <label>জন্ম তারিখ (Birth Date):</label>
                     <input type="date" id="prof-dob">
                 </div>
 
@@ -572,66 +592,66 @@
         <div id="tab-admin" class="view-section">
             <div class="card">
                 <h2 style="color: #c62828;">👑 অ্যাডমিন কন্ট্রোল প্যানেল</h2>
-                <p style="font-size: 12px; color: #666; margin-bottom: 15px;">গোপন সেকশন (পাসওয়ার্ড: 1234)</p>
+                <p style="font-size: 12px; color: #666; margin-bottom: 15px;">শুধুমাত্র অ্যাডমিন ব্যবহারের জন্য গোপন সেকশন।</p>
 
-                <!-- Admin 4 Sector Dashboard Stats -->
+                <!-- Admin 4 Sector Cards -->
                 <div class="admin-grid">
                     <div class="admin-card">
                         <small>1. Total Users</small>
                         <h3 id="admin-stat-users">1</h3>
                     </div>
                     <div class="admin-card">
-                        <small>2. Total Pending Req</small>
+                        <small>2. Total Withdraw Req</small>
                         <h3 id="admin-stat-reqs">0</h3>
                     </div>
                     <div class="admin-card">
-                        <small>3. User Removed</small>
+                        <small>3. User Remove</small>
                         <h3 id="admin-stat-removed">0</h3>
                     </div>
                     <div class="admin-card">
-                        <small>4. Total Paid Amount</small>
+                        <small>4. Total Paid Earn</small>
                         <h3 id="admin-stat-paid">0 ৳</h3>
                     </div>
                 </div>
 
-                <!-- Withdrawal Request Management -->
-                <h3>📥 পেমেন্ট এবং আইডি এক্টিভেশন রিকোয়েস্ট সমূহ:</h3>
+                <!-- Request Management Section -->
+                <h3>📥 উইথড্র এবং আইডি এক্টিভেশন রিকোয়েস্ট সমূহ:</h3>
                 <div id="admin-requests-list" style="margin-top: 10px;">
                     <p style="font-size: 12px; color: #888;">কোনো পেন্ডিং রিকোয়েস্ট নেই।</p>
                 </div>
 
                 <hr style="margin: 15px 0;">
-                <h3>👥 ইউজার ম্যানেজমেন্ট:</h3>
+                <h3>👥 ইউজার ম্যানেজমেন্ট (রিমুভ করুন):</h3>
                 <div id="admin-user-list" style="margin-top: 10px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; background: #f5f5f5; padding: 8px; border-radius: 6px;">
                         <span>ariyan99 (01700000000)</span>
-                        <button class="btn-deny" style="max-width: 80px;" onclick="removeUser('ariyan99')">রিমুভ</button>
+                        <button class="btn-deny" onclick="removeUser('ariyan99')">রিমুভ</button>
                     </div>
                 </div>
 
+                <button class="btn btn-secondary" style="margin-top:20px;" onclick="backToHome()">হোমে ফিরে যান</button>
             </div>
         </div>
 
     </div> <!-- End Container -->
 
-
     <!-- ==================== MODALS ==================== -->
 
-    <!-- Ad Timer Modal -->
+    <!-- Ad Watch Modal -->
     <div id="ad-modal" class="modal">
         <div class="modal-content">
-            <h3 id="ad-modal-title">Demo Ad #1</h3>
+            <h3 id="ad-modal-title">Demo Ad #1 - Special Offer</h3>
             <p style="margin: 15px 0; font-size: 14px;">বিজ্ঞাপনটি দেখা হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন।</p>
-            <div style="font-size: 32px; font-weight: bold; color: var(--primary-color);" id="ad-timer">10</div>
+            <div style="font-size: 30px; font-weight: bold; color: var(--primary-color);" id="ad-timer">10</div>
         </div>
     </div>
 
-    <!-- ID Activation & Withdrawal Modal -->
+    <!-- Withdraw Activation Pop-up Modal -->
     <div id="activation-modal" class="modal">
         <div class="modal-content" style="text-align: left;">
             <h3 style="color: #c62828; text-align: center;">⚠️ আইডি এক্টিভেশন আবশ্যক</h3>
             <p style="margin: 10px 0; font-size: 13px; line-height: 1.5; color: #333;">
-                উইথড্র করতে দয়া করে আপনার আইডিটি এক্টিভ করুন। <b>এ্যাক্টিভেশন ফি 120 টাকা (Send Money Only)</b>।
+                উইথড্র করতে দয়া করে আপনার আইডি টি একটিভ করুন। <b>এ্যাক্টিভেশন ফি 120 টাকা (Send Money Only)</b>।
             </p>
 
             <!-- Gateway Tabs -->
@@ -640,7 +660,7 @@
                 <button id="gate-nagad-btn" class="btn btn-secondary" style="margin:0; font-size:12px; padding: 8px;" onclick="switchPaymentGateway('nagad')">Nagad</button>
             </div>
 
-            <!-- Bkash Box -->
+            <!-- Bkash Details -->
             <div id="gateway-bkash-box">
                 <div class="input-group">
                     <label>বিকাশ নম্বর (Send Money):</label>
@@ -648,7 +668,7 @@
                 </div>
             </div>
 
-            <!-- Nagad Box -->
+            <!-- Nagad Details -->
             <div id="gateway-nagad-box" style="display: none;">
                 <div class="input-group">
                     <label>নগদ নম্বর (Send Money):</label>
@@ -657,16 +677,16 @@
             </div>
 
             <div class="input-group">
-                <label>TrxID (ট্রানজেকশন আইডি) লিখুন:</label>
+                <label>TrxID (ট্রানজেকশন আইডি) দিন:</label>
                 <input type="text" id="activation-trxid" placeholder="যেমন: 9J87X10K">
             </div>
 
-            <button class="btn" onclick="submitActivationRequest()">কনফার্ম করুন</button>
+            <button class="btn" onclick="submitActivationRequest()">একটিভ করুন</button>
             <button class="btn btn-secondary" onclick="closeActivationModal()">বন্ধ করুন</button>
         </div>
     </div>
 
-    <!-- Secret Admin Icon Trigger -->
+    <!-- Secret Admin Trigger Icon -->
     <div class="secret-admin-trigger" onclick="promptAdminLogin()">
         <i class="fas fa-user-shield"></i>
     </div>
@@ -693,12 +713,13 @@
 
     <!-- ==================== JAVASCRIPT ==================== -->
     <script>
-        // Data State Variables
+        // Data State
         let userData = {
-            signupBonus: 1000, // টেস্ট করার জন্য প্রাথমিক বোনাস ১০০০ টাকা সেট করা আছে
+            signupBonus: 150,
             adEarning: 0,
             refEarning: 0,
             adsWatchedToday: 0,
+            withdrawStatus: "", 
             removedUsersCount: 0
         };
 
@@ -710,6 +731,7 @@
 
         let selectedGateway = "bkash";
 
+        // Demo Ads Title List
         const demoAdTitles = [
             "Demo Ad #1 - Special Offer", "Demo Ad #2 - Exclusive Deal", "Demo Ad #3 - Discount Today",
             "Demo Ad #4 - Earn Extra Cash", "Demo Ad #5 - Mega Bonus", "Demo Ad #6 - Limited Time Promo",
@@ -720,32 +742,39 @@
             "Demo Ad #19 - Golden Opportunity", "Demo Ad #20 - Final Reward Deal"
         ];
 
-        // UI Synchronizer
+        // Update Balance Displays & Ticker Status
         function updateUI() {
             let total = userData.signupBonus + userData.adEarning + userData.refEarning;
             
-            // Sync Text Values Across All Sections
             document.getElementById('user-total-balance').innerText = total;
             document.getElementById('ad-earning-text').innerText = userData.adEarning;
             document.getElementById('ref-earning-text').innerText = userData.refEarning;
-            document.getElementById('bonus-earning-text').innerText = userData.signupBonus;
+            document.getElementById('signup-bonus-text').innerText = userData.signupBonus;
             document.getElementById('total-earning-text').innerText = total;
 
             document.getElementById('wallet-ad-earn').innerText = userData.adEarning;
             document.getElementById('wallet-ref-earn').innerText = userData.refEarning;
-            document.getElementById('wallet-bonus-earn').innerText = userData.signupBonus;
+            document.getElementById('wallet-signup-bonus').innerText = userData.signupBonus;
             document.getElementById('wallet-total-balance').innerText = total;
 
             document.getElementById('ads-watched-count').innerText = userData.adsWatchedToday;
 
-            // Admin Dashboard Stats Update
+            // Check Daily Task Completion for Marquee
+            let marqueeEl = document.getElementById('task-marquee');
+            if (userData.adsWatchedToday >= 20) {
+                marqueeEl.innerText = "আপনার আজকের টাস্ক সম্পূর্ণ হয়েছে";
+            } else {
+                marqueeEl.innerText = "আজকের টাস্কটি সম্পূর্ণ করুন";
+            }
+
+            // Admin UI update
             document.getElementById('admin-stat-users').innerText = adminStats.totalUsers;
             document.getElementById('admin-stat-reqs').innerText = adminStats.pendingReqs.length;
             document.getElementById('admin-stat-removed').innerText = userData.removedUsersCount;
             document.getElementById('admin-stat-paid').innerText = adminStats.totalPaid + " ৳";
         }
 
-        // Navigation Controller
+        // Navigation Switcher
         function switchNavTab(tabName, element) {
             document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
@@ -763,10 +792,10 @@
             switchNavTab('home', document.querySelectorAll('.nav-item')[0]);
         }
 
-        // Daily Task Logic (Ads Watching)
+        // Daily Task Logic
         function startAdTimer() {
             if (userData.adsWatchedToday >= 20) {
-                alert("আজকের জন্য আপনার ২০টি অ্যাড লিমিট শেষ! আগামীকাল আবার চেষ্টা করুন।");
+                alert("আজকের জন্য আপনার ২০টি লিমিট শেষ! আগামীকাল আবার চেষ্টা করুন।");
                 return;
             }
 
@@ -793,7 +822,7 @@
             }, 1000);
         }
 
-        // Copy Referral Link Function
+        // Copy Referral Link
         function copyRefLink() {
             let copyText = document.getElementById("ref-link-input");
             copyText.select();
@@ -801,14 +830,14 @@
             alert("রেফারেল লিঙ্ক কপি করা হয়েছে!");
         }
 
-        // Withdraw Button Click Handler
+        // Withdraw Logic
         function handleWithdrawClick() {
             let phone = document.getElementById('withdraw-phone').value;
             let amount = parseFloat(document.getElementById('withdraw-amount').value);
-            let currentTotalBalance = userData.signupBonus + userData.adEarning + userData.refEarning;
+            let totalBalance = userData.signupBonus + userData.adEarning + userData.refEarning;
 
-            if(!phone || isNaN(amount)) {
-                alert("দয়া করে মোবাইল নম্বর এবং উইথড্র পরিমাণ সঠিকভাবে লিখুন।");
+            if(!phone || !amount) {
+                alert("দয়া করে ফোন নম্বর এবং উইথড্র পরিমাণ সঠিকভাবে লিখুন।");
                 return;
             }
 
@@ -817,12 +846,11 @@
                 return;
             }
 
-            if(amount > currentTotalBalance) {
-                alert("আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই!");
+            if(amount > totalBalance) {
+                alert("আপনার ওয়ালেটে পর্যাপ্ত ব্যালেন্স নেই।");
                 return;
             }
 
-            // Open ID Activation Modal
             document.getElementById('activation-modal').classList.add('active');
         }
 
@@ -845,54 +873,38 @@
             document.getElementById('activation-modal').classList.remove('active');
         }
 
-        // SUBMIT WITHDRAWAL (INSTANT MONEY DEDUCTION)
+        // Submit Activation & Instant Deduction
         function submitActivationRequest() {
-            let trx = document.getElementById('activation-trxid').value.trim();
-            let amount = parseFloat(document.getElementById('withdraw-amount').value);
+            let trx = document.getElementById('activation-trxid').value;
+            let amount = parseFloat(document.getElementById('withdraw-amount').value) || 0;
             let method = document.getElementById('withdraw-method').value;
             let phone = document.getElementById('withdraw-phone').value;
 
             if(!trx) {
-                alert("দয়া করে আপনার Send Money-র TrxID দিন!");
+                alert("দয়া করে সঠিক TrxID লিখুন!");
                 return;
             }
 
-            let totalBalance = userData.signupBonus + userData.adEarning + userData.refEarning;
+            // Deduct balance instantly
+            let remainingToDeduct = amount;
 
-            if(amount > totalBalance) {
-                alert("আপনার একাউন্টে পর্যাপ্ত ব্যালেন্স নেই!");
-                return;
-            }
-
-            // INSTANT DEDUCTION LOGIC
-            let remainingDeduct = amount;
-
-            // 1. Deduct from Ad Earnings first
-            if (userData.adEarning >= remainingDeduct) {
-                userData.adEarning -= remainingDeduct;
-                remainingDeduct = 0;
+            if (userData.adEarning >= remainingToDeduct) {
+                userData.adEarning -= remainingToDeduct;
+                remainingToDeduct = 0;
             } else {
-                remainingDeduct -= userData.adEarning;
+                remainingToDeduct -= userData.adEarning;
                 userData.adEarning = 0;
-            }
 
-            // 2. Deduct remaining from Ref Earnings
-            if (remainingDeduct > 0) {
-                if (userData.refEarning >= remainingDeduct) {
-                    userData.refEarning -= remainingDeduct;
-                    remainingDeduct = 0;
+                if (userData.refEarning >= remainingToDeduct) {
+                    userData.refEarning -= remainingToDeduct;
+                    remainingToDeduct = 0;
                 } else {
-                    remainingDeduct -= userData.refEarning;
+                    remainingToDeduct -= userData.refEarning;
                     userData.refEarning = 0;
+                    userData.signupBonus -= remainingToDeduct;
                 }
             }
 
-            // 3. Deduct remaining from Signup Bonus
-            if (remainingDeduct > 0) {
-                userData.signupBonus -= remainingDeduct;
-            }
-
-            // Push request to Admin List
             let reqObj = {
                 id: Date.now(),
                 user: "ariyan99",
@@ -906,24 +918,23 @@
             adminStats.pendingReqs.push(reqObj);
             closeActivationModal();
             
-            // Sync and Notify
             updateUI();
-            alert("আপনার " + amount + " টাকার উইথড্র রিকোয়েস্ট সফল হয়েছে! আপনার অ্যাকাউন্ট থেকে টাকা কেটে নেওয়া হয়েছে এবং অ্যাপ্রুভালের জন্য পাঠানো হয়েছে।");
+            alert("আপনার উইথড্র রিকোয়েস্ট সফল হয়েছে এবং ব্যালেন্স থেকে টাকা কেটে নেওয়া হয়েছে।");
             
             renderAdminRequests();
         }
 
-        // Profile Image Uploader
+        // Profile Image
         function loadProfileImage(event) {
             let output = document.getElementById('profile-img');
             output.src = URL.createObjectURL(event.target.files[0]);
         }
 
         function saveProfile() {
-            alert("আপনার প্রোফাইল তথ্য সফলভাবে সেভ করা হয়েছে!");
+            alert("আপনার প্রোফাইল সফলভাবে সেভ করা হয়েছে!");
         }
 
-        // Secret Admin Panel Prompt
+        // Secret Admin Login PIN Code = 1998
         function promptAdminLogin() {
             let pass = prompt("অ্যাডমিন প্যানেলে ঢুকতে পাসওয়ার্ড দিন:");
             if(pass === "1998") {
@@ -933,7 +944,7 @@
             }
         }
 
-        // Render Requests inside Admin Panel
+        // Admin Request Renderer & Actions
         function renderAdminRequests() {
             let container = document.getElementById('admin-requests-list');
             if(adminStats.pendingReqs.length === 0) {
@@ -946,9 +957,9 @@
                 let div = document.createElement('div');
                 div.className = 'req-box';
                 div.innerHTML = `
-                    <b>ইউজার আইডি:</b> ${req.user} (${req.phone})<br>
+                    <b>ইউজার:</b> ${req.user} (${req.phone})<br>
                     <b>উইথড্র অ্যামাউন্ট:</b> ${req.amount} ৳ (${req.method})<br>
-                    <b>ফি মেথড:</b> ${req.gateway} | <b>TrxID:</b> <span style="color:#177a6d; font-weight:bold;">${req.trx}</span><br>
+                    <b>ফি মেথড:</b> ${req.gateway} | <b>TrxID:</b> ${req.trx}<br>
                     <div class="action-btns">
                         <button class="btn-approve" onclick="approveRequest(${req.id}, ${req.amount})">Approve</button>
                         <button class="btn-deny" onclick="denyRequest(${req.id})">Denied</button>
@@ -958,7 +969,6 @@
             });
         }
 
-        // ADMIN APPROVE
         function approveRequest(id, amount) {
             adminStats.pendingReqs = adminStats.pendingReqs.filter(r => r.id !== id);
             adminStats.totalPaid += parseFloat(amount);
@@ -967,19 +977,17 @@
             statusBanner.style.display = 'block';
             statusBanner.style.background = '#e8f5e9';
             statusBanner.style.color = '#2e7d32';
-            statusBanner.innerText = "আপনার " + amount + " টাকার উইথড্র ও এক্টিভেশন অনুরোধটি সফলভাবে অনুমোদন করা হয়েছে (Approved)।";
+            statusBanner.innerText = "আপনার প্রস্তাবিত পেমেন্ট অনুরোধটি অনুমোদন করা হয়েছে (Approved)।";
 
             renderAdminRequests();
             updateUI();
         }
 
-        // ADMIN DENIED (REFUNDS MONEY BACK TO USER)
         function denyRequest(id) {
             let req = adminStats.pendingReqs.find(r => r.id === id);
-            
             if (req) {
-                // Refund money back to Signup Bonus / Ad Earning balance
-                userData.signupBonus += parseFloat(req.amount);
+                // Refund deducted money back to user adEarning
+                userData.adEarning += parseFloat(req.amount);
             }
 
             adminStats.pendingReqs = adminStats.pendingReqs.filter(r => r.id !== id);
@@ -988,24 +996,23 @@
             statusBanner.style.display = 'block';
             statusBanner.style.background = '#ffebee';
             statusBanner.style.color = '#c62828';
-            statusBanner.innerText = "আপনার উইথড্র অনুরোধটি বাতিল করা হয়েছে (Denied)। কেটে নেওয়া " + (req ? req.amount : '') + " টাকা আপনার অ্যাকাউন্টে ফেরত দেওয়া হয়েছে।";
+            statusBanner.innerText = "আপনার অনুরোধটির অনুমোদন ব্যর্থ হয়েছে (Denied)। টাকা আপনার অ্যাকাউন্টে ফেরত দেওয়া হয়েছে।";
 
             renderAdminRequests();
             updateUI();
         }
 
-        // User Remove Action
         function removeUser(username) {
             if(confirm(`আপনি কি সত্যিই ${username} ইউজারকে রিমুভ করতে চান?`)) {
                 userData.removedUsersCount++;
                 adminStats.totalUsers = Math.max(0, adminStats.totalUsers - 1);
-                document.getElementById('admin-user-list').innerHTML = '<p style="font-size:12px; color:red;">ইউজার সফলভাবে রিমুভ করা হয়েছে।</p>';
+                document.getElementById('admin-user-list').innerHTML = '<p style="font-size:12px; color:red;">ইউজার রিমুভ করা হয়েছে।</p>';
                 updateUI();
             }
         }
 
-        // Initialize UI on Load
-        window.onload = function() {
-            updateUI();
-        };
+        // Initial Load
+        updateUI();
     </script>
+</body>
+</html>
