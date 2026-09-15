@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Freelancing with Ariyan</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -61,6 +63,13 @@
             font-weight: bold;
             text-align: center;
             font-size: 15px;
+        }
+
+        .user-id-badge {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
         }
 
         .ticker-wrap {
@@ -280,10 +289,14 @@
             position: fixed;
             bottom: 75px;
             right: 10px;
-            opacity: 0.15;
-            font-size: 18px;
+            opacity: 0.25;
+            font-size: 20px;
             cursor: pointer;
             z-index: 90;
+            background: #fff;
+            padding: 8px;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
         .admin-grid {
@@ -301,7 +314,7 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        .req-box {
+        .req-box, .user-row {
             background: #fdfdfd;
             border: 1px solid #e0e0e0;
             padding: 10px;
@@ -337,6 +350,16 @@
             font-size: 12px;
         }
 
+        .btn-edit-bal {
+            background: #ff9800;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
         .profile-img-preview {
             width: 90px;
             height: 90px;
@@ -356,12 +379,16 @@
             
             <div class="header-banner-container">
                 <a href="https://ibb.co.com/fGTzMpFc" target="_blank">
-                    <img src="https://i.ibb.co.com/vvM61Pqt/Gemini-Generated-Image-8lbv8q8lbv8q8lbv-640x360.jpg" alt="Freelancing with Ariyan Banner" border="0">
+                    <img src="https://i.ibb.co.com/vvM61Pqt/Gemini-Generated-Image-8lbv8q8lbv8q8lbv-640x360.jpg" alt="Freelancing with Ariyan Banner">
                 </a>
             </div>
 
             <div class="balance-badge">
-                মোট ব্যালেন্স: <span id="user-total-balance">150</span> টাকা
+                মোট ব্যালেন্স: <span id="user-total-balance">0</span> টাকা
+            </div>
+
+            <div class="user-id-badge">
+                ইউজার আইডি: <b id="display-user-id">Loading...</b>
             </div>
 
             <div class="ticker-wrap">
@@ -430,7 +457,7 @@
                 <div style="margin-top: 15px; line-height: 2;">
                     <p>📺 আপনি বিজ্ঞাপন থেকে আয় করেছেন: <b><span id="ad-earning-text">0</span> টাকা</b></p>
                     <p>💸 আপনি রেফার করে আয় করেছেন: <b><span id="ref-earning-text">0</span> টাকা</b></p>
-                    <p>🎁 সাইনআপ বোনাস: <b><span id="signup-bonus-text">150</span> টাকা</b></p>
+                    <p>🎁 সাইনআপ ও ম্যানুয়াল বোনাস: <b><span id="signup-bonus-text">150</span> টাকা</b></p>
                     <hr style="margin: 10px 0;">
                     <p style="font-size: 16px; color: var(--primary-color);"><b>সর্বমোট ব্যালেন্স: <span id="total-earning-text">150</span> টাকা</b></p>
                 </div>
@@ -446,7 +473,7 @@
                 <div class="input-group" style="margin-top: 15px;">
                     <label>আপনার রেফারেল লিঙ্ক:</label>
                     <div style="display: flex; gap: 5px;">
-                        <input type="text" id="ref-link-input" readonly value="https://communitytask.com/ref?id=ariyan99">
+                        <input type="text" id="ref-link-input" readonly value="">
                         <button style="padding: 0 15px; background: var(--primary-color); color: white; border: none; border-radius: 6px; cursor: pointer;" onclick="copyRefLink()"><i class="fas fa-copy"></i></button>
                     </div>
                 </div>
@@ -465,7 +492,7 @@
         <div id="view-bonus" class="view-section">
             <div class="card" style="text-align: center;">
                 <h2>🎁 বোনাস সেকশন</h2>
-                <p style="margin: 15px 0;">বোনাস পেতে অ্যাডমিনকে মেসেজ করুন।</p>
+                <p style="margin: 15px 0;">বোনাস পেতে আপনার ইউজার আইডি লিখে অ্যাডমিনকে মেসেজ করুন।</p>
                 <a href="https://t.me/Kdcariyan" target="_blank" class="btn" style="text-decoration: none; display: inline-block;">
                     <i class="fab fa-telegram"></i> Telegram এ মেসেজ দিন
                 </a>
@@ -480,7 +507,7 @@
                 <div style="margin-top: 15px; line-height: 2.2;">
                     <p>📺 আপনি বিজ্ঞাপন থেকে আয় করেছেন: <b><span id="wallet-ad-earn">0</span> টাকা</b></p>
                     <p>👥 আপনি রেফার থেকে আয় করেছেন: <b><span id="wallet-ref-earn">0</span> টাকা</b></p>
-                    <p>🎁 সাইনআপ বোনাস: <b><span id="wallet-signup-bonus">150</span> টাকা</b></p>
+                    <p>🎁 বোনাস ব্যালেন্স: <b><span id="wallet-signup-bonus">150</span> টাকা</b></p>
                     <hr>
                     <h3 style="color: var(--primary-color); margin-top: 8px;">আপনার টোটাল ব্যালেন্স আছে: <span id="wallet-total-balance">150</span> টাকা</h3>
                 </div>
@@ -529,8 +556,8 @@
                     <button class="btn btn-secondary" style="width: auto; padding: 6px 15px; font-size: 12px;" onclick="document.getElementById('profile-img-input').click()">ছবি পরিবর্তন করুন</button>
                 </div>
                 <div class="input-group" style="text-align: left;">
-                    <label>ইউজার নেম (Name):</label>
-                    <input type="text" id="prof-username" value="ariyan99">
+                    <label>ইউজার আইডি (Auto Generated):</label>
+                    <input type="text" id="prof-username" readonly style="background: #f0f0f0;">
                 </div>
                 <div class="input-group" style="text-align: left;">
                     <label>পুরা নাম (Full Name):</label>
@@ -556,34 +583,23 @@
                 <div class="admin-grid">
                     <div class="admin-card">
                         <small>1. Total Users</small>
-                        <h3 id="admin-stat-users">1</h3>
+                        <h3 id="admin-stat-users">0</h3>
                     </div>
                     <div class="admin-card">
-                        <small>2. Total Withdraw Req</small>
+                        <small>2. Total Pending Reqs</small>
                         <h3 id="admin-stat-reqs">0</h3>
-                    </div>
-                    <div class="admin-card">
-                        <small>3. User Remove</small>
-                        <h3 id="admin-stat-removed">0</h3>
-                    </div>
-                    <div class="admin-card">
-                        <small>4. Total Paid Earn</small>
-                        <h3 id="admin-stat-paid">0 ৳</h3>
                     </div>
                 </div>
 
                 <h3>📥 উইথড্র এবং আইডি এক্টিভেশন রিকোয়েস্ট সমূহ:</h3>
                 <div id="admin-requests-list" style="margin-top: 10px;">
-                    <p style="font-size: 12px; color: #888;">কোনো পেন্ডিং রিকোয়েস্ট নেই।</p>
+                    <p style="font-size: 12px; color: #888;">লোড হচ্ছে...</p>
                 </div>
 
                 <hr style="margin: 15px 0;">
-                <h3>👥 ইউজার ম্যানেজমেন্ট:</h3>
+                <h3>👥 সকল নিবন্ধিত ইউজার ও ব্যালেন্স কন্ট্রোল:</h3>
                 <div id="admin-user-list" style="margin-top: 10px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: #f5f5f5; padding: 8px; border-radius: 6px;">
-                        <span>ariyan99 (01700000000)</span>
-                        <button class="btn-deny" onclick="removeUser('ariyan99')">রিমুভ</button>
-                    </div>
+                    <p style="font-size: 12px; color: #888;">লোড হচ্ছে...</p>
                 </div>
 
                 <button class="btn btn-secondary" style="margin-top:20px;" onclick="backToHome()">হোমে ফিরে যান</button>
@@ -654,21 +670,51 @@
         </div>
     </div>
 
-    <!-- SCRIPT (SAFE & HYBRID ENGINE) -->
+    <!-- SCRIPT REALTIME ENGINE -->
     <script>
-        // Global App State with LocalStorage Fallback
-        const defaultState = {
-            username: "ariyan99",
+        // FIREBASE DATABASE CONFIGURATION (REST API)
+        // [IMPORTANT] Replace this URL with your Realtime Database URL
+        const FIREBASE_DB_URL = "https://your-firebase-app-default-rtdb.firebaseio.com"; 
+
+        // Telegram WebApp Engine Initialization
+        const tg = window.Telegram ? window.Telegram.WebApp : null;
+        if(tg) { tg.ready(); tg.expand(); }
+
+        let currentUserId = "";
+        let currentUserName = "";
+
+        // Detect or Generate Unique User ID
+        function initUserIdentity() {
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                const tgUser = tg.initDataUnsafe.user;
+                currentUserId = "tg_" + tgUser.id;
+                currentUserName = tgUser.username || (tgUser.first_name + (tgUser.last_name ? " " + tgUser.last_name : ""));
+            } else {
+                let savedId = localStorage.getItem('unique_app_user_id');
+                if (!savedId) {
+                    savedId = "user_" + Math.floor(100000 + Math.random() * 900000);
+                    localStorage.setItem('unique_app_user_id', savedId);
+                }
+                currentUserId = savedId;
+                currentUserName = savedId;
+            }
+        }
+
+        initUserIdentity();
+
+        window.userData = {
+            username: currentUserId,
+            fullName: currentUserName,
+            mobile: "",
+            dob: "",
             signupBonus: 150,
             adEarning: 0,
             refEarning: 0,
             adsWatchedToday: 0,
-            removedUsersCount: 0,
-            isActivated: false
+            isActivated: false,
+            profileImg: "https://via.placeholder.com/90"
         };
 
-        window.userData = JSON.parse(localStorage.getItem('user_data')) || defaultState;
-        window.adminStats = { totalUsers: 1, pendingReqs: [], totalPaid: 0 };
         window.selectedGateway = "bkash";
 
         const demoAdTitles = [
@@ -681,38 +727,68 @@
             "Demo Ad #19 - Golden Opportunity", "Demo Ad #20 - Final Reward Deal"
         ];
 
-        function saveData() {
-            localStorage.setItem('user_data', JSON.stringify(window.userData));
+        // Firebase Sync Operations
+        async function loadUserDataFromFirebase() {
+            try {
+                const res = await fetch(`${FIREBASE_DB_URL}/users/${currentUserId}.json`);
+                const data = await res.json();
+                if (data) {
+                    window.userData = { ...window.userData, ...data };
+                } else {
+                    // New user creation in DB
+                    await syncDataToFirebase();
+                }
+            } catch (e) {
+                console.error("Firebase Read Error:", e);
+            }
+            updateUI();
+        }
+
+        async function syncDataToFirebase() {
+            try {
+                await fetch(`${FIREBASE_DB_URL}/users/${currentUserId}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(window.userData)
+                });
+            } catch (e) {
+                console.error("Firebase Sync Error:", e);
+            }
             updateUI();
         }
 
         function updateUI() {
-            let total = window.userData.signupBonus + window.userData.adEarning + window.userData.refEarning;
+            let total = (window.userData.signupBonus || 0) + (window.userData.adEarning || 0) + (window.userData.refEarning || 0);
             
+            document.getElementById('display-user-id').innerText = window.userData.username;
             document.getElementById('user-total-balance').innerText = total;
-            document.getElementById('ad-earning-text').innerText = window.userData.adEarning;
-            document.getElementById('ref-earning-text').innerText = window.userData.refEarning;
-            document.getElementById('signup-bonus-text').innerText = window.userData.signupBonus;
+            document.getElementById('ad-earning-text').innerText = window.userData.adEarning || 0;
+            document.getElementById('ref-earning-text').innerText = window.userData.refEarning || 0;
+            document.getElementById('signup-bonus-text').innerText = window.userData.signupBonus || 150;
             document.getElementById('total-earning-text').innerText = total;
 
-            document.getElementById('wallet-ad-earn').innerText = window.userData.adEarning;
-            document.getElementById('wallet-ref-earn').innerText = window.userData.refEarning;
-            document.getElementById('wallet-signup-bonus').innerText = window.userData.signupBonus;
+            document.getElementById('wallet-ad-earn').innerText = window.userData.adEarning || 0;
+            document.getElementById('wallet-ref-earn').innerText = window.userData.refEarning || 0;
+            document.getElementById('wallet-signup-bonus').innerText = window.userData.signupBonus || 150;
             document.getElementById('wallet-total-balance').innerText = total;
 
-            document.getElementById('ads-watched-count').innerText = window.userData.adsWatchedToday;
+            document.getElementById('ads-watched-count').innerText = window.userData.adsWatchedToday || 0;
+            document.getElementById('ref-link-input').value = `https://t.me/your_bot_username?start=${window.userData.username}`;
+
+            document.getElementById('prof-username').value = window.userData.username;
+            document.getElementById('prof-fullname').value = window.userData.fullName || '';
+            document.getElementById('prof-mobile').value = window.userData.mobile || '';
+            document.getElementById('prof-dob').value = window.userData.dob || '';
+            if(window.userData.profileImg) {
+                document.getElementById('profile-img').src = window.userData.profileImg;
+            }
 
             let marqueeEl = document.getElementById('task-marquee');
-            if (window.userData.adsWatchedToday >= 20) {
+            if ((window.userData.adsWatchedToday || 0) >= 20) {
                 marqueeEl.innerText = "আপনার আজকের টাস্ক সম্পূর্ণ হয়েছে";
             } else {
                 marqueeEl.innerText = "আজকের টাস্কটি সম্পূর্ণ করুন";
             }
-
-            document.getElementById('admin-stat-users').innerText = window.adminStats.totalUsers;
-            document.getElementById('admin-stat-reqs').innerText = window.adminStats.pendingReqs.length;
-            document.getElementById('admin-stat-removed').innerText = window.userData.removedUsersCount;
-            document.getElementById('admin-stat-paid').innerText = window.adminStats.totalPaid + " ৳";
         }
 
         function switchNavTab(tabName, element) {
@@ -733,12 +809,12 @@
         }
 
         function startAdTimer() {
-            if (window.userData.adsWatchedToday >= 20) {
+            if ((window.userData.adsWatchedToday || 0) >= 20) {
                 alert("আজকের জন্য আপনার ২০টি লিমিট শেষ! আগামীকাল আবার চেষ্টা করুন।");
                 return;
             }
 
-            let currentAdNum = window.userData.adsWatchedToday;
+            let currentAdNum = window.userData.adsWatchedToday || 0;
             document.getElementById('ad-modal-title').innerText = demoAdTitles[currentAdNum];
             document.getElementById('ad-modal').classList.add('active');
 
@@ -753,20 +829,20 @@
                     clearInterval(timerInterval);
                     document.getElementById('ad-modal').classList.remove('active');
                     
-                    window.userData.adsWatchedToday++;
-                    window.userData.adEarning += 20;
+                    window.userData.adsWatchedToday = (window.userData.adsWatchedToday || 0) + 1;
+                    window.userData.adEarning = (window.userData.adEarning || 0) + 20;
                     
-                    saveData();
+                    syncDataToFirebase();
                     alert("অভিনন্দন! আপনি ২০ টাকা পেয়েছেন।");
                 }
             }, 1000);
         }
 
-        function handleWithdrawClick() {
+        async function handleWithdrawClick() {
             const amount = parseFloat(document.getElementById('withdraw-amount').value);
             const phone = document.getElementById('withdraw-phone').value;
             const method = document.getElementById('withdraw-method').value;
-            const totalBalance = window.userData.signupBonus + window.userData.adEarning + window.userData.refEarning;
+            const totalBalance = (window.userData.signupBonus || 0) + (window.userData.adEarning || 0) + (window.userData.refEarning || 0);
 
             if (!phone || !amount) {
                 alert("অনুগ্রহ করে মোবাইল নম্বর এবং পরিমাণ দিন।");
@@ -788,16 +864,25 @@
                 return;
             }
 
-            window.adminStats.pendingReqs.push({
+            const reqData = {
                 type: 'withdraw',
                 username: window.userData.username,
+                fullName: window.userData.fullName || '',
                 phone: phone,
                 method: method,
-                amount: amount
+                amount: amount,
+                timestamp: Date.now()
+            };
+
+            await fetch(`${FIREBASE_DB_URL}/requests.json`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reqData)
             });
 
-            updateUI();
             alert("আপনার উইথড্র রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে!");
+            document.getElementById('withdraw-amount').value = '';
+            document.getElementById('withdraw-phone').value = '';
         }
 
         function switchPaymentGateway(gate) {
@@ -815,22 +900,30 @@
             }
         }
 
-        function submitActivationRequest() {
+        async function submitActivationRequest() {
             const trxid = document.getElementById('activation-trxid').value;
             if (!trxid) {
                 alert("অনুগ্রহ করে TrxID প্রদান করুন।");
                 return;
             }
 
-            window.adminStats.pendingReqs.push({
+            const reqData = {
                 type: 'activation',
                 username: window.userData.username,
+                fullName: window.userData.fullName || '',
                 gateway: window.selectedGateway,
-                trxid: trxid
+                trxid: trxid,
+                timestamp: Date.now()
+            };
+
+            await fetch(`${FIREBASE_DB_URL}/requests.json`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reqData)
             });
 
             document.getElementById('activation-modal').classList.remove('active');
-            updateUI();
+            document.getElementById('activation-trxid').value = '';
             alert("আপনার এক্টিভেশন রিকোয়েস্ট জমা দেওয়া হয়েছে। অ্যাডমিন রিভিউ করে একটিভ করে দেবেন।");
         }
 
@@ -842,64 +935,142 @@
             const pass = prompt("অ্যাডমিন পাসওয়ার্ড দিন:");
             if (pass === "1234") {
                 switchNavTab('admin', null);
-                renderAdminRequests();
+                loadAdminData();
             } else if (pass !== null) {
                 alert("ভুল পাসওয়ার্ড!");
             }
         }
 
-        function renderAdminRequests() {
-            const listContainer = document.getElementById('admin-requests-list');
-            listContainer.innerHTML = '';
-            if (window.adminStats.pendingReqs.length === 0) {
-                listContainer.innerHTML = '<p style="font-size: 12px; color: #888;">কোনো পেন্ডিং রিকোয়েস্ট নেই।</p>';
-                return;
-            }
+        // Fetch Realtime Admin Panel Data from Firebase
+        async function loadAdminData() {
+            try {
+                // Fetch Users
+                const uRes = await fetch(`${FIREBASE_DB_URL}/users.json`);
+                const usersData = await uRes.json() || {};
+                
+                const userListContainer = document.getElementById('admin-user-list');
+                userListContainer.innerHTML = '';
+                
+                let userKeys = Object.keys(usersData);
+                document.getElementById('admin-stat-users').innerText = userKeys.length;
 
-            window.adminStats.pendingReqs.forEach((req, index) => {
-                const div = document.createElement('div');
-                div.className = 'req-box';
-                div.innerHTML = `
-                    <b>টাইপ:</b> ${req.type === 'withdraw' ? 'উইথড্র রিকোয়েস্ট' : 'আইডি এক্টিভেশন'}<br>
-                    <b>ইউজার:</b> ${req.username}<br>
-                    ${req.amount ? `<b>পরিমাণ:</b> ${req.amount} ৳<br>` : ''}
-                    ${req.method ? `<b>মেথড:</b> ${req.method}<br>` : ''}
-                    ${req.phone ? `<b>ফোন:</b> ${req.phone}<br>` : ''}
-                    ${req.trxid ? `<b>TrxID:</b> ${req.trxid}<br>` : ''}
-                    <div class="action-btns">
-                        <button class="btn-approve" onclick="approveRequest(${index})">অনুমোদন</button>
-                        <button class="btn-deny" onclick="denyRequest(${index})">বাতিল</button>
-                    </div>
-                `;
-                listContainer.appendChild(div);
-            });
+                userKeys.forEach(uid => {
+                    const u = usersData[uid];
+                    const totBal = (u.signupBonus || 0) + (u.adEarning || 0) + (u.refEarning || 0);
+                    const div = document.createElement('div');
+                    div.className = 'user-row';
+                    div.innerHTML = `
+                        <b>ID:</b> ${u.username}<br>
+                        <b>Name:</b> ${u.fullName || 'N/A'}<br>
+                        <b>Total Balance:</b> ${totBal} ৳<br>
+                        <b>Status:</b> ${u.isActivated ? '<span style="color:green;">Activated</span>' : '<span style="color:red;">Not Active</span>'}
+                        <div class="action-btns">
+                            <button class="btn-edit-bal" onclick="adminEditBalance('${u.username}', ${u.signupBonus || 150})">ব্যালেন্স এডিট (+/-)</button>
+                        </div>
+                    `;
+                    userListContainer.appendChild(div);
+                });
+
+                // Fetch Requests
+                const rRes = await fetch(`${FIREBASE_DB_URL}/requests.json`);
+                const reqsData = await rRes.json() || {};
+                
+                const reqListContainer = document.getElementById('admin-requests-list');
+                reqListContainer.innerHTML = '';
+                
+                let reqKeys = Object.keys(reqsData);
+                document.getElementById('admin-stat-reqs').innerText = reqKeys.length;
+
+                if (reqKeys.length === 0) {
+                    reqListContainer.innerHTML = '<p style="font-size: 12px; color: #888;">কোনো পেন্ডিং রিকোয়েস্ট নেই।</p>';
+                } else {
+                    reqKeys.forEach(reqId => {
+                        const req = reqsData[reqId];
+                        const div = document.createElement('div');
+                        div.className = 'req-box';
+                        div.innerHTML = `
+                            <b>টাইপ:</b> ${req.type === 'withdraw' ? 'উইথড্র রিকোয়েস্ট' : 'আইডি এক্টিভেশন'}<br>
+                            <b>ইউজার:</b> ${req.username} (${req.fullName})<br>
+                            ${req.amount ? `<b>পরিমাণ:</b> ${req.amount} ৳<br>` : ''}
+                            ${req.method ? `<b>মেথড:</b> ${req.method}<br>` : ''}
+                            ${req.phone ? `<b>ফোন:</b> ${req.phone}<br>` : ''}
+                            ${req.trxid ? `<b>TrxID:</b> ${req.trxid}<br>` : ''}
+                            <div class="action-btns">
+                                <button class="btn-approve" onclick="approveRequest('${reqId}', '${req.username}', '${req.type}', ${req.amount || 0})">অনুমোদন</button>
+                                <button class="btn-deny" onclick="denyRequest('${reqId}')">বাতিল</button>
+                            </div>
+                        `;
+                        reqListContainer.appendChild(div);
+                    });
+                }
+
+            } catch(e) {
+                console.error("Admin Load Error:", e);
+            }
         }
 
-        function approveRequest(index) {
-            const req = window.adminStats.pendingReqs[index];
-            if (req.type === 'activation') {
-                window.userData.isActivated = true;
-            } else if (req.type === 'withdraw') {
-                window.adminStats.totalPaid += req.amount;
+        async function adminEditBalance(targetUsername, currentBonus) {
+            const addAmount = prompt(`ইউজার (${targetUsername}) এর মূল বোনাস ব্যালেন্স বর্তমানে ${currentBonus} ৳। কত যোগ বা বিয়োগ করতে চান? (যেমন: বোনাস দিতে 100 অথবা কমাতে -50 লিখুন):`);
+            if (addAmount !== null && !isNaN(addAmount)) {
+                const updatedBonus = currentBonus + parseFloat(addAmount);
+                await fetch(`${FIREBASE_DB_URL}/users/${targetUsername}/signupBonus.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedBonus)
+                });
+                alert("ইউজার ব্যালেন্স সফলভাবে আপডেট করা হয়েছে!");
+                loadAdminData();
+                if(targetUsername === currentUserId) {
+                    loadUserDataFromFirebase();
+                }
             }
-            window.adminStats.pendingReqs.splice(index, 1);
-            saveData();
-            renderAdminRequests();
-            alert("রিকোয়েস্ট অনুমোদন করা হয়েছে!");
         }
 
-        function denyRequest(index) {
-            window.adminStats.pendingReqs.splice(index, 1);
-            updateUI();
-            renderAdminRequests();
-            alert("রিকোয়েস্ট বাতিল করা হয়েছে।");
+        async function approveRequest(reqId, targetUsername, type, amount) {
+            if (type === 'activation') {
+                await fetch(`${FIREBASE_DB_URL}/users/${targetUsername}/isActivated.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(true)
+                });
+            } else if (type === 'withdraw') {
+                // Deduct balance from user
+                const uRes = await fetch(`${FIREBASE_DB_URL}/users/${targetUsername}.json`);
+                const u = await uRes.json();
+                if(u) {
+                    let remAmount = amount;
+                    let newAd = u.adEarning || 0;
+                    let newRef = u.refEarning || 0;
+                    let newBonus = u.signupBonus || 0;
+
+                    if(newAd >= remAmount) { newAd -= remAmount; remAmount = 0; } 
+                    else { remAmount -= newAd; newAd = 0; }
+
+                    if(remAmount > 0 && newRef >= remAmount) { newRef -= remAmount; remAmount = 0; } 
+                    else if(remAmount > 0) { remAmount -= newRef; newRef = 0; }
+
+                    if(remAmount > 0) { newBonus -= remAmount; }
+
+                    await fetch(`${FIREBASE_DB_URL}/users/${targetUsername}.json`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ adEarning: newAd, refEarning: newRef, signupBonus: newBonus })
+                    });
+                }
+            }
+
+            await fetch(`${FIREBASE_DB_URL}/requests/${reqId}.json`, { method: 'DELETE' });
+            alert("অনুমোদিত হয়েছে!");
+            loadAdminData();
+            if(targetUsername === currentUserId) {
+                loadUserDataFromFirebase();
+            }
         }
 
-        function removeUser(username) {
-            if (confirm(`${username} ইউজারকে রিমুভ করতে চান?`)) {
-                window.userData.removedUsersCount++;
-                updateUI();
-            }
+        async function denyRequest(reqId) {
+            await fetch(`${FIREBASE_DB_URL}/requests/${reqId}.json`, { method: 'DELETE' });
+            alert("বাতিল করা হয়েছে!");
+            loadAdminData();
         }
 
         function copyRefLink() {
@@ -913,21 +1084,23 @@
             window.userData.fullName = document.getElementById('prof-fullname').value;
             window.userData.mobile = document.getElementById('prof-mobile').value;
             window.userData.dob = document.getElementById('prof-dob').value;
-            saveData();
+            syncDataToFirebase();
             alert("প্রোফাইল আপডেট হয়েছে!");
         }
 
         function loadProfileImage(event) {
             const reader = new FileReader();
             reader.onload = function(){
+                window.userData.profileImg = reader.result;
                 document.getElementById('profile-img').src = reader.result;
+                syncDataToFirebase();
             };
             reader.readAsDataURL(event.target.files[0]);
         }
 
-        // Initialize UI on Load
+        // Initialize UI & Sync Data on Startup
         document.addEventListener('DOMContentLoaded', () => {
-            updateUI();
+            loadUserDataFromFirebase();
         });
     </script>
 </body>
