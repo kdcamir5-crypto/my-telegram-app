@@ -7,6 +7,7 @@
     <!-- Telegram WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
             --primary-color: #177a6d;
@@ -299,7 +300,6 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        /* NEW ADMIN INTERFACE STYLES */
         .admin-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -407,7 +407,6 @@
             margin-bottom: 10px;
         }
 
-        /* Slide-in Pop-up Banner Notification */
         .slide-popup-notification {
             position: fixed;
             top: 20px;
@@ -625,7 +624,6 @@
                 <button class="btn" onclick="handleWithdrawClick()">উইথড্র করুন</button>
             </div>
 
-            <!-- WITHDRAWAL HISTORY SECTION -->
             <div class="card" style="margin-top: 15px;">
                 <h3>📜 Withdrawal History</h3>
                 <div id="user-withdraw-history-list" style="margin-top: 10px;">
@@ -694,30 +692,25 @@
             </div>
         </div>
 
-        <!-- ADMIN SUB-VIEW: TOTAL USERS MANAGEMENT -->
+        <!-- ADMIN SUB-VIEWS -->
         <div id="admin-view-users" class="view-section">
             <div class="card">
                 <h2>👥 সকল ইউজার ম্যানেজমেন্ট</h2>
                 <p style="font-size: 12px; color: #666; margin-bottom: 15px;">ইউজারদের তথ্য, মোট ব্যালেন্স, বোনাস ও রিমুভ কন্ট্রোল:</p>
-                
                 <div id="admin-user-list" style="margin-top: 10px;">
                     <p style="font-size: 12px; color: #888;">লোড হচ্ছে...</p>
                 </div>
-
                 <button class="btn btn-secondary" style="margin-top:15px;" onclick="openAdminHome()">আগের পেজে যান</button>
             </div>
         </div>
 
-        <!-- ADMIN SUB-VIEW: TOTAL WITHDRAW MANAGEMENT -->
         <div id="admin-view-withdraw" class="view-section">
             <div class="card">
                 <h2>🏦 উইথড্র ও এক্টিভেশন রিকোয়েস্ট</h2>
                 <p style="font-size: 12px; color: #666; margin-bottom: 15px;">সকল উইথড্র এবং আইডি এক্টিভেশন রিকোয়েস্ট সমূহ:</p>
-                
                 <div id="admin-requests-list" style="margin-top: 10px;">
                     <p style="font-size: 12px; color: #888;">লোড হচ্ছে...</p>
                 </div>
-
                 <button class="btn btn-secondary" style="margin-top:15px;" onclick="openAdminHome()">আগের পেজে যান</button>
             </div>
         </div>
@@ -786,33 +779,33 @@
         </div>
     </div>
 
-    <!-- SCRIPT REALTIME ENGINE -->
-    <script>
-        // Init Telegram WebApp
-        if (window.Telegram && window.Telegram.WebApp) {
-            window.Telegram.WebApp.ready();
-            window.Telegram.WebApp.expand();
-        }
+    <!-- FIREBASE MODULE & REALTIME BACKEND SCRIPT -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, get, update, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // External Link Handler (To Prevent Mini App Close)
-        function openExternalLink(e, url) {
-            if (e) e.preventDefault();
-            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink && url.includes('t.me')) {
-                window.Telegram.WebApp.openTelegramLink(url);
-            } else if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openLink) {
-                window.Telegram.WebApp.openLink(url);
-            } else {
-                window.open(url, '_blank');
-            }
-        }
+        // Firebase Config (Replace with your Firebase Credentials)
+        const firebaseConfig = {
+    apiKey: "AIzaSyDLxotImsTTEAMgOfVKdodefhmcTi9MKfE",
+    authDomain: "frelancing-mini-app.firebaseapp.com",
+    databaseURL: "https://frelancing-mini-app-default-rtdb.firebaseio.com",
+    projectId: "frelancing-mini-app",
+    storageBucket: "frelancing-mini-app.firebasestorage.app",
+    messagingSenderId: "991264241409",
+    appId: "1:991264241409:web:466b311d1af170d15c0d00"
+};
 
-        // Local Storage State Management
-        let currentUser = localStorage.getItem('app_user_id') || 'USER_' + Math.floor(100000 + Math.random() * 900000);
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Telegram WebApp / ID Setup
+        let tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+        let currentUser = tgUser ? 'TG_' + tgUser.id : (localStorage.getItem('app_user_id') || 'USER_' + Math.floor(100000 + Math.random() * 900000));
         localStorage.setItem('app_user_id', currentUser);
 
-        let userData = JSON.parse(localStorage.getItem('user_data_' + currentUser)) || {
+        let userData = {
             id: currentUser,
-            fullName: '',
+            fullName: tgUser ? tgUser.first_name : '',
             mobile: '',
             dob: '',
             profileImg: '',
@@ -820,16 +813,40 @@
             refEarning: 0,
             signupBonus: 150,
             adsWatched: 0,
-            withdrawals: []
+            withdrawals: {}
         };
 
         let activeGateway = 'bkash';
         let currentPendingWithdraw = null;
 
+        // Firebase Sync
+        const userRef = ref(db, 'users/' + currentUser);
+
+        onValue(userRef, (snapshot) => {
+            if (snapshot.exists()) {
+                userData = snapshot.val();
+                if (!userData.withdrawals) userData.withdrawals = {};
+            } else {
+                set(userRef, userData);
+            }
+            updateUI();
+        });
+
         function saveUserData() {
-            localStorage.setItem('user_data_' + currentUser, JSON.stringify(userData));
+            set(ref(db, 'users/' + currentUser), userData);
             updateUI();
         }
+
+        window.openExternalLink = function(e, url) {
+            if (e) e.preventDefault();
+            if (window.Telegram?.WebApp?.openTelegramLink && url.includes('t.me')) {
+                window.Telegram.WebApp.openTelegramLink(url);
+            } else if (window.Telegram?.WebApp?.openLink) {
+                window.Telegram.WebApp.openLink(url);
+            } else {
+                window.open(url, '_blank');
+            }
+        };
 
         function updateUI() {
             let totalBalance = userData.adEarning + userData.refEarning + userData.signupBonus;
@@ -851,9 +868,7 @@
             document.getElementById('ads-watched-count').innerText = userData.adsWatched;
             document.getElementById('ref-link-input').value = 'https://t.me/bechelor_point_season?start=' + userData.id;
 
-            if (userData.profileImg) {
-                document.getElementById('profile-img').src = userData.profileImg;
-            }
+            if (userData.profileImg) document.getElementById('profile-img').src = userData.profileImg;
             if (userData.fullName) document.getElementById('prof-fullname').value = userData.fullName;
             if (userData.mobile) document.getElementById('prof-mobile').value = userData.mobile;
             if (userData.dob) document.getElementById('prof-dob').value = userData.dob;
@@ -861,34 +876,27 @@
             renderUserWithdrawHistory();
         }
 
-        // View Navigation
-        function hideAllViews() {
-            let views = document.querySelectorAll('.view-section');
-            views.forEach(v => v.classList.remove('active'));
-        }
+        window.hideAllViews = function() {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+        };
 
-        function openSubView(viewId) {
+        window.openSubView = function(viewId) {
             hideAllViews();
             document.getElementById(viewId).classList.add('active');
-        }
+        };
 
-        function backToHome() {
+        window.backToHome = function() {
             hideAllViews();
             document.getElementById('tab-home').classList.add('active');
             resetNavHighlight(0);
-        }
+        };
 
-        function switchNavTab(tabName, el) {
+        window.switchNavTab = function(tabName, el) {
             hideAllViews();
             document.getElementById('tab-' + tabName).classList.add('active');
-            let items = document.querySelectorAll('.nav-item');
-            items.forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             if(el) el.classList.add('active');
-
-            if(tabName === 'withdraw') {
-                checkAndShowStatusNotification();
-            }
-        }
+        };
 
         function resetNavHighlight(index) {
             let items = document.querySelectorAll('.nav-item');
@@ -896,8 +904,7 @@
             if (items[index]) items[index].classList.add('active');
         }
 
-        // Ad Timer Functionality
-        function startAdTimer() {
+        window.startAdTimer = function() {
             if (userData.adsWatched >= 20) {
                 alert('আজকের জন্য আপনার ২০টি অ্যাড দেখা শেষ হয়ে গেছে!');
                 return;
@@ -918,10 +925,9 @@
                     alert('অভিনন্দন! আপনি ২০ টাকা বোনাস পেয়েছেন।');
                 }
             }, 1000);
-        }
+        };
 
-        // Payment Gateway and Activation Modal
-        function switchPaymentGateway(gateway) {
+        window.switchPaymentGateway = function(gateway) {
             activeGateway = gateway;
             if (gateway === 'bkash') {
                 document.getElementById('gateway-bkash-box').style.display = 'block';
@@ -934,9 +940,9 @@
                 document.getElementById('gate-bkash-btn').className = 'btn btn-secondary';
                 document.getElementById('gate-nagad-btn').className = 'btn';
             }
-        }
+        };
 
-        function handleWithdrawClick() {
+        window.handleWithdrawClick = function() {
             let phone = document.getElementById('withdraw-phone').value;
             let amount = parseFloat(document.getElementById('withdraw-amount').value);
             let total = userData.adEarning + userData.refEarning + userData.signupBonus;
@@ -960,13 +966,12 @@
                 method: document.getElementById('withdraw-method').value
             };
 
-            // Pop-up activation modal
             document.getElementById('activation-modal').classList.add('active');
-        }
+        };
 
-        function closeActivationModal() {
+        window.closeActivationModal = function() {
             document.getElementById('activation-modal').classList.remove('active');
-        }
+        };
 
         function showSlidePopup(message, duration = 10000) {
             let popup = document.getElementById('slide-popup');
@@ -977,91 +982,66 @@
             }, duration);
         }
 
-        function submitActivationRequest() {
+        window.submitActivationRequest = function() {
             let trx = document.getElementById('activation-trxid').value.trim();
             if (!trx) {
                 alert('দয়া করে TrxID (ট্রানজেকশন আইডি) লিখুন।');
                 return;
             }
 
+            let reqId = 'REQ_' + Date.now();
+            let amount = currentPendingWithdraw.amount;
+
             let newReq = {
-                id: 'REQ_' + Date.now(),
+                id: reqId,
                 userId: userData.id,
-                method: currentPendingWithdraw ? currentPendingWithdraw.method : 'bkash',
-                phone: currentPendingWithdraw ? currentPendingWithdraw.phone : userData.mobile,
-                amount: currentPendingWithdraw ? currentPendingWithdraw.amount : 1000,
+                method: currentPendingWithdraw.method,
+                phone: currentPendingWithdraw.phone,
+                amount: amount,
                 gateway: activeGateway,
                 trxId: trx,
                 status: 'pending',
-                notified: false,
                 date: new Date().toLocaleString('bn-BD')
             };
 
-            userData.withdrawals.push(newReq);
-
-            // Global System Admin Request Management Sync
-            let allAdminReqs = JSON.parse(localStorage.getItem('all_admin_requests')) || [];
-            allAdminReqs.push(newReq);
-            localStorage.setItem('all_admin_requests', JSON.stringify(allAdminReqs));
-
-            // Subtract balance
-            if(currentPendingWithdraw) {
-                if (userData.signupBonus >= currentPendingWithdraw.amount) {
-                    userData.signupBonus -= currentPendingWithdraw.amount;
+            // Deduct Main Balance First
+            if (userData.signupBonus >= amount) {
+                userData.signupBonus -= amount;
+            } else {
+                let rem = amount - userData.signupBonus;
+                userData.signupBonus = 0;
+                if(userData.adEarning >= rem) {
+                    userData.adEarning -= rem;
                 } else {
-                    let rem = currentPendingWithdraw.amount - userData.signupBonus;
-                    userData.signupBonus = 0;
-                    if(userData.adEarning >= rem) {
-                        userData.adEarning -= rem;
-                    } else {
-                        rem -= userData.adEarning;
-                        userData.adEarning = 0;
-                        userData.refEarning -= rem;
-                    }
+                    rem -= userData.adEarning;
+                    userData.adEarning = 0;
+                    userData.refEarning -= rem;
                 }
             }
 
+            if(!userData.withdrawals) userData.withdrawals = {};
+            userData.withdrawals[reqId] = newReq;
+
             saveUserData();
+
+            // Save in Admin Requests node
+            set(ref(db, 'requests/' + reqId), newReq);
+
             closeActivationModal();
             document.getElementById('activation-trxid').value = '';
 
-            // 1st Bengali Popup Notification Requirements
             showSlidePopup('আপনার উইথড্রল টি সফলভাবে জমা হয়েছে', 5000);
-        }
-
-        function checkAndShowStatusNotification() {
-            if (!userData.withdrawals || userData.withdrawals.length === 0) return;
-
-            let allAdminReqs = JSON.parse(localStorage.getItem('all_admin_requests')) || [];
-
-            userData.withdrawals.forEach((w) => {
-                let match = allAdminReqs.find(r => r.id === w.id);
-                if (match) {
-                    w.status = match.status;
-                }
-
-                if (!w.notified && (w.status === 'approved' || w.status === 'denied')) {
-                    if (w.status === 'approved') {
-                        showSlidePopup('আপনার উইথড্রল সাকসেসফুল', 10000);
-                    } else if (w.status === 'denied') {
-                        showSlidePopup('আপনার উইথড্রল রিকোয়েস্ট আনসাকসেসফুল, দয়া করে আবার চেষ্টা করুন', 10000);
-                    }
-                    w.notified = true;
-                }
-            });
-
-            saveUserData();
-        }
+        };
 
         function renderUserWithdrawHistory() {
             let container = document.getElementById('user-withdraw-history-list');
-            if (!userData.withdrawals || userData.withdrawals.length === 0) {
+            if (!userData.withdrawals || Object.keys(userData.withdrawals).length === 0) {
                 container.innerHTML = `<p style="font-size: 12px; color: #888;">কোনো উইথড্র হিস্ট্রি পাওয়া যায়নি।</p>`;
                 return;
             }
 
             let html = '';
-            userData.withdrawals.slice().reverse().forEach(w => {
+            Object.values(userData.withdrawals).reverse().forEach(w => {
                 let statusBadge = `<span class="status-badge-pending">Pending</span>`;
                 if (w.status === 'approved') statusBadge = `<span class="status-badge-approved">Approved</span>`;
                 if (w.status === 'denied') statusBadge = `<span class="status-badge-denied">Denied</span>`;
@@ -1078,8 +1058,7 @@
             container.innerHTML = html;
         }
 
-        // Profile Editing Functions
-        function loadProfileImage(event) {
+        window.loadProfileImage = function(event) {
             let reader = new FileReader();
             reader.onload = function() {
                 document.getElementById('profile-img').src = reader.result;
@@ -1087,25 +1066,25 @@
                 saveUserData();
             };
             reader.readAsDataURL(event.target.files[0]);
-        }
+        };
 
-        function saveProfile() {
+        window.saveProfile = function() {
             userData.fullName = document.getElementById('prof-fullname').value;
             userData.mobile = document.getElementById('prof-mobile').value;
             userData.dob = document.getElementById('prof-dob').value;
             saveUserData();
             alert('প্রোফাইল সফলভাবে সেভ করা হয়েছে!');
-        }
+        };
 
-        function copyRefLink() {
+        window.copyRefLink = function() {
             let copyText = document.getElementById('ref-link-input');
             copyText.select();
             document.execCommand('copy');
             alert('রেফারেল লিংক কপি করা হয়েছে!');
-        }
+        };
 
-        // ADMIN PANEL FUNCTIONS
-        function promptAdminLogin() {
+        // ADMIN PANEL IMPLEMENTATION
+        window.promptAdminLogin = function() {
             let pass = prompt('অ্যাডমিন প্যানেলে প্রবেশের জন্য পাসওয়ার্ড দিন:');
             if (pass === '1234') {
                 hideAllViews();
@@ -1114,152 +1093,151 @@
             } else if(pass !== null) {
                 alert('ভুল পাসওয়ার্ড!');
             }
-        }
+        };
 
-        function openAdminHome() {
+        window.openAdminHome = function() {
             hideAllViews();
             document.getElementById('tab-admin').classList.add('active');
             loadAdminDashboard();
-        }
+        };
 
-        function openAdminSubView(subViewId) {
+        window.openAdminSubView = function(subViewId) {
             hideAllViews();
             document.getElementById(subViewId).classList.add('active');
             if(subViewId === 'admin-view-users') renderAdminUsersList();
             if(subViewId === 'admin-view-withdraw') renderAdminRequestsList();
-        }
+        };
 
         function loadAdminDashboard() {
-            let allAdminReqs = JSON.parse(localStorage.getItem('all_admin_requests')) || [];
-            document.getElementById('admin-stat-reqs').innerText = allAdminReqs.length;
-
-            let userCount = 1;
-            for(let i=0; i<localStorage.length; i++) {
-                let key = localStorage.key(i);
-                if(key.startsWith('user_data_') && key !== ('user_data_' + currentUser)) {
-                    userCount++;
-                }
-            }
-            document.getElementById('admin-stat-users').innerText = userCount;
+            get(ref(db, 'requests')).then((snapshot) => {
+                document.getElementById('admin-stat-reqs').innerText = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+            });
+            get(ref(db, 'users')).then((snapshot) => {
+                document.getElementById('admin-stat-users').innerText = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+            });
         }
 
         function renderAdminUsersList() {
             let container = document.getElementById('admin-user-list');
-            let html = '';
-
-            let users = [userData];
-            for(let i=0; i<localStorage.length; i++) {
-                let key = localStorage.key(i);
-                if(key.startsWith('user_data_') && key !== ('user_data_' + currentUser)) {
-                    users.push(JSON.parse(localStorage.getItem(key)));
+            get(ref(db, 'users')).then((snapshot) => {
+                if (!snapshot.exists()) {
+                    container.innerHTML = '<p>কোনো ইউজার ডাটা পাওয়া যায়নি।</p>';
+                    return;
                 }
-            }
-
-            users.forEach(u => {
-                let total = u.adEarning + u.refEarning + u.signupBonus;
-                html += `
-                    <div class="user-row">
-                        <b>ইউজার ID:</b> ${u.id}<br>
-                        <b>নাম:</b> ${u.fullName || 'N/A'} | <b>ফোন:</b> ${u.mobile || 'N/A'}<br>
-                        <b>ব্যালেন্স:</b> ${total} টাকা (Bonus: ${u.signupBonus}, Ad: ${u.adEarning}, Ref: ${u.refEarning})<br>
-                        <div class="action-btns">
-                            <button class="btn-edit-bal" onclick="adminAddBonus('${u.id}')">+ বোনাস দিন</button>
-                            <button class="btn-delete-user" onclick="adminDeleteUser('${u.id}')">রিমুভ</button>
+                let users = snapshot.val();
+                let html = '';
+                Object.values(users).forEach(u => {
+                    let total = u.adEarning + u.refEarning + u.signupBonus;
+                    html += `
+                        <div class="user-row">
+                            <b>ইউজার ID:</b> ${u.id}<br>
+                            <b>নাম:</b> ${u.fullName || 'N/A'} | <b>ফোন:</b> ${u.mobile || 'N/A'}<br>
+                            <b>ব্যালেন্স:</b> ${total} টাকা (Bonus: ${u.signupBonus}, Ad: ${u.adEarning}, Ref: ${u.refEarning})<br>
+                            <div class="action-btns">
+                                <button class="btn-edit-bal" onclick="adminAddBonus('${u.id}')">+ বোনাস দিন</button>
+                                <button class="btn-delete-user" onclick="adminDeleteUser('${u.id}')">রিমুভ</button>
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                });
+                container.innerHTML = html;
             });
-
-            container.innerHTML = html || '<p>কোনো ইউজার ডাটা পাওয়া যায়নি।</p>';
         }
 
-        function adminAddBonus(uId) {
+        window.adminAddBonus = function(uId) {
             let bonus = parseFloat(prompt('কত টাকা বোনাস যোগ করতে চান?'));
             if (!isNaN(bonus) && bonus > 0) {
-                if (uId === currentUser) {
-                    userData.signupBonus += bonus;
-                    saveUserData();
-                } else {
-                    let targetUser = JSON.parse(localStorage.getItem('user_data_' + uId));
-                    if (targetUser) {
-                        targetUser.signupBonus += bonus;
-                        localStorage.setItem('user_data_' + uId, JSON.stringify(targetUser));
+                get(ref(db, 'users/' + uId)).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        let u = snapshot.val();
+                        u.signupBonus += bonus;
+                        update(ref(db, 'users/' + uId), { signupBonus: u.signupBonus });
+                        alert('বোনাস যোগ করা হয়েছে!');
+                        renderAdminUsersList();
                     }
-                }
-                alert('বোনাস যোগ করা হয়েছে!');
-                renderAdminUsersList();
+                });
             }
-        }
+        };
 
-        function adminDeleteUser(uId) {
+        window.adminDeleteUser = function(uId) {
             if (confirm('আপনি কি নিশ্চিত এই ইউজারকে মুছে ফেলতে চান?')) {
-                localStorage.removeItem('user_data_' + uId);
+                remove(ref(db, 'users/' + uId));
                 alert('ইউজার রিমুভ করা হয়েছে!');
                 renderAdminUsersList();
             }
-        }
+        };
 
         function renderAdminRequestsList() {
             let container = document.getElementById('admin-requests-list');
-            let allAdminReqs = JSON.parse(localStorage.getItem('all_admin_requests')) || [];
+            get(ref(db, 'requests')).then((snapshot) => {
+                if (!snapshot.exists()) {
+                    container.innerHTML = '<p style="font-size: 12px; color: #888;">কোনো রিকোয়েস্ট নেই।</p>';
+                    return;
+                }
+                let reqs = snapshot.val();
+                let html = '';
+                Object.values(reqs).reverse().forEach((r) => {
+                    let statusBadge = `<span class="status-badge-pending">Pending</span>`;
+                    if (r.status === 'approved') statusBadge = `<span class="status-badge-approved">Approved</span>`;
+                    if (r.status === 'denied') statusBadge = `<span class="status-badge-denied">Denied</span>`;
 
-            if (allAdminReqs.length === 0) {
-                container.innerHTML = '<p style="font-size: 12px; color: #888;">কোনো রিকোয়েস্ট নেই।</p>';
-                return;
-            }
-
-            let html = '';
-            allAdminReqs.slice().reverse().forEach((r) => {
-                let statusBadge = `<span class="status-badge-pending">Pending</span>`;
-                if (r.status === 'approved') statusBadge = `<span class="status-badge-approved">Approved</span>`;
-                if (r.status === 'denied') statusBadge = `<span class="status-badge-denied">Denied</span>`;
-
-                html += `
-                    <div class="req-box">
-                        <b>ইউজার ID:</b> ${r.userId}<br>
-                        <b>পেমেন্ট মেথড:</b> ${r.method.toUpperCase()} (${r.phone})<br>
-                        <b>টাকা:</b> ${r.amount} | <b>গেটওয়ে:</b> ${r.gateway.toUpperCase()}<br>
-                        <b>TrxID:</b> <span style="color:#d97706; font-weight:bold;">${r.trxId}</span><br>
-                        <b>স্ট্যাটাস:</b> ${statusBadge}<br>
-                        <div class="action-btns">
-                            <button class="btn-approve" onclick="updateReqStatus('${r.id}', 'approved')">Approve</button>
-                            <button class="btn-deny" onclick="updateReqStatus('${r.id}', 'denied')">Deny</button>
+                    html += `
+                        <div class="req-box">
+                            <b>ইউজার ID:</b> ${r.userId}<br>
+                            <b>পেমেন্ট মেথড:</b> ${r.method.toUpperCase()} (${r.phone})<br>
+                            <b>টাকা:</b> ${r.amount} | <b>গেটওয়ে:</b> ${r.gateway.toUpperCase()}<br>
+                            <b>TrxID:</b> <span style="color:#d97706; font-weight:bold;">${r.trxId}</span><br>
+                            <b>স্ট্যাটাস:</b> ${statusBadge}<br>
+                            <div class="action-btns">
+                                <button class="btn-approve" onclick="updateReqStatus('${r.id}', '${r.userId}', 'approved')">Approve</button>
+                                <button class="btn-deny" onclick="updateReqStatus('${r.id}', '${r.userId}', 'denied')">Deny</button>
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                });
+                container.innerHTML = html;
             });
-
-            container.innerHTML = html;
         }
 
-        function updateReqStatus(reqId, newStatus) {
-            let allAdminReqs = JSON.parse(localStorage.getItem('all_admin_requests')) || [];
-            let req = allAdminReqs.find(r => r.id === reqId);
-            if (req) {
-                req.status = newStatus;
-                localStorage.setItem('all_admin_requests', JSON.stringify(allAdminReqs));
+        // Refund Logic on Denied Status
+        window.updateReqStatus = function(reqId, uId, newStatus) {
+            get(ref(db, 'requests/' + reqId)).then((snapshot) => {
+                if (!snapshot.exists()) return;
+                let req = snapshot.val();
 
-                // Sync with user's data
-                if (req.userId === currentUser) {
-                    let userReq = userData.withdrawals.find(w => w.id === reqId);
-                    if (userReq) userReq.status = newStatus;
-                    saveUserData();
-                } else {
-                    let otherUser = JSON.parse(localStorage.getItem('user_data_' + req.userId));
-                    if (otherUser && otherUser.withdrawals) {
-                        let userReq = otherUser.withdrawals.find(w => w.id === reqId);
-                        if (userReq) userReq.status = newStatus;
-                        localStorage.setItem('user_data_' + req.userId, JSON.stringify(otherUser));
-                    }
+                if (req.status === newStatus) {
+                    alert('স্ট্যাটাস ইতোমধ্যে ' + newStatus + ' করা রয়েছে!');
+                    return;
                 }
+
+                let previousStatus = req.status;
+                req.status = newStatus;
+
+                // Update request node
+                update(ref(db, 'requests/' + reqId), { status: newStatus });
+
+                // Update user node
+                get(ref(db, 'users/' + uId)).then((uSnap) => {
+                    if (uSnap.exists()) {
+                        let u = uSnap.val();
+                        if (!u.withdrawals) u.withdrawals = {};
+                        if (u.withdrawals[reqId]) {
+                            u.withdrawals[reqId].status = newStatus;
+                        }
+
+                        // If status is DENIED, refund money back to user main balance
+                        if (newStatus === 'denied' && previousStatus !== 'denied') {
+                            u.signupBonus += parseFloat(req.amount);
+                        }
+
+                        set(ref(db, 'users/' + uId), u);
+                    }
+                });
 
                 alert(`রিকোয়েস্টটি ${newStatus.toUpperCase()} করা হয়েছে!`);
                 renderAdminRequestsList();
-            }
-        }
-
-        // Initial Load Call
-        updateUI();
+            });
+        };
     </script>
 </body>
 </html>
