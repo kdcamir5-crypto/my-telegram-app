@@ -367,19 +367,16 @@
         <!-- ==================== HOME TAB ==================== -->
         <div id="tab-home" class="view-section active">
             
-            <!-- Banner Image (Only in Home Tab, Auto-Adjusted Size) -->
             <div class="header-banner-container">
                 <a href="https://ibb.co.com/fGTzMpFc" target="_blank">
                     <img src="https://i.ibb.co.com/vvM61Pqt/Gemini-Generated-Image-8lbv8q8lbv8q8lbv-640x360.jpg" alt="Freelancing with Ariyan Banner" border="0">
                 </a>
             </div>
 
-            <!-- Total Balance Badge -->
             <div class="balance-badge">
                 মোট ব্যালেন্স: <span id="user-total-balance">150</span> টাকা
             </div>
 
-            <!-- Dynamic Running Marquee Text -->
             <div class="ticker-wrap">
                 <i class="fas fa-bullhorn"></i>
                 <marquee id="task-marquee" behavior="scroll" direction="left" scrollamount="5">
@@ -387,7 +384,6 @@
                 </marquee>
             </div>
 
-            <!-- 4 Grid Features -->
             <div class="features-grid">
                 <div class="feature-card" onclick="openSubView('view-daily-task')">
                     <div class="icon-circle"><i class="fas fa-tasks"></i></div>
@@ -407,12 +403,10 @@
                 </div>
             </div>
 
-            <!-- Telegram Channel Link -->
             <a href="https://t.me/bechelor_point_season" target="_blank" class="telegram-btn-box">
-                <i class="fab fa-telegram-plane"></i> আমাদের টেলিগ্রাম চ্যানেলে জয়েন করুন
+                <i class="fab fa-telegram-plane"></i> আমাদের টেলিগ্রাম চ্যানেলে জয়েন করুন
             </a>
 
-            <!-- Notice Board -->
             <div class="notice-board">
                 <h3>📢 অফিশিয়াল নোটিশ</h3>
                 <p style="font-weight: bold; color: #2c3e50;">🪙 Communitytask</p>
@@ -432,12 +426,12 @@
         </div>
 
 
-        <!-- ==================== SUB VIEWS (FROM HOME) ==================== -->
+        <!-- ==================== SUB VIEWS ==================== -->
 
         <!-- 1. Daily Task View -->
         <div id="view-daily-task" class="view-section">
             <div class="card">
-                <h2>📺 ডেইলি টাস্ক (বিজ্ঞাপন দেখে আয়)</h2>
+                <h2>📺 ডেইলি টাস্ক (বিজ্ঞাপন দেখে আয়)</h2>
                 <p style="margin: 8px 0; color: #666;">প্রতিদিন সর্বোচ্চ ২০টি বিজ্ঞাপন দেখতে পারবেন। প্রতি অ্যাডে পাবেন ২০ টাকা।</p>
                 <p style="font-weight: bold; margin-bottom: 15px;">আজকে বিজ্ঞাপন দেখেছেন: <span id="ads-watched-count">0</span>/20</p>
                 
@@ -451,8 +445,8 @@
             <div class="card">
                 <h2>📊 আপনার ইনকাম হিস্ট্রি</h2>
                 <div style="margin-top: 15px; line-height: 2;">
-                    <p>📺 আপনি বিজ্ঞাপন থেকে আয় করেছেন: <b><span id="ad-earning-text">0</span> টাকা</b></p>
-                    <p>💸 আপনি রেফার করে আয় করেছেন: <b><span id="ref-earning-text">0</span> টাকা</b></p>
+                    <p>📺 আপনি বিজ্ঞাপন থেকে আয় করেছেন: <b><span id="ad-earning-text">0</span> টাকা</b></p>
+                    <p>💸 আপনি রেফার করে আয় করেছেন: <b><span id="ref-earning-text">0</span> টাকা</b></p>
                     <p>🎁 সাইনআপ বোনাস: <b><span id="signup-bonus-text">150</span> টাকা</b></p>
                     <hr style="margin: 10px 0;">
                     <p style="font-size: 16px; color: var(--primary-color);"><b>সর্বমোট ব্যালেন্স: <span id="total-earning-text">150</span> টাকা</b></p>
@@ -464,8 +458,8 @@
         <!-- 3. Referral Earning View -->
         <div id="view-referral" class="view-section">
             <div class="card">
-                <h2>🔗 রেফারেল আয় করুন</h2>
-                <p style="margin-top: 5px;">রেফার করে আয় করুন, শেয়ার করুন। প্রতিটি সফল রেফারে পাবেন <b>100 টাকা</b>।</p>
+                <h2>🔗 রেফারেল আয় করুন</h2>
+                <p style="margin-top: 5px;">রেফার করে আয় করুন, শেয়ার করুন। প্রতিটি সফল রেফারে পাবেন <b>100 টাকা</b>।</p>
                 
                 <div class="input-group" style="margin-top: 15px;">
                     <label>আপনার রেফারেল লিঙ্ক:</label>
@@ -504,10 +498,10 @@
         <!-- 1. Wallet Tab -->
         <div id="tab-wallet" class="view-section">
             <div class="card">
-                <h2>👛 ওয়ালেট (Wallet)</h2>
+                <h2>👛 ওয়ালেট (Wallet)</h2>
                 <div style="margin-top: 15px; line-height: 2.2;">
-                    <p>📺 আপনি বিজ্ঞাপন থেকে আয় করেছেন: <b><span id="wallet-ad-earn">0</span> টাকা</b></p>
-                    <p>👥 আপনি রেফার থেকে আয় করেছেন: <b><span id="wallet-ref-earn">0</span> টাকা</b></p>
+                    <p>📺 আপনি বিজ্ঞাপন থেকে আয় করেছেন: <b><span id="wallet-ad-earn">0</span> টাকা</b></p>
+                    <p>👥 আপনি রেফার থেকে আয় করেছেন: <b><span id="wallet-ref-earn">0</span> টাকা</b></p>
                     <p>🎁 সাইনআপ বোনাস: <b><span id="wallet-signup-bonus">150</span> টাকা</b></p>
                     <hr>
                     <h3 style="color: var(--primary-color); margin-top: 8px;">আপনার টোটাল ব্যালেন্স আছে: <span id="wallet-total-balance">150</span> টাকা</h3>
@@ -594,7 +588,6 @@
                 <h2 style="color: #c62828;">👑 অ্যাডমিন কন্ট্রোল প্যানেল</h2>
                 <p style="font-size: 12px; color: #666; margin-bottom: 15px;">শুধুমাত্র অ্যাডমিন ব্যবহারের জন্য গোপন সেকশন।</p>
 
-                <!-- Admin 4 Sector Cards -->
                 <div class="admin-grid">
                     <div class="admin-card">
                         <small>1. Total Users</small>
@@ -614,10 +607,9 @@
                     </div>
                 </div>
 
-                <!-- Request Management Section -->
                 <h3>📥 উইথড্র এবং আইডি এক্টিভেশন রিকোয়েস্ট সমূহ:</h3>
                 <div id="admin-requests-list" style="margin-top: 10px;">
-                    <p style="font-size: 12px; color: #888;">কোনো পেন্ডিং রিকোয়েস্ট নেই।</p>
+                    <p style="font-size: 12px; color: #888;">কোনো পেন্ডিং রিকোয়েস্ট নেই।</p>
                 </div>
 
                 <hr style="margin: 15px 0;">
@@ -654,13 +646,11 @@
                 উইথড্র করতে দয়া করে আপনার আইডি টি একটিভ করুন। <b>এ্যাক্টিভেশন ফি 120 টাকা (Send Money Only)</b>।
             </p>
 
-            <!-- Gateway Tabs -->
             <div style="display: flex; gap: 10px; margin-bottom: 12px;">
                 <button id="gate-bkash-btn" class="btn" style="margin:0; font-size:12px; padding: 8px;" onclick="switchPaymentGateway('bkash')">bKash</button>
                 <button id="gate-nagad-btn" class="btn btn-secondary" style="margin:0; font-size:12px; padding: 8px;" onclick="switchPaymentGateway('nagad')">Nagad</button>
             </div>
 
-            <!-- Bkash Details -->
             <div id="gateway-bkash-box">
                 <div class="input-group">
                     <label>বিকাশ নম্বর (Send Money):</label>
@@ -668,7 +658,6 @@
                 </div>
             </div>
 
-            <!-- Nagad Details -->
             <div id="gateway-nagad-box" style="display: none;">
                 <div class="input-group">
                     <label>নগদ নম্বর (Send Money):</label>
@@ -711,27 +700,40 @@
     </div>
 
 
-    <!-- ==================== JAVASCRIPT ==================== -->
-    <script>
-        // Data State
-        let userData = {
+    <!-- ==================== FIREBASE & APP SCRIPT ==================== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue, push, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            databaseURL: "https://frelancing-mini-app-default-rtdb.firebaseio.com"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Global State
+        window.userData = {
+            username: "ariyan99",
             signupBonus: 150,
             adEarning: 0,
             refEarning: 0,
             adsWatchedToday: 0,
             withdrawStatus: "", 
-            removedUsersCount: 0
+            removedUsersCount: 0,
+            isActivated: false
         };
 
-        let adminStats = {
+        window.adminStats = {
             totalUsers: 1,
             pendingReqs: [],
             totalPaid: 0
         };
 
-        let selectedGateway = "bkash";
+        window.selectedGateway = "bkash";
 
-        // Demo Ads Title List
         const demoAdTitles = [
             "Demo Ad #1 - Special Offer", "Demo Ad #2 - Exclusive Deal", "Demo Ad #3 - Discount Today",
             "Demo Ad #4 - Earn Extra Cash", "Demo Ad #5 - Mega Bonus", "Demo Ad #6 - Limited Time Promo",
@@ -742,64 +744,116 @@
             "Demo Ad #19 - Golden Opportunity", "Demo Ad #20 - Final Reward Deal"
         ];
 
-        // Update Balance Displays & Ticker Status
-        function updateUI() {
-            let total = userData.signupBonus + userData.adEarning + userData.refEarning;
+        // Sync Data to Firebase Database
+        function saveUserDataToFirebase() {
+            const userRef = ref(db, 'users/' + window.userData.username);
+            set(userRef, window.userData);
+        }
+
+        // Listen for Realtime Changes from Firebase
+        const userRef = ref(db, 'users/' + window.userData.username);
+        onValue(userRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                window.userData = { ...window.userData, ...data };
+                window.updateUI();
+            } else {
+                saveUserDataToFirebase();
+            }
+        });
+
+        // Listen for Requests in Firebase (Admin Panel)
+        const reqsRef = ref(db, 'requests');
+        onValue(reqsRef, (snapshot) => {
+            const data = snapshot.val();
+            const listContainer = document.getElementById('admin-requests-list');
+            listContainer.innerHTML = '';
+            window.adminStats.pendingReqs = [];
+
+            if (data) {
+                Object.keys(data).forEach(key => {
+                    const req = data[key];
+                    req.id = key;
+                    window.adminStats.pendingReqs.push(req);
+
+                    const div = document.createElement('div');
+                    div.className = 'req-box';
+                    div.innerHTML = `
+                        <b>টাইপ:</b> ${req.type === 'withdraw' ? 'উইথড্র রিকোয়েস্ট' : 'আইডি এক্টিভেশন'}<br>
+                        <b>ইউজার:</b> ${req.username}<br>
+                        ${req.amount ? `<b>পরিমাণ:</b> ${req.amount} ৳<br>` : ''}
+                        ${req.method ? `<b>মেথড:</b> ${req.method}<br>` : ''}
+                        ${req.phone ? `<b>ফোন:</b> ${req.phone}<br>` : ''}
+                        ${req.trxid ? `<b>TrxID:</b> ${req.trxid}<br>` : ''}
+                        <div class="action-btns">
+                            <button class="btn-approve" onclick="approveRequest('${key}', '${req.type}', '${req.username}', ${req.amount || 0})">অনুমোদন</button>
+                            <button class="btn-deny" onclick="denyRequest('${key}')">বাতিল</button>
+                        </div>
+                    `;
+                    listContainer.appendChild(div);
+                });
+            } else {
+                listContainer.innerHTML = '<p style="font-size: 12px; color: #888;">কোনো পেন্ডিং রিকোয়েস্ট নেই।</p>';
+            }
+            window.updateUI();
+        });
+
+        // Update UI Functions
+        window.updateUI = function() {
+            let total = window.userData.signupBonus + window.userData.adEarning + window.userData.refEarning;
             
             document.getElementById('user-total-balance').innerText = total;
-            document.getElementById('ad-earning-text').innerText = userData.adEarning;
-            document.getElementById('ref-earning-text').innerText = userData.refEarning;
-            document.getElementById('signup-bonus-text').innerText = userData.signupBonus;
+            document.getElementById('ad-earning-text').innerText = window.userData.adEarning;
+            document.getElementById('ref-earning-text').innerText = window.userData.refEarning;
+            document.getElementById('signup-bonus-text').innerText = window.userData.signupBonus;
             document.getElementById('total-earning-text').innerText = total;
 
-            document.getElementById('wallet-ad-earn').innerText = userData.adEarning;
-            document.getElementById('wallet-ref-earn').innerText = userData.refEarning;
-            document.getElementById('wallet-signup-bonus').innerText = userData.signupBonus;
+            document.getElementById('wallet-ad-earn').innerText = window.userData.adEarning;
+            document.getElementById('wallet-ref-earn').innerText = window.userData.refEarning;
+            document.getElementById('wallet-signup-bonus').innerText = window.userData.signupBonus;
             document.getElementById('wallet-total-balance').innerText = total;
 
-            document.getElementById('ads-watched-count').innerText = userData.adsWatchedToday;
+            document.getElementById('ads-watched-count').innerText = window.userData.adsWatchedToday;
 
-            // Check Daily Task Completion for Marquee
             let marqueeEl = document.getElementById('task-marquee');
-            if (userData.adsWatchedToday >= 20) {
-                marqueeEl.innerText = "আপনার আজকের টাস্ক সম্পূর্ণ হয়েছে";
+            if (window.userData.adsWatchedToday >= 20) {
+                marqueeEl.innerText = "আপনার আজকের টাস্ক সম্পূর্ণ হয়েছে";
             } else {
                 marqueeEl.innerText = "আজকের টাস্কটি সম্পূর্ণ করুন";
             }
 
-            // Admin UI update
-            document.getElementById('admin-stat-users').innerText = adminStats.totalUsers;
-            document.getElementById('admin-stat-reqs').innerText = adminStats.pendingReqs.length;
-            document.getElementById('admin-stat-removed').innerText = userData.removedUsersCount;
-            document.getElementById('admin-stat-paid').innerText = adminStats.totalPaid + " ৳";
-        }
+            document.getElementById('admin-stat-users').innerText = window.adminStats.totalUsers;
+            document.getElementById('admin-stat-reqs').innerText = window.adminStats.pendingReqs.length;
+            document.getElementById('admin-stat-removed').innerText = window.userData.removedUsersCount;
+            document.getElementById('admin-stat-paid').innerText = window.adminStats.totalPaid + " ৳";
+        };
 
-        // Navigation Switcher
-        function switchNavTab(tabName, element) {
+        // UI Handlers
+        window.switchNavTab = function(tabName, element) {
             document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
 
             document.getElementById('tab-' + tabName).classList.add('active');
             if(element) element.classList.add('active');
-        }
+        };
 
-        function openSubView(viewId) {
+        window.openSubView = function(viewId) {
             document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
-        }
+        };
 
-        function backToHome() {
-            switchNavTab('home', document.querySelectorAll('.nav-item')[0]);
-        }
+        window.backToHome = function() {
+            window.switchNavTab('home', document.querySelectorAll('.nav-item')[0]);
+        };
 
-        // Daily Task Logic
-        function startAdTimer() {
-            if (userData.adsWatchedToday >= 20) {
+        // Ad System
+        window.startAdTimer = function() {
+            if (window.userData.adsWatchedToday >= 20) {
                 alert("আজকের জন্য আপনার ২০টি লিমিট শেষ! আগামীকাল আবার চেষ্টা করুন।");
                 return;
             }
 
-            let currentAdNum = userData.adsWatchedToday;
+            let currentAdNum = window.userData.adsWatchedToday;
             document.getElementById('ad-modal-title').innerText = demoAdTitles[currentAdNum];
             document.getElementById('ad-modal').classList.add('active');
 
@@ -814,49 +868,59 @@
                     clearInterval(timerInterval);
                     document.getElementById('ad-modal').classList.remove('active');
                     
-                    userData.adsWatchedToday++;
-                    userData.adEarning += 20;
-                    updateUI();
-                    alert("অভিনন্দন! আপনি ২০ টাকা পেয়েছেন।");
+                    window.userData.adsWatchedToday++;
+                    window.userData.adEarning += 20;
+                    
+                    saveUserDataToFirebase();
+                    window.updateUI();
+                    alert("অভিনন্দন! আপনি ২০ টাকা পেয়েছেন।");
                 }
             }, 1000);
-        }
+        };
 
-        // Copy Referral Link
-        function copyRefLink() {
-            let copyText = document.getElementById("ref-link-input");
-            copyText.select();
-            document.execCommand("copy");
-            alert("রেফারেল লিঙ্ক কপি করা হয়েছে!");
-        }
+        // Withdraw & Activation Logic
+        window.handleWithdrawClick = function() {
+            const amount = parseFloat(document.getElementById('withdraw-amount').value);
+            const phone = document.getElementById('withdraw-phone').value;
+            const method = document.getElementById('withdraw-method').value;
+            const totalBalance = window.userData.signupBonus + window.userData.adEarning + window.userData.refEarning;
 
-        // Withdraw Logic
-        function handleWithdrawClick() {
-            let phone = document.getElementById('withdraw-phone').value;
-            let amount = parseFloat(document.getElementById('withdraw-amount').value);
-            let totalBalance = userData.signupBonus + userData.adEarning + userData.refEarning;
-
-            if(!phone || !amount) {
-                alert("দয়া করে ফোন নম্বর এবং উইথড্র পরিমাণ সঠিকভাবে লিখুন।");
+            if (!phone || !amount) {
+                alert("অনুগ্রহ করে মোবাইল নম্বর এবং পরিমাণ দিন।");
                 return;
             }
 
-            if(amount < 1000) {
+            if (amount < 1000) {
                 alert("সর্বনিম্ন উইথড্র পরিমাণ ১০০০ টাকা।");
                 return;
             }
 
-            if(amount > totalBalance) {
-                alert("আপনার ওয়ালেটে পর্যাপ্ত ব্যালেন্স নেই।");
+            if (amount > totalBalance) {
+                alert("আপনার পর্যাপ্ত ব্যালেন্স নেই।");
                 return;
             }
 
-            document.getElementById('activation-modal').classList.add('active');
-        }
+            if (!window.userData.isActivated) {
+                document.getElementById('activation-modal').classList.add('active');
+                return;
+            }
 
-        function switchPaymentGateway(type) {
-            selectedGateway = type;
-            if(type === 'bkash') {
+            // Push withdraw request to Firebase
+            push(ref(db, 'requests'), {
+                type: 'withdraw',
+                username: window.userData.username,
+                phone: phone,
+                method: method,
+                amount: amount,
+                timestamp: Date.now()
+            });
+
+            alert("আপনার উইথড্র রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে!");
+        };
+
+        window.switchPaymentGateway = function(gate) {
+            window.selectedGateway = gate;
+            if(gate === 'bkash') {
                 document.getElementById('gateway-bkash-box').style.display = 'block';
                 document.getElementById('gateway-nagad-box').style.display = 'none';
                 document.getElementById('gate-bkash-btn').className = 'btn';
@@ -867,152 +931,86 @@
                 document.getElementById('gate-bkash-btn').className = 'btn btn-secondary';
                 document.getElementById('gate-nagad-btn').className = 'btn';
             }
-        }
+        };
 
-        function closeActivationModal() {
-            document.getElementById('activation-modal').classList.remove('active');
-        }
-
-        // Submit Activation & Instant Deduction
-        function submitActivationRequest() {
-            let trx = document.getElementById('activation-trxid').value;
-            let amount = parseFloat(document.getElementById('withdraw-amount').value) || 0;
-            let method = document.getElementById('withdraw-method').value;
-            let phone = document.getElementById('withdraw-phone').value;
-
-            if(!trx) {
-                alert("দয়া করে সঠিক TrxID লিখুন!");
+        window.submitActivationRequest = function() {
+            const trxid = document.getElementById('activation-trxid').value;
+            if (!trxid) {
+                alert("অনুগ্রহ করে TrxID প্রদান করুন।");
                 return;
             }
 
-            // Deduct balance instantly
-            let remainingToDeduct = amount;
-
-            if (userData.adEarning >= remainingToDeduct) {
-                userData.adEarning -= remainingToDeduct;
-                remainingToDeduct = 0;
-            } else {
-                remainingToDeduct -= userData.adEarning;
-                userData.adEarning = 0;
-
-                if (userData.refEarning >= remainingToDeduct) {
-                    userData.refEarning -= remainingToDeduct;
-                    remainingToDeduct = 0;
-                } else {
-                    remainingToDeduct -= userData.refEarning;
-                    userData.refEarning = 0;
-                    userData.signupBonus -= remainingToDeduct;
-                }
-            }
-
-            let reqObj = {
-                id: Date.now(),
-                user: "ariyan99",
-                phone: phone,
-                amount: amount,
-                method: method,
-                gateway: selectedGateway,
-                trx: trx
-            };
-
-            adminStats.pendingReqs.push(reqObj);
-            closeActivationModal();
-            
-            updateUI();
-            alert("আপনার উইথড্র রিকোয়েস্ট সফল হয়েছে এবং ব্যালেন্স থেকে টাকা কেটে নেওয়া হয়েছে।");
-            
-            renderAdminRequests();
-        }
-
-        // Profile Image
-        function loadProfileImage(event) {
-            let output = document.getElementById('profile-img');
-            output.src = URL.createObjectURL(event.target.files[0]);
-        }
-
-        function saveProfile() {
-            alert("আপনার প্রোফাইল সফলভাবে সেভ করা হয়েছে!");
-        }
-
-        // Secret Admin Login PIN Code = 1998
-        function promptAdminLogin() {
-            let pass = prompt("অ্যাডমিন প্যানেলে ঢুকতে পাসওয়ার্ড দিন:");
-            if(pass === "1998") {
-                switchNavTab('admin', null);
-            } else if(pass !== null) {
-                alert("ভুল পাসওয়ার্ড!");
-            }
-        }
-
-        // Admin Request Renderer & Actions
-        function renderAdminRequests() {
-            let container = document.getElementById('admin-requests-list');
-            if(adminStats.pendingReqs.length === 0) {
-                container.innerHTML = '<p style="font-size: 12px; color: #888;">কোনো পেন্ডিং রিকোয়েস্ট নেই।</p>';
-                return;
-            }
-
-            container.innerHTML = '';
-            adminStats.pendingReqs.forEach(req => {
-                let div = document.createElement('div');
-                div.className = 'req-box';
-                div.innerHTML = `
-                    <b>ইউজার:</b> ${req.user} (${req.phone})<br>
-                    <b>উইথড্র অ্যামাউন্ট:</b> ${req.amount} ৳ (${req.method})<br>
-                    <b>ফি মেথড:</b> ${req.gateway} | <b>TrxID:</b> ${req.trx}<br>
-                    <div class="action-btns">
-                        <button class="btn-approve" onclick="approveRequest(${req.id}, ${req.amount})">Approve</button>
-                        <button class="btn-deny" onclick="denyRequest(${req.id})">Denied</button>
-                    </div>
-                `;
-                container.appendChild(div);
+            push(ref(db, 'requests'), {
+                type: 'activation',
+                username: window.userData.username,
+                gateway: window.selectedGateway,
+                trxid: trxid,
+                timestamp: Date.now()
             });
-        }
 
-        function approveRequest(id, amount) {
-            adminStats.pendingReqs = adminStats.pendingReqs.filter(r => r.id !== id);
-            adminStats.totalPaid += parseFloat(amount);
-            
-            let statusBanner = document.getElementById('withdraw-status-banner');
-            statusBanner.style.display = 'block';
-            statusBanner.style.background = '#e8f5e9';
-            statusBanner.style.color = '#2e7d32';
-            statusBanner.innerText = "আপনার প্রস্তাবিত পেমেন্ট অনুরোধটি অনুমোদন করা হয়েছে (Approved)।";
+            document.getElementById('activation-modal').classList.remove('active');
+            alert("আপনার এক্টিভেশন রিকোয়েস্ট জমা দেওয়া হয়েছে। অ্যাডমিন রিভিউ করে একটিভ করে দেবেন।");
+        };
 
-            renderAdminRequests();
-            updateUI();
-        }
+        window.closeActivationModal = function() {
+            document.getElementById('activation-modal').classList.remove('active');
+        };
 
-        function denyRequest(id) {
-            let req = adminStats.pendingReqs.find(r => r.id === id);
-            if (req) {
-                // Refund deducted money back to user adEarning
-                userData.adEarning += parseFloat(req.amount);
+        // Admin Actions
+        window.promptAdminLogin = function() {
+            const pass = prompt("অ্যাডমিন পাসওয়ার্ড দিন:");
+            if (pass === "1234") {
+                window.switchNavTab('admin', null);
+            } else if (pass !== null) {
+                alert("ভুল পাসওয়ার্ড!");
             }
+        };
 
-            adminStats.pendingReqs = adminStats.pendingReqs.filter(r => r.id !== id);
-            
-            let statusBanner = document.getElementById('withdraw-status-banner');
-            statusBanner.style.display = 'block';
-            statusBanner.style.background = '#ffebee';
-            statusBanner.style.color = '#c62828';
-            statusBanner.innerText = "আপনার অনুরোধটির অনুমোদন ব্যর্থ হয়েছে (Denied)। টাকা আপনার অ্যাকাউন্টে ফেরত দেওয়া হয়েছে।";
-
-            renderAdminRequests();
-            updateUI();
-        }
-
-        function removeUser(username) {
-            if(confirm(`আপনি কি সত্যিই ${username} ইউজারকে রিমুভ করতে চান?`)) {
-                userData.removedUsersCount++;
-                adminStats.totalUsers = Math.max(0, adminStats.totalUsers - 1);
-                document.getElementById('admin-user-list').innerHTML = '<p style="font-size:12px; color:red;">ইউজার রিমুভ করা হয়েছে।</p>';
-                updateUI();
+        window.approveRequest = function(reqId, type, username, amount) {
+            if (type === 'activation') {
+                set(ref(db, `users/${username}/isActivated`), true);
+            } else if (type === 'withdraw') {
+                window.adminStats.totalPaid += amount;
             }
-        }
+            remove(ref(db, `requests/${reqId}`));
+            alert("রিকোয়েস্ট অনুমোদন করা হয়েছে!");
+        };
 
-        // Initial Load
-        updateUI();
+        window.denyRequest = function(reqId) {
+            remove(ref(db, `requests/${reqId}`));
+            alert("রিকোয়েস্ট বাতিল করা হয়েছে।");
+        };
+
+        window.removeUser = function(username) {
+            if (confirm(`${username} ইউজারকে রিমুভ করতে চান?`)) {
+                remove(ref(db, `users/${username}`));
+                window.userData.removedUsersCount++;
+                window.updateUI();
+            }
+        };
+
+        window.copyRefLink = function() {
+            const input = document.getElementById('ref-link-input');
+            input.select();
+            document.execCommand('copy');
+            alert("রেফারেল লিঙ্ক কপি করা হয়েছে!");
+        };
+
+        window.saveProfile = function() {
+            window.userData.fullName = document.getElementById('prof-fullname').value;
+            window.userData.mobile = document.getElementById('prof-mobile').value;
+            window.userData.dob = document.getElementById('prof-dob').value;
+            saveUserDataToFirebase();
+            alert("প্রোফাইল আপডেট হয়েছে!");
+        };
+
+        window.loadProfileImage = function(event) {
+            const reader = new FileReader();
+            reader.onload = function(){
+                document.getElementById('profile-img').src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        };
     </script>
 </body>
 </html>
