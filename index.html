@@ -28,14 +28,12 @@
             padding-bottom: 75px;
         }
 
-        /* Container */
         .container {
             padding: 12px;
             max-width: 500px;
             margin: 0 auto;
         }
 
-        /* Responsive Adjustable Banner (Inside Home Page Only) */
         .header-banner-container {
             width: 100%;
             border-radius: 12px;
@@ -65,7 +63,6 @@
             font-size: 15px;
         }
 
-        /* Running Announcement Bar */
         .ticker-wrap {
             width: 100%;
             background-color: #fff3cd;
@@ -86,7 +83,6 @@
             width: 100%;
         }
 
-        /* View Control */
         .view-section {
             display: none;
         }
@@ -95,7 +91,6 @@
             display: block;
         }
 
-        /* Grid Features (4 Circle Icons) */
         .features-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -137,7 +132,6 @@
             display: block;
         }
 
-        /* Telegram Join Button */
         .telegram-btn-box {
             background: #0088cc;
             color: white;
@@ -151,7 +145,6 @@
             box-shadow: 0 3px 8px rgba(0,136,204,0.3);
         }
 
-        /* Notice Board */
         .notice-board {
             background: var(--card-bg);
             padding: 18px;
@@ -179,7 +172,6 @@
             margin: 10px 0;
         }
 
-        /* Cards & Interfaces */
         .card {
             background: var(--card-bg);
             padding: 18px;
@@ -224,7 +216,6 @@
             font-size: 14px;
         }
 
-        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -260,7 +251,6 @@
             font-weight: bold;
         }
 
-        /* Modal Overlay */
         .modal {
             display: none;
             position: fixed;
@@ -286,7 +276,6 @@
             position: relative;
         }
 
-        /* Secret Admin Icon */
         .secret-admin-trigger {
             position: fixed;
             bottom: 75px;
@@ -297,7 +286,6 @@
             z-index: 90;
         }
 
-        /* Admin Tab Styling */
         .admin-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -361,10 +349,9 @@
 </head>
 <body>
 
-    <!-- MAIN CONTAINER -->
     <div class="container">
 
-        <!-- ==================== HOME TAB ==================== -->
+        <!-- HOME TAB -->
         <div id="tab-home" class="view-section active">
             
             <div class="header-banner-container">
@@ -425,10 +412,7 @@
             </div>
         </div>
 
-
-        <!-- ==================== SUB VIEWS ==================== -->
-
-        <!-- 1. Daily Task View -->
+        <!-- SUB VIEWS -->
         <div id="view-daily-task" class="view-section">
             <div class="card">
                 <h2>📺 ডেইলি টাস্ক (বিজ্ঞাপন দেখে আয়)</h2>
@@ -440,7 +424,6 @@
             </div>
         </div>
 
-        <!-- 2. Earning Details View -->
         <div id="view-earning" class="view-section">
             <div class="card">
                 <h2>📊 আপনার ইনকাম হিস্ট্রি</h2>
@@ -455,7 +438,6 @@
             </div>
         </div>
 
-        <!-- 3. Referral Earning View -->
         <div id="view-referral" class="view-section">
             <div class="card">
                 <h2>🔗 রেফারেল আয় করুন</h2>
@@ -480,7 +462,6 @@
             </div>
         </div>
 
-        <!-- 4. Bonus View -->
         <div id="view-bonus" class="view-section">
             <div class="card" style="text-align: center;">
                 <h2>🎁 বোনাস সেকশন</h2>
@@ -492,10 +473,7 @@
             </div>
         </div>
 
-
-        <!-- ==================== BOTTOM NAV SECTIONS ==================== -->
-
-        <!-- 1. Wallet Tab -->
+        <!-- BOTTOM NAV TABS -->
         <div id="tab-wallet" class="view-section">
             <div class="card">
                 <h2>👛 ওয়ালেট (Wallet)</h2>
@@ -509,13 +487,9 @@
             </div>
         </div>
 
-        <!-- 2. Withdraw Tab -->
         <div id="tab-withdraw" class="view-section">
             <div class="card">
                 <h2>🏦 টাকা উত্তোলন (Withdraw)</h2>
-                
-                <div id="withdraw-status-banner" style="display:none; padding: 10px; border-radius: 6px; margin: 10px 0; font-size: 13px;"></div>
-
                 <div class="input-group" style="margin-top: 15px;">
                     <label>পেমেন্ট মেথড সিলেক্ট করুন:</label>
                     <select id="withdraw-method">
@@ -523,22 +497,18 @@
                         <option value="nagad">Nagad (নগদ)</option>
                     </select>
                 </div>
-
                 <div class="input-group">
                     <label>আপনার মোবাইল নম্বর:</label>
                     <input type="text" id="withdraw-phone" placeholder="017XXXXXXXX">
                 </div>
-
                 <div class="input-group">
                     <label>উইথড্র পরিমাণ (টাকা):</label>
                     <input type="number" id="withdraw-amount" placeholder="সর্বনিম্ন 1000 টাকা">
                 </div>
-
                 <button class="btn" onclick="handleWithdrawClick()">উইথড্র করুন</button>
             </div>
         </div>
 
-        <!-- 3. Support Tab -->
         <div id="tab-support" class="view-section">
             <div class="card" style="text-align: center;">
                 <h2>🎧 কাস্টমার সাপোর্ট</h2>
@@ -550,7 +520,6 @@
             </div>
         </div>
 
-        <!-- 4. Profile Tab -->
         <div id="tab-profile" class="view-section">
             <div class="card" style="text-align: center;">
                 <h2>👤 প্রোফাইল সেটিং</h2>
@@ -559,7 +528,6 @@
                     <input type="file" id="profile-img-input" accept="image/*" style="display: none;" onchange="loadProfileImage(event)">
                     <button class="btn btn-secondary" style="width: auto; padding: 6px 15px; font-size: 12px;" onclick="document.getElementById('profile-img-input').click()">ছবি পরিবর্তন করুন</button>
                 </div>
-
                 <div class="input-group" style="text-align: left;">
                     <label>ইউজার নেম (Name):</label>
                     <input type="text" id="prof-username" value="ariyan99">
@@ -576,18 +544,15 @@
                     <label>জন্ম তারিখ (Birth Date):</label>
                     <input type="date" id="prof-dob">
                 </div>
-
                 <button class="btn" onclick="saveProfile()">সেভ করুন</button>
             </div>
         </div>
 
-
-        <!-- ==================== SECRET ADMIN PANEL ==================== -->
+        <!-- SECRET ADMIN PANEL -->
         <div id="tab-admin" class="view-section">
             <div class="card">
                 <h2 style="color: #c62828;">👑 অ্যাডমিন কন্ট্রোল প্যানেল</h2>
                 <p style="font-size: 12px; color: #666; margin-bottom: 15px;">শুধুমাত্র অ্যাডমিন ব্যবহারের জন্য গোপন সেকশন।</p>
-
                 <div class="admin-grid">
                     <div class="admin-card">
                         <small>1. Total Users</small>
@@ -613,7 +578,7 @@
                 </div>
 
                 <hr style="margin: 15px 0;">
-                <h3>👥 ইউজার ম্যানেজমেন্ট (রিমুভ করুন):</h3>
+                <h3>👥 ইউজার ম্যানেজমেন্ট:</h3>
                 <div id="admin-user-list" style="margin-top: 10px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; background: #f5f5f5; padding: 8px; border-radius: 6px;">
                         <span>ariyan99 (01700000000)</span>
@@ -625,62 +590,52 @@
             </div>
         </div>
 
-    </div> <!-- End Container -->
+    </div>
 
-    <!-- ==================== MODALS ==================== -->
-
-    <!-- Ad Watch Modal -->
+    <!-- MODALS -->
     <div id="ad-modal" class="modal">
         <div class="modal-content">
-            <h3 id="ad-modal-title">Demo Ad #1 - Special Offer</h3>
+            <h3 id="ad-modal-title">Demo Ad #1</h3>
             <p style="margin: 15px 0; font-size: 14px;">বিজ্ঞাপনটি দেখা হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন।</p>
             <div style="font-size: 30px; font-weight: bold; color: var(--primary-color);" id="ad-timer">10</div>
         </div>
     </div>
 
-    <!-- Withdraw Activation Pop-up Modal -->
     <div id="activation-modal" class="modal">
         <div class="modal-content" style="text-align: left;">
             <h3 style="color: #c62828; text-align: center;">⚠️ আইডি এক্টিভেশন আবশ্যক</h3>
             <p style="margin: 10px 0; font-size: 13px; line-height: 1.5; color: #333;">
                 উইথড্র করতে দয়া করে আপনার আইডি টি একটিভ করুন। <b>এ্যাক্টিভেশন ফি 120 টাকা (Send Money Only)</b>।
             </p>
-
             <div style="display: flex; gap: 10px; margin-bottom: 12px;">
                 <button id="gate-bkash-btn" class="btn" style="margin:0; font-size:12px; padding: 8px;" onclick="switchPaymentGateway('bkash')">bKash</button>
                 <button id="gate-nagad-btn" class="btn btn-secondary" style="margin:0; font-size:12px; padding: 8px;" onclick="switchPaymentGateway('nagad')">Nagad</button>
             </div>
-
             <div id="gateway-bkash-box">
                 <div class="input-group">
                     <label>বিকাশ নম্বর (Send Money):</label>
                     <input type="text" value="01720236858" readonly style="font-weight: bold; background: #eee;">
                 </div>
             </div>
-
             <div id="gateway-nagad-box" style="display: none;">
                 <div class="input-group">
                     <label>নগদ নম্বর (Send Money):</label>
                     <input type="text" value="01683312033" readonly style="font-weight: bold; background: #eee;">
                 </div>
             </div>
-
             <div class="input-group">
                 <label>TrxID (ট্রানজেকশন আইডি) দিন:</label>
                 <input type="text" id="activation-trxid" placeholder="যেমন: 9J87X10K">
             </div>
-
             <button class="btn" onclick="submitActivationRequest()">একটিভ করুন</button>
             <button class="btn btn-secondary" onclick="closeActivationModal()">বন্ধ করুন</button>
         </div>
     </div>
 
-    <!-- Secret Admin Trigger Icon -->
     <div class="secret-admin-trigger" onclick="promptAdminLogin()">
         <i class="fas fa-user-shield"></i>
     </div>
 
-    <!-- BOTTOM NAVIGATION BAR -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchNavTab('home', this)">
             <i class="fas fa-home"></i> Home
@@ -699,39 +654,21 @@
         </div>
     </div>
 
-
-    <!-- ==================== FIREBASE & APP SCRIPT ==================== -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, set, onValue, push, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-        // Firebase Configuration
-        const firebaseConfig = {
-            databaseURL: "https://frelancing-mini-app-default-rtdb.firebaseio.com"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        // Global State
-        window.userData = {
+    <!-- SCRIPT (SAFE & HYBRID ENGINE) -->
+    <script>
+        // Global App State with LocalStorage Fallback
+        const defaultState = {
             username: "ariyan99",
             signupBonus: 150,
             adEarning: 0,
             refEarning: 0,
             adsWatchedToday: 0,
-            withdrawStatus: "", 
             removedUsersCount: 0,
             isActivated: false
         };
 
-        window.adminStats = {
-            totalUsers: 1,
-            pendingReqs: [],
-            totalPaid: 0
-        };
-
+        window.userData = JSON.parse(localStorage.getItem('user_data')) || defaultState;
+        window.adminStats = { totalUsers: 1, pendingReqs: [], totalPaid: 0 };
         window.selectedGateway = "bkash";
 
         const demoAdTitles = [
@@ -744,62 +681,12 @@
             "Demo Ad #19 - Golden Opportunity", "Demo Ad #20 - Final Reward Deal"
         ];
 
-        // Sync Data to Firebase Database
-        function saveUserDataToFirebase() {
-            const userRef = ref(db, 'users/' + window.userData.username);
-            set(userRef, window.userData);
+        function saveData() {
+            localStorage.setItem('user_data', JSON.stringify(window.userData));
+            updateUI();
         }
 
-        // Listen for Realtime Changes from Firebase
-        const userRef = ref(db, 'users/' + window.userData.username);
-        onValue(userRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                window.userData = { ...window.userData, ...data };
-                window.updateUI();
-            } else {
-                saveUserDataToFirebase();
-            }
-        });
-
-        // Listen for Requests in Firebase (Admin Panel)
-        const reqsRef = ref(db, 'requests');
-        onValue(reqsRef, (snapshot) => {
-            const data = snapshot.val();
-            const listContainer = document.getElementById('admin-requests-list');
-            listContainer.innerHTML = '';
-            window.adminStats.pendingReqs = [];
-
-            if (data) {
-                Object.keys(data).forEach(key => {
-                    const req = data[key];
-                    req.id = key;
-                    window.adminStats.pendingReqs.push(req);
-
-                    const div = document.createElement('div');
-                    div.className = 'req-box';
-                    div.innerHTML = `
-                        <b>টাইপ:</b> ${req.type === 'withdraw' ? 'উইথড্র রিকোয়েস্ট' : 'আইডি এক্টিভেশন'}<br>
-                        <b>ইউজার:</b> ${req.username}<br>
-                        ${req.amount ? `<b>পরিমাণ:</b> ${req.amount} ৳<br>` : ''}
-                        ${req.method ? `<b>মেথড:</b> ${req.method}<br>` : ''}
-                        ${req.phone ? `<b>ফোন:</b> ${req.phone}<br>` : ''}
-                        ${req.trxid ? `<b>TrxID:</b> ${req.trxid}<br>` : ''}
-                        <div class="action-btns">
-                            <button class="btn-approve" onclick="approveRequest('${key}', '${req.type}', '${req.username}', ${req.amount || 0})">অনুমোদন</button>
-                            <button class="btn-deny" onclick="denyRequest('${key}')">বাতিল</button>
-                        </div>
-                    `;
-                    listContainer.appendChild(div);
-                });
-            } else {
-                listContainer.innerHTML = '<p style="font-size: 12px; color: #888;">কোনো পেন্ডিং রিকোয়েস্ট নেই।</p>';
-            }
-            window.updateUI();
-        });
-
-        // Update UI Functions
-        window.updateUI = function() {
+        function updateUI() {
             let total = window.userData.signupBonus + window.userData.adEarning + window.userData.refEarning;
             
             document.getElementById('user-total-balance').innerText = total;
@@ -826,28 +713,26 @@
             document.getElementById('admin-stat-reqs').innerText = window.adminStats.pendingReqs.length;
             document.getElementById('admin-stat-removed').innerText = window.userData.removedUsersCount;
             document.getElementById('admin-stat-paid').innerText = window.adminStats.totalPaid + " ৳";
-        };
+        }
 
-        // UI Handlers
-        window.switchNavTab = function(tabName, element) {
+        function switchNavTab(tabName, element) {
             document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
 
             document.getElementById('tab-' + tabName).classList.add('active');
             if(element) element.classList.add('active');
-        };
+        }
 
-        window.openSubView = function(viewId) {
+        function openSubView(viewId) {
             document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
-        };
+        }
 
-        window.backToHome = function() {
-            window.switchNavTab('home', document.querySelectorAll('.nav-item')[0]);
-        };
+        function backToHome() {
+            switchNavTab('home', document.querySelectorAll('.nav-item')[0]);
+        }
 
-        // Ad System
-        window.startAdTimer = function() {
+        function startAdTimer() {
             if (window.userData.adsWatchedToday >= 20) {
                 alert("আজকের জন্য আপনার ২০টি লিমিট শেষ! আগামীকাল আবার চেষ্টা করুন।");
                 return;
@@ -871,15 +756,13 @@
                     window.userData.adsWatchedToday++;
                     window.userData.adEarning += 20;
                     
-                    saveUserDataToFirebase();
-                    window.updateUI();
+                    saveData();
                     alert("অভিনন্দন! আপনি ২০ টাকা পেয়েছেন।");
                 }
             }, 1000);
-        };
+        }
 
-        // Withdraw & Activation Logic
-        window.handleWithdrawClick = function() {
+        function handleWithdrawClick() {
             const amount = parseFloat(document.getElementById('withdraw-amount').value);
             const phone = document.getElementById('withdraw-phone').value;
             const method = document.getElementById('withdraw-method').value;
@@ -905,20 +788,19 @@
                 return;
             }
 
-            // Push withdraw request to Firebase
-            push(ref(db, 'requests'), {
+            window.adminStats.pendingReqs.push({
                 type: 'withdraw',
                 username: window.userData.username,
                 phone: phone,
                 method: method,
-                amount: amount,
-                timestamp: Date.now()
+                amount: amount
             });
 
+            updateUI();
             alert("আপনার উইথড্র রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে!");
-        };
+        }
 
-        window.switchPaymentGateway = function(gate) {
+        function switchPaymentGateway(gate) {
             window.selectedGateway = gate;
             if(gate === 'bkash') {
                 document.getElementById('gateway-bkash-box').style.display = 'block';
@@ -931,86 +813,122 @@
                 document.getElementById('gate-bkash-btn').className = 'btn btn-secondary';
                 document.getElementById('gate-nagad-btn').className = 'btn';
             }
-        };
+        }
 
-        window.submitActivationRequest = function() {
+        function submitActivationRequest() {
             const trxid = document.getElementById('activation-trxid').value;
             if (!trxid) {
                 alert("অনুগ্রহ করে TrxID প্রদান করুন।");
                 return;
             }
 
-            push(ref(db, 'requests'), {
+            window.adminStats.pendingReqs.push({
                 type: 'activation',
                 username: window.userData.username,
                 gateway: window.selectedGateway,
-                trxid: trxid,
-                timestamp: Date.now()
+                trxid: trxid
             });
 
             document.getElementById('activation-modal').classList.remove('active');
+            updateUI();
             alert("আপনার এক্টিভেশন রিকোয়েস্ট জমা দেওয়া হয়েছে। অ্যাডমিন রিভিউ করে একটিভ করে দেবেন।");
-        };
+        }
 
-        window.closeActivationModal = function() {
+        function closeActivationModal() {
             document.getElementById('activation-modal').classList.remove('active');
-        };
+        }
 
-        // Admin Actions
-        window.promptAdminLogin = function() {
+        function promptAdminLogin() {
             const pass = prompt("অ্যাডমিন পাসওয়ার্ড দিন:");
             if (pass === "1234") {
-                window.switchNavTab('admin', null);
+                switchNavTab('admin', null);
+                renderAdminRequests();
             } else if (pass !== null) {
                 alert("ভুল পাসওয়ার্ড!");
             }
-        };
+        }
 
-        window.approveRequest = function(reqId, type, username, amount) {
-            if (type === 'activation') {
-                set(ref(db, `users/${username}/isActivated`), true);
-            } else if (type === 'withdraw') {
-                window.adminStats.totalPaid += amount;
+        function renderAdminRequests() {
+            const listContainer = document.getElementById('admin-requests-list');
+            listContainer.innerHTML = '';
+            if (window.adminStats.pendingReqs.length === 0) {
+                listContainer.innerHTML = '<p style="font-size: 12px; color: #888;">কোনো পেন্ডিং রিকোয়েস্ট নেই।</p>';
+                return;
             }
-            remove(ref(db, `requests/${reqId}`));
+
+            window.adminStats.pendingReqs.forEach((req, index) => {
+                const div = document.createElement('div');
+                div.className = 'req-box';
+                div.innerHTML = `
+                    <b>টাইপ:</b> ${req.type === 'withdraw' ? 'উইথড্র রিকোয়েস্ট' : 'আইডি এক্টিভেশন'}<br>
+                    <b>ইউজার:</b> ${req.username}<br>
+                    ${req.amount ? `<b>পরিমাণ:</b> ${req.amount} ৳<br>` : ''}
+                    ${req.method ? `<b>মেথড:</b> ${req.method}<br>` : ''}
+                    ${req.phone ? `<b>ফোন:</b> ${req.phone}<br>` : ''}
+                    ${req.trxid ? `<b>TrxID:</b> ${req.trxid}<br>` : ''}
+                    <div class="action-btns">
+                        <button class="btn-approve" onclick="approveRequest(${index})">অনুমোদন</button>
+                        <button class="btn-deny" onclick="denyRequest(${index})">বাতিল</button>
+                    </div>
+                `;
+                listContainer.appendChild(div);
+            });
+        }
+
+        function approveRequest(index) {
+            const req = window.adminStats.pendingReqs[index];
+            if (req.type === 'activation') {
+                window.userData.isActivated = true;
+            } else if (req.type === 'withdraw') {
+                window.adminStats.totalPaid += req.amount;
+            }
+            window.adminStats.pendingReqs.splice(index, 1);
+            saveData();
+            renderAdminRequests();
             alert("রিকোয়েস্ট অনুমোদন করা হয়েছে!");
-        };
+        }
 
-        window.denyRequest = function(reqId) {
-            remove(ref(db, `requests/${reqId}`));
+        function denyRequest(index) {
+            window.adminStats.pendingReqs.splice(index, 1);
+            updateUI();
+            renderAdminRequests();
             alert("রিকোয়েস্ট বাতিল করা হয়েছে।");
-        };
+        }
 
-        window.removeUser = function(username) {
+        function removeUser(username) {
             if (confirm(`${username} ইউজারকে রিমুভ করতে চান?`)) {
-                remove(ref(db, `users/${username}`));
                 window.userData.removedUsersCount++;
-                window.updateUI();
+                updateUI();
             }
-        };
+        }
 
-        window.copyRefLink = function() {
+        function copyRefLink() {
             const input = document.getElementById('ref-link-input');
             input.select();
             document.execCommand('copy');
             alert("রেফারেল লিঙ্ক কপি করা হয়েছে!");
-        };
+        }
 
-        window.saveProfile = function() {
+        function saveProfile() {
             window.userData.fullName = document.getElementById('prof-fullname').value;
             window.userData.mobile = document.getElementById('prof-mobile').value;
             window.userData.dob = document.getElementById('prof-dob').value;
-            saveUserDataToFirebase();
+            saveData();
             alert("প্রোফাইল আপডেট হয়েছে!");
-        };
+        }
 
-        window.loadProfileImage = function(event) {
+        function loadProfileImage(event) {
             const reader = new FileReader();
             reader.onload = function(){
                 document.getElementById('profile-img').src = reader.result;
             };
             reader.readAsDataURL(event.target.files[0]);
-        };
+        }
+
+        // Initialize UI on Load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateUI();
+        });
     </script>
 </body>
 </html>
