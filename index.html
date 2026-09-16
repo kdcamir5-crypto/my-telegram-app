@@ -945,22 +945,25 @@
                 timestamp: new Date().toLocaleString()
             };
 
-            try {
-                // ফায়ারবেসে উইথড্র রিকোয়েস্ট পাঠাবো
-                const res = await fetch(`${FIREBASE_DB_URL}/requests.json`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(reqData)
-                });
+           try {
+            // ফায়ারবেসে উইথড্র রিকোয়েস্ট পাঠাবো
+            const res = await fetch(`${FIREBASE_DB_URL}/requests.json`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ...reqData,
+                    type: "withdraw"
+                })
+            });
 
-                if(res.ok) {
-                    showSlidePopup("উইথড্র রিকোয়েস্ট জমা হয়েছে!");
-                    document.getElementById('withdraw-phone').value = "";
-                    document.getElementById('withdraw-amount').value = "";
-                    loadUserWithdrawHistory();
-                } else {
-                    showSlidePopup("ফায়ারবেস সিকিউরিটি ইস্যু! ডাটা জমা হয়নি।");
-                }
+            if (res.ok) {
+                showSlidePopup("উইথড্র রিকোয়েস্ট জমা হয়েছে!");
+                document.getElementById('withdraw-phone').value = "";
+                document.getElementById('withdraw-amount').value = "";
+                loadUserWithdrawHistory();
+            } else {
+                showSlidePopup("ফায়ারবেস সিকিউরিটি ইস্যু! ডাটা জমা হয়নি।");
+            }
             } catch (e) {
                 showSlidePopup("নেটওয়ার্ক সমস্যা! পুনরায় চেষ্টা করুন।");
             }
