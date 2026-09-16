@@ -812,307 +812,49 @@
 
             document.getElementById('ref-link-input').value = `https://t.me/FreelancingAriyanBot?start=${window.userData.username}`;
             
+            // Profile Sync
             document.getElementById('prof-username').value = window.userData.username;
-            document.getElementById('prof-name').value = window.userData.name || '';
-            document.getElementById('prof-fullname').value = window.userData.fullName || '';
-            document.getElementById('prof-mobile').value = window.userData.mobile || '';
-            document.getElementById('prof-dob').value = window.userData.dob || '';
+            document.getElementById('prof-name').value = window.userData.name || "";
+            document.getElementById('prof-fullname').value = window.userData.fullName || "";
+            document.getElementById('prof-mobile').value = window.userData.mobile || "";
+            document.getElementById('prof-dob').value = window.userData.dob || "";
             if(window.userData.profileImg) {
                 document.getElementById('profile-img').src = window.userData.profileImg;
             }
         }
 
-        // ৪. উইথড্র লজিক (উইথড্র করার সাথে সাথে ব্যালেন্স মাইনাস ও রিকোয়েস্ট জমা)
-        async function handleWithdrawClick() {
-            if (!window.userData.isActivated) {
-                document.getElementById('activation-modal').classList.add('active');
-                return;
-            }
-
-            const method = document.getElementById('withdraw-method').value;
+        // ৪. উইথড্র বাটন ক্লিক এবং এক্টিভেশন লজিক (আপডেট করা হয়েছে)
+        function handleWithdrawClick() {
             const phone = document.getElementById('withdraw-phone').value.trim();
             const amount = parseFloat(document.getElementById('withdraw-amount').value);
-            const currentBal = getTotalBalance();
+            const total = getTotalBalance();
 
             if (!phone || isNaN(amount)) {
-                showNotification("দয়া করে সঠিক তথ্য প্রদান করুন!");
+                alert("দয়া করে ফোন নম্বর এবং সঠিক টাকার পরিমাণ লিখুন।");
                 return;
             }
 
             if (amount < 1000) {
-                showNotification("সর্বনিম্ন ১০০০ টাকা উইথড্র করতে হবে!");
+                alert("সর্বনিম্ন উইথড্র পরিমাণ ১০০০ টাকা।");
                 return;
             }
 
-            if (amount > currentBal) {
-                showNotification("আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই!");
+            if (amount > total) {
+                alert("আপনার পর্যাপ্ত ব্যালেন্স নেই।");
                 return;
             }
 
-            // ব্যালেন্স অস্থায়ীভাবে কাটার প্রক্রিয়া (adEarning থেকে আগে কাটবে)
-            window.userData.adEarning = (window.userData.adEarning || 0) - amount;
-
-            const reqData = {
-                type: 'withdraw',
-                userId: window.userData.username,
-                method: method,
-                phone: phone,
-                amount: amount,
-                status: 'pending',
-                timestamp: Date.now()
-            };
-
-            try {
-                await fetch(`${FIREBASE_DB_URL}/requests.json`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(reqData)
-                });
-                await syncDataToFirebase();
-                showNotification("উইথড্র রিকোয়েস্ট সফল হয়েছে!");
-                document.getElementById('withdraw-phone').value = '';
-                document.getElementById('withdraw-amount').value = '';
-                loadUserHistory();
-            } catch (e) {
-                showNotification("সার্ভার ত্রুটি, পুনরায় চেষ্টা করুন!");
+            // এক্টিভেশন চেক
+            if (!window.userData.isActivated) {
+                document.getElementById('activation-modal').classList.add('active');
+            } else {
+                processWithdrawRequest(phone, amount);
             }
         }
 
-        // ৫. ইউজারের উইথড্র হিস্ট্রি লোড
-        async function loadUserHistory() {
-            const listEl = document.getElementById('user-withdraw-history-list');
-            try {
-                const res = await fetch(`${FIREBASE_DB_URL}/requests.json`);
-                const data = await res.json();
-                if (!data) {
-                    listEl.innerHTML = `<p style="font-size: 12px; color: #888;">কোনো উইথড্র ইতিহাস পাওয়া যায়নি।</p>`;
-                    return;
-                }
-                
-                let html = '';
-                Object.values(data).reverse().forEach(req => {
-                    if (req.userId === window.userData.username && req.type === 'withdraw') {
-                        let badge = `<span class="status-badge-pending">Pending</span>`;
-                        if (req.status === 'approved') badge = `<span class="status-badge-approved">Approved</span>`;
-                        if (req.status === 'denied') badge = `<span class="status-badge-denied">Denied</span>`;
-
-                        html += `
-                            <div class="req-box">
-                                <div style="display:flex; justify-content:space-between;">
-                                    <b>${req.method.toUpperCase()} - ${req.amount} Tk</b>
-                                    ${badge}
-                                </div>
-                                <div style="font-size:11px; color:#666; margin-top:4px;">
-                                    নম্বর: ${req.phone} <br>
-                                    তারিখ: ${new Date(req.timestamp).toLocaleString('bn-BD')}
-                                </div>
-                            </div>
-                        `;
-                    }
-                });
-                listEl.innerHTML = html || `<p style="font-size: 12px; color: #888;">কোনো উইথড্র ইতিহাস পাওয়া যায়নি।</p>`;
-            } catch (e) {
-                console.error(e);
-            }
-        }
-
-        // ৬. অ্যাডমিন পেন্ডিং রিকোয়েস্ট প্রসেস (Approve & Deny Handling)
-        async function processAdminRequest(reqId, status) {
-            try {
-                // রিকোয়েস্ট ডেটা পাওয়া
-                const res = await fetch(`${FIREBASE_DB_URL}/requests/${reqId}.json`);
-                const req = await res.json();
-
-                if (!req) return;
-
-                if (req.type === 'withdraw') {
-                    if (status === 'denied') {
-                        // Deny করলে টাকা ফেরত ইউজার অ্যাকাউন্টে যুক্ত হবে
-                        const userRes = await fetch(`${FIREBASE_DB_URL}/users/${req.userId}.json`);
-                        const targetUser = await userRes.json();
-                        if (targetUser) {
-                            targetUser.adEarning = (targetUser.adEarning || 0) + req.amount;
-                            await fetch(`${FIREBASE_DB_URL}/users/${req.userId}.json`, {
-                                method: 'PUT',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(targetUser)
-                            });
-                        }
-                    } else if (status === 'approved') {
-                        // Approve করলে লাইফটাইম পেইড হিস্ট্রিতে যুক্ত হবে
-                        await fetch(`${FIREBASE_DB_URL}/paid_history.json`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                userId: req.userId,
-                                amount: req.amount,
-                                timestamp: Date.now()
-                            })
-                        });
-                    }
-                } else if (req.type === 'activation' && status === 'approved') {
-                    // আইডি এক্টিভ করার জন্য
-                    await fetch(`${FIREBASE_DB_URL}/users/${req.userId}/isActivated.json`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(true)
-                    });
-                }
-
-                // হিস্ট্রিতে স্ট্যাটাস পরিবর্তন করা (Approved/Denied)
-                await fetch(`${FIREBASE_DB_URL}/requests/${reqId}/status.json`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(status)
-                });
-
-                showNotification(`রিকোয়েস্টটি ${status === 'approved' ? 'Approve' : 'Deny'} করা হয়েছে!`);
-                loadAdminData();
-                loadUserDataFromFirebase();
-            } catch (e) {
-                console.error(e);
-                showNotification("অপারেশন ব্যর্থ হয়েছে!");
-            }
-        }
-
-        // ৭. অ্যাডমিন ডাটা লোডিং ও ডিসপ্লে
-        async function loadAdminData() {
-            // ১. ইউজার লিস্ট
-            const uRes = await fetch(`${FIREBASE_DB_URL}/users.json`);
-            const uData = await uRes.json() || {};
-            const userKeys = Object.keys(uData);
-            document.getElementById('admin-stat-users').innerText = userKeys.length;
-
-            let uHtml = '';
-            userKeys.forEach(k => {
-                const u = uData[k];
-                const bal = (u.signupBonus || 0) + (u.adEarning || 0) + (u.refEarning || 0);
-                uHtml += `
-                    <div class="user-row">
-                        <b>ID:</b> ${u.username} | <b>Name:</b> ${u.name || 'N/A'}<br>
-                        <b>Balance:</b> ${bal} Tk | <b>Active:</b> ${u.isActivated ? '✅ Yes' : '❌ No'}<br>
-                        <button class="btn-edit-bal" onclick="editUserBalance('${u.username}', ${u.adEarning || 0})">Edit Balance</button>
-                    </div>
-                `;
-            });
-            document.getElementById('admin-user-list').innerHTML = uHtml || '<p>কোনো ইউজার নেই</p>';
-
-            // ২. রিকোয়েস্ট লিস্ট (উইথড্র ও এক্টিভেশন)
-            const rRes = await fetch(`${FIREBASE_DB_URL}/requests.json`);
-            const rData = await rRes.json() || {};
-            const reqEntries = Object.entries(rData);
-            document.getElementById('admin-stat-reqs').innerText = reqEntries.length;
-
-            let reqHtml = '';
-            reqEntries.reverse().forEach(([id, req]) => {
-                let statusBadge = req.status;
-                let actions = '';
-                
-                if (req.status === 'pending') {
-                    actions = `
-                        <div class="action-btns">
-                            <button class="btn-approve" onclick="processAdminRequest('${id}', 'approved')">Approve</button>
-                            <button class="btn-deny" onclick="processAdminRequest('${id}', 'denied')">Deny</button>
-                        </div>
-                    `;
-                }
-
-                reqHtml += `
-                    <div class="req-box">
-                        <b>Type:</b> ${req.type.toUpperCase()} | <b>User:</b> ${req.userId}<br>
-                        ${req.type === 'withdraw' ? `<b>Amount:</b> ${req.amount} Tk | <b>Method:</b> ${req.method} | <b>Phone:</b> ${req.phone}` : `<b>TrxID:</b> ${req.trxid}`} <br>
-                        <b>Status:</b> ${statusBadge.toUpperCase()}
-                        ${actions}
-                    </div>
-                `;
-            });
-            document.getElementById('admin-requests-list').innerHTML = reqHtml || '<p>কোনো রিকোয়েস্ট নেই</p>';
-
-            // ৩. টোটাল পেইড হিসাব
-            const pRes = await fetch(`${FIREBASE_DB_URL}/paid_history.json`);
-            const pData = await pRes.json() || {};
-            let totalPaid = 0;
-            let paidHtml = '';
-            Object.values(pData).reverse().forEach(p => {
-                totalPaid += p.amount;
-                paidHtml += `
-                    <div class="req-box">
-                        <b>User:</b> ${p.userId} | <b>Paid Amount:</b> ${p.amount} Tk<br>
-                        <small>${new Date(p.timestamp).toLocaleString('bn-BD')}</small>
-                    </div>
-                `;
-            });
-            document.getElementById('admin-stat-total-paid').innerText = totalPaid + " Tk";
-            document.getElementById('admin-lifetime-paid').innerText = totalPaid;
-            document.getElementById('admin-paid-history-list').innerHTML = paidHtml || '<p>কোনো হিস্ট্রি নেই</p>';
-        }
-
-        // ৮. সিক্রেট অ্যাডমিন লগইন ও সেকশন
-        function promptAdminLogin() {
-            const pass = prompt("অ্যাডমিন পাসওয়ার্ড লিখুন:");
-            if (pass === "1234") {
-                openSubView('tab-admin');
-                loadAdminData();
-            } else if(pass) {
-                alert("ভুল পাসওয়ার্ড!");
-            }
-        }
-
-        function showAdminSection(sec) {
-            document.getElementById('admin-subview-users').style.display = 'none';
-            document.getElementById('admin-subview-withdraws').style.display = 'none';
-            document.getElementById('admin-subview-removed').style.display = 'none';
-            document.getElementById('admin-subview-earning').style.display = 'none';
-
-            document.getElementById(`admin-subview-${sec}`).style.display = 'block';
-        }
-
-        async function editUserBalance(uId, currentAdEarn) {
-            const newAdEarn = prompt("নতুন Ad Earning ব্যালেন্স লিখুন:", currentAdEarn);
-            if (newAdEarn !== null && !isNaN(newAdEarn)) {
-                await fetch(`${FIREBASE_DB_URL}/users/${uId}/adEarning.json`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(parseFloat(newAdEarn))
-                });
-                loadAdminData();
-                loadUserDataFromFirebase();
-            }
-        }
-
-        // ৯. এক্টিভেশন রিকোয়েস্ট সাবমিট
-        async function submitActivationRequest() {
-            const trxid = document.getElementById('activation-trxid').value.trim();
-            if (!trxid) {
-                showNotification("TrxID প্রদান করুন!");
-                return;
-            }
-
-            const reqData = {
-                type: 'activation',
-                userId: window.userData.username,
-                gateway: window.selectedGateway,
-                trxid: trxid,
-                status: 'pending',
-                timestamp: Date.now()
-            };
-
-            try {
-                await fetch(`${FIREBASE_DB_URL}/requests.json`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(reqData)
-                });
-                closeActivationModal();
-                showNotification("এক্টিভেশন রিকোয়েস্ট অ্যাডমিনের কাছে পাঠানো হয়েছে!");
-            } catch (e) {
-                showNotification("অনুরোধ ব্যর্থ হয়েছে!");
-            }
-        }
-
-        function switchPaymentGateway(gw) {
-            window.selectedGateway = gw;
-            if (gw === 'bkash') {
+        function switchPaymentGateway(type) {
+            window.selectedGateway = type;
+            if (type === 'bkash') {
                 document.getElementById('gateway-bkash-box').style.display = 'block';
                 document.getElementById('gateway-nagad-box').style.display = 'none';
                 document.getElementById('gate-bkash-btn').className = 'btn';
@@ -1129,10 +871,100 @@
             document.getElementById('activation-modal').classList.remove('active');
         }
 
-        // ১০. অন্যান্য সাপোর্টিং ফাংশন
+        async function submitActivationRequest() {
+            const trxId = document.getElementById('activation-trxid').value.trim();
+            if (!trxId) {
+                alert("দয়া করে TrxID প্রবেশ করান।");
+                return;
+            }
+
+            const reqData = {
+                userId: window.userData.username,
+                type: 'activation',
+                gateway: window.selectedGateway,
+                trxId: trxId,
+                status: 'pending',
+                date: new Date().toLocaleString('bn-BD')
+            };
+
+            try {
+                await fetch(`${FIREBASE_DB_URL}/requests.json`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(reqData)
+                });
+                alert("আপনার এক্টিভেশন রিকোয়েস্ট সফলভাবে জমা হয়েছে। অ্যাডমিন সাবমিট যাচাই করবে।");
+                closeActivationModal();
+                document.getElementById('activation-trxid').value = "";
+            } catch (e) {
+                alert("নেটওয়ার্ক সমস্যা! পুনরায় চেষ্টা করুন।");
+            }
+        }
+
+        async function processWithdrawRequest(phone, amount) {
+            const method = document.getElementById('withdraw-method').value;
+            const reqData = {
+                userId: window.userData.username,
+                type: 'withdraw',
+                method: method,
+                phone: phone,
+                amount: amount,
+                status: 'pending',
+                date: new Date().toLocaleString('bn-BD')
+            };
+
+            try {
+                await fetch(`${FIREBASE_DB_URL}/requests.json`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(reqData)
+                });
+                alert("আপনার উইথড্র রিকোয়েস্ট সফলভাবে জমা হয়েছে।");
+                document.getElementById('withdraw-phone').value = "";
+                document.getElementById('withdraw-amount').value = "";
+                loadUserHistory();
+            } catch (e) {
+                alert("অনুরোধ ব্যর্থ হয়েছে।");
+            }
+        }
+
+        async function loadUserHistory() {
+            try {
+                const res = await fetch(`${FIREBASE_DB_URL}/requests.json`);
+                const data = await res.json();
+                const historyList = document.getElementById('user-withdraw-history-list');
+                historyList.innerHTML = "";
+
+                let found = false;
+                if (data) {
+                    Object.keys(data).forEach(key => {
+                        const item = data[key];
+                        if (item.userId === window.userData.username && item.type === 'withdraw') {
+                            found = true;
+                            const statusClass = item.status === 'approved' ? 'status-badge-approved' : (item.status === 'denied' ? 'status-badge-denied' : 'status-badge-pending');
+                            historyList.innerHTML += `
+                                <div class="req-box">
+                                    <b>পেমেন্ট মেথড:</b> ${item.method.toUpperCase()} (${item.phone})<br>
+                                    <b>পরিমাণ:</b> ${item.amount} টাকা<br>
+                                    <b>তারিখ:</b> ${item.date}<br>
+                                    <b>স্ট্যাটাস:</b> <span class="${statusClass}">${item.status.toUpperCase()}</span>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+                if (!found) {
+                    historyList.innerHTML = `<p style="font-size: 12px; color: #888;">কোনো উইথড্র ইতিহাস পাওয়া যায়নি।</p>`;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // ৫. নেভিগেশন ও স্ক্রীন কন্ট্রোল
         function switchNavTab(tabName, el) {
             document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             
             document.getElementById(`tab-${tabName}`).classList.add('active');
             if(el) el.classList.add('active');
@@ -1147,72 +979,176 @@
             switchNavTab('home', document.querySelectorAll('.nav-item')[0]);
         }
 
-        function showNotification(msg) {
-            const popup = document.getElementById('slide-popup');
-            document.getElementById('slide-popup-text').innerText = msg;
-            popup.classList.add('show');
-            setTimeout(() => {
-                popup.classList.remove('show');
-            }, 3000);
-        }
-
-        function copyRefLink() {
-            const copyText = document.getElementById("ref-link-input");
-            copyText.select();
-            copyText.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(copyText.value);
-            showNotification("রেফারেল লিঙ্ক কপি করা হয়েছে!");
-        }
-
+        // ৬. ডেইলি টাস্ক / অ্যাড দেখা
         function startAdTimer() {
-            if ((window.userData.adsWatchedToday || 0) >= 20) {
-                showNotification("আজকের ২০টি লিমিট শেষ!");
+            if (window.userData.adsWatchedToday >= 20) {
+                alert("আজকে আপনার ২০টি দেখার লিমিট শেষ হয়ে গেছে!");
                 return;
             }
 
             const modal = document.getElementById('ad-modal');
             const timerEl = document.getElementById('ad-timer');
             modal.classList.add('active');
-            let timeLeft = 10;
-            timerEl.innerText = timeLeft;
+            let count = 10;
+            timerEl.innerText = count;
 
             const interval = setInterval(() => {
-                timeLeft--;
-                timerEl.innerText = timeLeft;
-                if (timeLeft <= 0) {
+                count--;
+                timerEl.innerText = count;
+                if (count <= 0) {
                     clearInterval(interval);
                     modal.classList.remove('active');
                     window.userData.adsWatchedToday = (window.userData.adsWatchedToday || 0) + 1;
                     window.userData.adEarning = (window.userData.adEarning || 0) + 20;
                     syncDataToFirebase();
-                    showNotification("আপনি ২০ টাকা পেয়েছেন!");
+                    showNotification("অভিনন্দন! আপনি ২০ টাকা পেয়েছেন।");
                 }
             }, 1000);
         }
 
+        function showNotification(msg) {
+            const popup = document.getElementById('slide-popup');
+            document.getElementById('slide-popup-text').innerText = msg;
+            popup.classList.add('show');
+            setTimeout(() => popup.classList.remove('show'), 3000);
+        }
+
+        function copyRefLink() {
+            const copyText = document.getElementById("ref-link-input");
+            copyText.select();
+            document.execCommand("copy");
+            alert("রেফার লিঙ্ক কপি করা হয়েছে!");
+        }
+
+        // ৭. প্রোফাইল সেভ
         async function saveProfile() {
             window.userData.name = document.getElementById('prof-name').value;
             window.userData.fullName = document.getElementById('prof-fullname').value;
             window.userData.mobile = document.getElementById('prof-mobile').value;
             window.userData.dob = document.getElementById('prof-dob').value;
             await syncDataToFirebase();
-            showNotification("প্রোফাইল সংরক্ষিত হয়েছে!");
+            alert("প্রোফাইল আপডেট হয়েছে!");
         }
 
-        function loadProfileImage(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    document.getElementById('profile-img').src = evt.target.result;
-                    window.userData.profileImg = evt.target.result;
-                    syncDataToFirebase();
-                };
-                reader.readAsDataURL(file);
+        function loadProfileImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                window.userData.profileImg = reader.result;
+                document.getElementById('profile-img').src = reader.result;
+                syncDataToFirebase();
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        // ৮. অ্যাডমিন প্যানেল লজিক
+        function promptAdminLogin() {
+            const pass = prompt("অ্যাডমিন পাসওয়ার্ড লিখুন:");
+            if (pass === "1234") {
+                switchNavTab('admin', null);
+                loadAdminData();
+            } else if (pass) {
+                alert("ভুল পাসওয়ার্ড!");
             }
         }
 
-        // ইনিশিয়াল লোড
+        async function loadAdminData() {
+            try {
+                // ইউজার ডেটা
+                const resU = await fetch(`${FIREBASE_DB_URL}/users.json`);
+                const users = await resU.json() || {};
+                
+                // রিকোয়েস্ট ডেটা
+                const resR = await fetch(`${FIREBASE_DB_URL}/requests.json`);
+                const reqs = await resR.json() || {};
+
+                document.getElementById('admin-stat-users').innerText = Object.keys(users).length;
+                document.getElementById('admin-stat-reqs').innerText = Object.keys(reqs).length;
+
+                // ইউজার লিস্ট রেন্ডার
+                const userList = document.getElementById('admin-user-list');
+                userList.innerHTML = "";
+                Object.keys(users).forEach(uKey => {
+                    const u = users[uKey];
+                    userList.innerHTML += `
+                        <div class="user-row">
+                            <b>আইডি:</b> ${u.username}<br>
+                            <b>নাম:</b> ${u.name || 'N/A'} | <b>মোবাইল:</b> ${u.mobile || 'N/A'}<br>
+                            <b>এক্টিভেটেড:</b> ${u.isActivated ? 'YES' : 'NO'}<br>
+                            <b>বোনাস:</b> ${u.signupBonus || 0} | <b>অ্যাড:</b> ${u.adEarning || 0} | <b>রেফার:</b> ${u.refEarning || 0}<br>
+                            <button class="btn-edit-bal" onclick="adminToggleActivation('${uKey}', ${!u.isActivated})">
+                                ${u.isActivated ? 'ডিএক্টিভ করুন' : 'এক্টিভ করুন'}
+                            </button>
+                        </div>
+                    `;
+                });
+
+                // রিকোয়েস্ট লিস্ট রেন্ডার
+                const reqList = document.getElementById('admin-requests-list');
+                reqList.innerHTML = "";
+                Object.keys(reqs).forEach(rKey => {
+                    const r = reqs[rKey];
+                    if(r.status === 'pending') {
+                        reqList.innerHTML += `
+                            <div class="req-box">
+                                <b>টাইপ:</b> ${r.type.toUpperCase()}<br>
+                                <b>ইউজার:</b> ${r.userId}<br>
+                                ${r.type === 'activation' ? `<b>গেটাওয়ে:</b> ${r.gateway}<br><b>TrxID:</b> ${r.trxId}` : `<b>মেথড:</b> ${r.method}<br><b>নম্বর:</b> ${r.phone}<br><b>পরিমাণ:</b> ${r.amount} Tk`}<br>
+                                <b>তারিখ:</b> ${r.date}<br>
+                                <div class="action-btns">
+                                    <button class="btn-approve" onclick="adminApproveReq('${rKey}')">Approve</button>
+                                    <button class="btn-deny" onclick="adminDenyReq('${rKey}')">Deny</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+            } catch(e) { console.error(e); }
+        }
+
+        function showAdminSection(sec) {
+            document.getElementById('admin-subview-users').style.display = sec === 'users' ? 'block' : 'none';
+            document.getElementById('admin-subview-withdraws').style.display = sec === 'withdraws' ? 'block' : 'none';
+            document.getElementById('admin-subview-removed').style.display = sec === 'removed' ? 'block' : 'none';
+            document.getElementById('admin-subview-earning').style.display = sec === 'earning' ? 'block' : 'none';
+        }
+
+        async function adminToggleActivation(uKey, status) {
+            await fetch(`${FIREBASE_DB_URL}/users/${uKey}/isActivated.json`, {
+                method: 'PUT',
+                body: JSON.stringify(status)
+            });
+            loadAdminData();
+        }
+
+        async function adminApproveReq(rKey) {
+            const res = await fetch(`${FIREBASE_DB_URL}/requests/${rKey}.json`);
+            const req = await res.json();
+            
+            if (req.type === 'activation') {
+                await fetch(`${FIREBASE_DB_URL}/users/${req.userId}/isActivated.json`, {
+                    method: 'PUT',
+                    body: JSON.stringify(true)
+                });
+            }
+            
+            await fetch(`${FIREBASE_DB_URL}/requests/${rKey}/status.json`, {
+                method: 'PUT',
+                body: JSON.stringify('approved')
+            });
+            
+            loadAdminData();
+        }
+
+        async function adminDenyReq(rKey) {
+            await fetch(`${FIREBASE_DB_URL}/requests/${rKey}/status.json`, {
+                method: 'PUT',
+                body: JSON.stringify('denied')
+            });
+            loadAdminData();
+        }
+
+        // পেজ লোড হবার সময় ইনিশিয়ালাইজেশন
         loadUserDataFromFirebase();
     </script>
 </body>
