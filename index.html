@@ -505,7 +505,7 @@
             </div>
         </div>
 
-        <!-- উইথড্র সেকশন (Withdraw & History) -->
+        <!-- উইথড্র সেকশন (Withdraw & History) FIXED -->
         <div id="tab-withdraw" class="view-section">
             <div class="card">
                 <h2>🏦 টাকা উত্তোলন (Withdraw)</h2>
@@ -743,8 +743,7 @@
             refEarning: 0,
             adsWatchedToday: 0,
             isActivated: false,
-            profileImg: "https://via.placeholder.com/90",
-            referredBy: ""
+            profileImg: "https://via.placeholder.com/90"
         };
 
         window.selectedGateway = "bkash";
@@ -893,7 +892,7 @@
             }, 1000);
         }
 
-        // ৫. উইথড্র এবং অটো রিফান্ড সেকশন
+        // ৫. উইথড্র, ইনস্ট্যান্ট ব্যালেন্স কাট এবং হিস্ট্রি ফিক্সড সেকশন
         async function handleWithdrawClick() {
             const method = document.getElementById('withdraw-method').value;
             const phone = document.getElementById('withdraw-phone').value.trim();
@@ -909,18 +908,31 @@
                 return;
             }
 
-            // ডিডাকশন লজিক
+            // ইনস্ট্যান্ট মেইন ব্যালেন্স ডিডাকশন লজিক
             let rem = amount;
-            if (window.userData.adEarning >= rem) { window.userData.adEarning -= rem; rem = 0; }
-            else { rem -= window.userData.adEarning; window.userData.adEarning = 0; }
-
-            if (rem > 0) {
-                if (window.userData.refEarning >= rem) { window.userData.refEarning -= rem; rem = 0; }
-                else { rem -= window.userData.refEarning; window.userData.refEarning = 0; }
+            if (window.userData.adEarning >= rem) { 
+                window.userData.adEarning -= rem; 
+                rem = 0; 
+            } else { 
+                rem -= window.userData.adEarning; 
+                window.userData.adEarning = 0; 
             }
 
-            if (rem > 0) { window.userData.signupBonus -= rem; }
+            if (rem > 0) {
+                if (window.userData.refEarning >= rem) { 
+                    window.userData.refEarning -= rem; 
+                    rem = 0; 
+                } else { 
+                    rem -= window.userData.refEarning; 
+                    window.userData.refEarning = 0; 
+                }
+            }
 
+            if (rem > 0) { 
+                window.userData.signupBonus -= rem; 
+            }
+
+            // ফায়ারবেসে মেইন ব্যালেন্স আপডেট
             await syncDataToFirebase();
 
             const reqData = {
@@ -934,20 +946,27 @@
             };
 
             try {
-                await fetch(`${FIREBASE_DB_URL}/requests.json`, {
+                // ফায়ারবেসে উইথড্র রিকোয়েস্ট পাঠাবো
+                const res = await fetch(`${FIREBASE_DB_URL}/requests.json`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(reqData)
                 });
-                showSlidePopup("উইথড্র রিকোয়েস্ট জমা হয়েছে!");
-                document.getElementById('withdraw-phone').value = "";
-                document.getElementById('withdraw-amount').value = "";
-                loadUserWithdrawHistory();
+
+                if(res.ok) {
+                    showSlidePopup("উইথড্র রিকোয়েস্ট জমা হয়েছে!");
+                    document.getElementById('withdraw-phone').value = "";
+                    document.getElementById('withdraw-amount').value = "";
+                    loadUserWithdrawHistory();
+                } else {
+                    showSlidePopup("ফায়ারবেস সিকিউরিটি ইস্যু! ডাটা জমা হয়নি।");
+                }
             } catch (e) {
                 showSlidePopup("নেটওয়ার্ক সমস্যা! পুনরায় চেষ্টা করুন।");
             }
         }
 
+        // ইউজারের জন্য Withdraw History প্রদর্শন সেকশন
         async function loadUserWithdrawHistory() {
             try {
                 const res = await fetch(`${FIREBASE_DB_URL}/requests.json`);
@@ -1112,7 +1131,7 @@
                 }
                 document.getElementById('admin-stat-users').innerText = userCount;
 
-                // ২. উইথড্র রিকোয়েস্ট লোড
+                // ২. উইথড্র ও অ্যাক্টিভেশন রিকোয়েস্ট লোড
                 const rRes = await fetch(`${FIREBASE_DB_URL}/requests.json`);
                 const rData = await rRes.json();
                 const rList = document.getElementById('admin-requests-list');
@@ -1197,6 +1216,7 @@
             }
         }
 
+        // অ্যাডমিন কর্তৃক এপ্রুভ বা ডিনাই করার রিফান্ড ও স্ট্যাটাস আপডেট লজিক
         async function processAdminRequest(reqId, type, userId, newStatus, amount) {
             try {
                 await fetch(`${FIREBASE_DB_URL}/requests/${reqId}/status.json`, {
@@ -1213,6 +1233,7 @@
                     });
                 }
 
+                // ডিনাই (Denied) করলে টাকা মেইন ব্যালেন্সে অটো-ফেরত (Refund) যাওয়ার লজিক
                 if (type === 'withdraw' && newStatus === 'denied') {
                     const targetUserRes = await fetch(`${FIREBASE_DB_URL}/users/${userId}.json`);
                     const targetUserData = await targetUserRes.json();
@@ -1226,6 +1247,7 @@
                     }
                 }
 
+                // এপ্রুভ করলে টোটাল পেইড হিসাব আপডেট
                 if (type === 'withdraw' && newStatus === 'approved') {
                     const pRes = await fetch(`${FIREBASE_DB_URL}/total_paid.json`);
                     const pData = await pRes.json();
