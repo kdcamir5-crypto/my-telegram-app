@@ -1,232 +1,711 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0,
-          maximum-scale=1.0, user-scalable=no">
+          content="width=device-width,
+          initial-scale=1.0,
+          maximum-scale=1.0,
+          user-scalable=no">
 
     <meta name="theme-color" content="#0d6efd">
 
     <meta name="description"
-          content="Frelancing with Ariyan - Online earning platform">
+          content="Frelancing with Ariyan">
 
     <title>Frelancing with Ariyan</title>
 
-    <!-- Main CSS -->
     <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
-    <!-- =====================================================
-         APPLICATION ROOT
-         পরবর্তী সব Interface এখানে তৈরি হবে
-    ====================================================== -->
-    <div id="app">
+<div id="app">
 
-        <!-- Initial Loading Screen -->
-        <div id="loading-screen">
+    <!-- =================================================
+         LOADING SCREEN
+    ================================================== -->
 
-            <div class="loading-box">
+    <div id="loading-screen">
 
-                <div class="loading-spinner"></div>
+        <div class="loading-box">
 
-                <h2>Frelancing with Ariyan</h2>
+            <div class="loading-spinner"></div>
 
-                <p>লোড হচ্ছে...</p>
+            <h2>Frelancing with Ariyan</h2>
 
-            </div>
+            <p>অ্যাকাউন্ট প্রস্তুত হচ্ছে...</p>
 
         </div>
 
     </div>
 
 
-    <!-- =====================================================
-         FIREBASE
-    ====================================================== -->
+    <!-- =================================================
+         AUTH SCREEN
+    ================================================== -->
 
-    <script type="module">
+    <div id="auth-screen" style="display:none;">
 
-        /*
-         * Firebase SDK
-         * আমরা Firebase Realtime Database ব্যবহার করব।
-         */
+        <div class="auth-box">
 
-        import {
-            initializeApp
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+            <h1>Frelancing with Ariyan</h1>
 
-        import {
-            getDatabase,
-            ref,
-            get,
-            set,
-            update,
-            runTransaction,
-            push
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+            <p>আপনার অ্যাকাউন্ট তৈরি করুন</p>
 
+            <input
+                id="auth-email"
+                type="email"
+                placeholder="Email">
 
-        /*
-         * =====================================================
-         * FIREBASE CONFIGURATION
-         * =====================================================
-         *
-         * তোমার দেওয়া Firebase Database URL এখানে রাখা হয়েছে।
-         *
-         * গুরুত্বপূর্ণ:
-         * এখানে Firebase-এর public configuration ব্যবহার করা যায়।
-         * কিন্তু Admin password বা private server secret এখানে রাখা যাবে না।
-         */
+            <input
+                id="auth-password"
+                type="password"
+                placeholder="Password">
 
-        const firebaseConfig = {
+            <button id="register-btn">
+                নতুন অ্যাকাউন্ট তৈরি করুন
+            </button>
 
-            databaseURL:
-                "https://frelancing-mini-app-default-rtdb.firebaseio.com"
+            <button id="login-btn">
+                Login
+            </button>
 
-        };
+            <p id="auth-message"></p>
+
+        </div>
+
+    </div>
 
 
-        /*
-         * Firebase initialize
-         */
+    <!-- =================================================
+         MAIN APPLICATION
+    ================================================== -->
 
-        const firebaseApp =
-            initializeApp(firebaseConfig);
+    <main id="main-app" style="display:none;">
 
+        <section class="welcome-section">
 
-        /*
-         * Realtime Database
-         */
+            <h1>
+                Frelancing with Ariyan
+            </h1>
 
-        const database =
-            getDatabase(firebaseApp);
+            <p>
+                স্বাগতম!
+            </p>
 
+            <div class="user-card">
 
-        /*
-         * =====================================================
-         * GLOBAL APP OBJECT
-         * =====================================================
-         *
-         * পরবর্তী ধাপের সব JavaScript এই object ব্যবহার করতে পারবে।
-         */
+                <p>আপনার Unique ID</p>
 
-        window.FWA = {
+                <strong id="user-unique-id">
+                    Loading...
+                </strong>
 
-            firebaseApp: firebaseApp,
+                <p>
+                    Referral Code:
+                    <strong id="user-referral-code">
+                        Loading...
+                    </strong>
+                </p>
 
-            database: database,
+            </div>
 
-            dbRef: ref,
+        </section>
 
-            dbGet: get,
+    </main>
 
-            dbSet: set,
-
-            dbUpdate: update,
-
-            dbTransaction: runTransaction,
-
-            dbPush: push
-
-        };
+</div>
 
 
-        /*
-         * =====================================================
-         * BASIC APP START
-         * =====================================================
-         */
+<!-- =====================================================
+     FIREBASE APPLICATION
+====================================================== -->
 
-        document.addEventListener(
-            "DOMContentLoaded",
-            function () {
+<script type="module">
 
-                const loadingScreen =
-                    document.getElementById(
-                        "loading-screen"
-                    );
+    import {
+        initializeApp
+    } from
+    "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-                /*
-                 * আপাতত Firebase connection initialize
-                 * হওয়ার পর loading screen সরানো হচ্ছে।
-                 *
-                 * পরবর্তী ধাপে এখানে:
-                 * - User ID check
-                 * - New user creation
-                 * - Existing user loading
-                 * - Firebase balance loading
-                 * ইত্যাদি যুক্ত হবে।
-                 */
 
-                setTimeout(function () {
+    import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        onAuthStateChanged
+    } from
+    "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-                    if (loadingScreen) {
 
-                        loadingScreen.style.display =
-                            "none";
+    import {
+        getDatabase,
+        ref,
+        get,
+        set,
+        update
+    } from
+    "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-                    }
 
-                }, 500);
+    /* =====================================================
+       FIREBASE CONFIG
+    ====================================================== */
 
-            }
+    const firebaseConfig = {
+
+        apiKey:
+        "AIzaSyDLxotImsTTEAMgOfVKdodefhmcTi9MKfE",
+
+        authDomain:
+        "frelancing-mini-app.firebaseapp.com",
+
+        databaseURL:
+        "https://frelancing-mini-app-default-rtdb.firebaseio.com",
+
+        projectId:
+        "frelancing-mini-app",
+
+        storageBucket:
+        "frelancing-mini-app.firebasestorage.app",
+
+        messagingSenderId:
+        "991264241409",
+
+        appId:
+        "1:991264241409:web:466b311d1af170d15c0d00"
+
+    };
+
+
+    /* =====================================================
+       INITIALIZE FIREBASE
+    ====================================================== */
+
+    const app =
+        initializeApp(firebaseConfig);
+
+
+    const auth =
+        getAuth(app);
+
+
+    const database =
+        getDatabase(app);
+
+
+    /* =====================================================
+       GLOBAL OBJECT
+    ====================================================== */
+
+    window.FWA = {
+
+        app: app,
+
+        auth: auth,
+
+        database: database,
+
+        ref: ref,
+
+        get: get,
+
+        set: set,
+
+        update: update
+
+    };
+
+
+    /* =====================================================
+       ELEMENTS
+    ====================================================== */
+
+    const loadingScreen =
+        document.getElementById(
+            "loading-screen"
         );
 
-    </script>
+
+    const authScreen =
+        document.getElementById(
+            "auth-screen"
+        );
+
+
+    const mainApp =
+        document.getElementById(
+            "main-app"
+        );
+
+
+    const authMessage =
+        document.getElementById(
+            "auth-message"
+        );
+
+
+    /* =====================================================
+       GENERATE OUR OWN UNIQUE USER ID
+    ====================================================== */
+
+    function generateUniqueID() {
+
+        const timestamp =
+            Date.now()
+            .toString(36)
+            .toUpperCase();
+
+
+        const randomPart =
+            Math.random()
+            .toString(36)
+            .substring(2, 8)
+            .toUpperCase();
+
+
+        return "FWA-" +
+               timestamp +
+               "-" +
+               randomPart;
+
+    }
+
+
+    /* =====================================================
+       GENERATE REFERRAL CODE
+    ====================================================== */
+
+    function generateReferralCode() {
+
+        const randomPart =
+            Math.random()
+            .toString(36)
+            .substring(2, 10)
+            .toUpperCase();
+
+
+        return "ARIYAN-" +
+               randomPart;
+
+    }
+
+
+    /* =====================================================
+       CREATE USER DATABASE PROFILE
+    ====================================================== */
+
+    async function createUserProfile(user) {
+
+        const userRef =
+            ref(
+                database,
+                "users/" + user.uid
+            );
+
+
+        const snapshot =
+            await get(userRef);
+
+
+        /*
+         * User already exists.
+         * তাই নতুন ID তৈরি করা হবে না।
+         */
+
+        if (snapshot.exists()) {
+
+            return snapshot.val();
+
+        }
+
+
+        /*
+         * নতুন User
+         */
+
+        const uniqueID =
+            generateUniqueID();
+
+
+        const referralCode =
+            generateReferralCode();
+
+
+        const userData = {
+
+            uid: user.uid,
+
+            uniqueId: uniqueID,
+
+            referralCode: referralCode,
+
+            email: user.email || "",
+
+
+            /*
+             * Starting balance
+             *
+             * তোমার specification অনুযায়ী
+             * নতুন account-এ 150 টাকা bonus.
+             */
+
+            balance: 150,
+
+
+            adEarning: 0,
+
+            referralEarning: 0,
+
+            bonus: 150,
+
+
+            totalEarning: 150,
+
+
+            totalAdsToday: 0,
+
+            lastTaskDate: "",
+
+
+            profile: {
+
+                name: "",
+
+                fullName: "",
+
+                mobile: "",
+
+                birthdate: "",
+
+                photoURL: ""
+
+            },
+
+
+            createdAt:
+                Date.now(),
+
+
+            status:
+                "active"
+
+        };
+
+
+        /*
+         * Firebase-এ একবারে সম্পূর্ণ profile save
+         */
+
+        await set(
+            userRef,
+            userData
+        );
+
+
+        return userData;
+
+    }
+
+
+    /* =====================================================
+       LOAD USER
+    ====================================================== */
+
+    async function loadUser(user) {
+
+        try {
+
+            const userData =
+                await createUserProfile(
+                    user
+                );
+
+
+            /*
+             * Unique ID দেখানো
+             */
+
+            document.getElementById(
+                "user-unique-id"
+            ).textContent =
+                userData.uniqueId;
+
+
+            /*
+             * Referral Code
+             */
+
+            document.getElementById(
+                "user-referral-code"
+            ).textContent =
+                userData.referralCode;
+
+
+            /*
+             * Loading hide
+             */
+
+            loadingScreen.style.display =
+                "none";
+
+
+            authScreen.style.display =
+                "none";
+
+
+            mainApp.style.display =
+                "block";
+
+
+            console.log(
+                "User loaded:",
+                userData
+            );
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            loadingScreen.style.display =
+                "none";
+
+            authScreen.style.display =
+                "block";
+
+            authMessage.textContent =
+                "User data load করতে সমস্যা হয়েছে।";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       REGISTER
+    ====================================================== */
+
+    document.getElementById(
+        "register-btn"
+    ).addEventListener(
+        "click",
+        async function () {
+
+            const email =
+                document.getElementById(
+                    "auth-email"
+                ).value.trim();
+
+
+            const password =
+                document.getElementById(
+                    "auth-password"
+                ).value;
+
+
+            if (!email || !password) {
+
+                authMessage.textContent =
+                    "Email এবং Password দিন।";
+
+                return;
+
+            }
+
+
+            if (password.length < 6) {
+
+                authMessage.textContent =
+                    "Password কমপক্ষে ৬ অক্ষরের হতে হবে।";
+
+                return;
+
+            }
+
+
+            try {
+
+                authMessage.textContent =
+                    "অ্যাকাউন্ট তৈরি হচ্ছে...";
+
+
+                const credential =
+                    await
+                    createUserWithEmailAndPassword(
+                        auth,
+                        email,
+                        password
+                    );
+
+
+                await loadUser(
+                    credential.user
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+
+                authMessage.textContent =
+                    "অ্যাকাউন্ট তৈরি করা যায়নি: "
+                    + error.message;
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       LOGIN
+    ====================================================== */
+
+    document.getElementById(
+        "login-btn"
+    ).addEventListener(
+        "click",
+        async function () {
+
+            const email =
+                document.getElementById(
+                    "auth-email"
+                ).value.trim();
+
+
+            const password =
+                document.getElementById(
+                    "auth-password"
+                ).value;
+
+
+            if (!email || !password) {
+
+                authMessage.textContent =
+                    "Email এবং Password দিন।";
+
+                return;
+
+            }
+
+
+            try {
+
+                authMessage.textContent =
+                    "Login হচ্ছে...";
+
+
+                const credential =
+                    await
+                    signInWithEmailAndPassword(
+                        auth,
+                        email,
+                        password
+                    );
+
+
+                await loadUser(
+                    credential.user
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+
+                authMessage.textContent =
+                    "Login করা যায়নি। Email অথবা Password সঠিক কিনা দেখুন।";
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       AUTH STATE LISTENER
+    ====================================================== */
+
+    onAuthStateChanged(
+        auth,
+        async function (user) {
+
+            if (user) {
+
+                await loadUser(user);
+
+            } else {
+
+                loadingScreen.style.display =
+                    "none";
+
+                authScreen.style.display =
+                    "block";
+
+                mainApp.style.display =
+                    "none";
+
+            }
+
+        }
+    );
+
+</script>
 
 </body>
-</html>
-/* =========================================================
-   FRELANCING WITH ARIYAN
-   GLOBAL CSS
-========================================================= */
 
+</html>
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html {
-    scroll-behavior: smooth;
+html,
+body {
+    width: 100%;
+    min-height: 100%;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-
-    min-height: 100vh;
-
     font-family:
         Arial,
         "Noto Sans Bengali",
         sans-serif;
 
-    background: #f5f7fb;
+    background: #f4f7fb;
 
     color: #222;
 
     -webkit-tap-highlight-color: transparent;
 }
 
+button,
+input {
+    font-family: inherit;
+}
 
-/* =========================================================
-   APPLICATION ROOT
-========================================================= */
+
+/* =====================================================
+   APP
+===================================================== */
 
 #app {
-    width: 100%;
     min-height: 100vh;
 }
 
 
-/* =========================================================
-   LOADING SCREEN
-========================================================= */
+/* =====================================================
+   LOADING
+===================================================== */
 
 #loading-screen {
 
@@ -234,23 +713,17 @@ body {
 
     inset: 0;
 
-    width: 100%;
-    height: 100%;
-
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
-    background: #ffffff;
+    background: #fff;
 
     z-index: 99999;
 }
 
-
-/* =========================================================
-   LOADING BOX
-========================================================= */
 
 .loading-box {
 
@@ -262,12 +735,12 @@ body {
 
     text-align: center;
 
-    background: #ffffff;
+    background: #fff;
 
-    border-radius: 20px;
+    border-radius: 22px;
 
     box-shadow:
-        0 10px 35px rgba(0, 0, 0, 0.08);
+        0 10px 40px rgba(0,0,0,.08);
 }
 
 
@@ -275,11 +748,9 @@ body {
 
     margin-top: 18px;
 
-    font-size: 23px;
-
-    font-weight: 700;
-
     color: #0d6efd;
+
+    font-size: 23px;
 }
 
 
@@ -288,14 +759,8 @@ body {
     margin-top: 8px;
 
     color: #777;
-
-    font-size: 15px;
 }
 
-
-/* =========================================================
-   LOADING SPINNER
-========================================================= */
 
 .loading-spinner {
 
@@ -303,24 +768,20 @@ body {
 
     height: 48px;
 
-    margin: 0 auto;
+    margin: auto;
 
     border-radius: 50%;
 
-    border: 5px solid #e9ecef;
+    border: 5px solid #e8edf3;
 
     border-top-color: #0d6efd;
 
     animation:
-        fwa-spin 0.9s linear infinite;
+        spin .8s linear infinite;
 }
 
 
-@keyframes fwa-spin {
-
-    from {
-        transform: rotate(0deg);
-    }
+@keyframes spin {
 
     to {
         transform: rotate(360deg);
@@ -329,49 +790,208 @@ body {
 }
 
 
-/* =========================================================
-   MOBILE OPTIMIZATION
-========================================================= */
+/* =====================================================
+   AUTH
+===================================================== */
 
-button,
-input,
-select,
-textarea {
+#auth-screen {
 
-    font-family: inherit;
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
 }
 
 
-button {
+.auth-box {
 
-    cursor: pointer;
+    width: 100%;
+
+    max-width: 400px;
+
+    padding: 30px 22px;
+
+    background: white;
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 10px 40px rgba(0,0,0,.08);
+
+    text-align: center;
 }
 
 
-img {
+.auth-box h1 {
 
-    max-width: 100%;
+    color: #0d6efd;
 
-    display: block;
+    font-size: 25px;
+
+    margin-bottom: 8px;
 }
 
 
-/* =========================================================
-   SMALL SCREEN
-========================================================= */
+.auth-box p {
+
+    color: #777;
+
+    margin-bottom: 20px;
+}
+
+
+.auth-box input {
+
+    width: 100%;
+
+    height: 48px;
+
+    padding: 0 15px;
+
+    margin-bottom: 12px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 12px;
+
+    outline: none;
+
+    font-size: 15px;
+}
+
+
+.auth-box input:focus {
+
+    border-color: #0d6efd;
+}
+
+
+.auth-box button {
+
+    width: 100%;
+
+    min-height: 48px;
+
+    margin-top: 8px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #0d6efd;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 600;
+}
+
+
+.auth-box button:hover {
+
+    opacity: .92;
+}
+
+
+#auth-message {
+
+    margin-top: 15px;
+
+    font-size: 14px;
+
+    color: #d00;
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+#main-app {
+
+    width: 100%;
+
+    max-width: 600px;
+
+    margin: auto;
+
+    padding: 20px;
+}
+
+
+.welcome-section {
+
+    text-align: center;
+}
+
+
+.welcome-section h1 {
+
+    color: #0d6efd;
+
+    font-size: 25px;
+
+    margin-top: 20px;
+}
+
+
+.welcome-section > p {
+
+    margin-top: 8px;
+
+    color: #666;
+}
+
+
+/* =====================================================
+   USER CARD
+===================================================== */
+
+.user-card {
+
+    margin-top: 25px;
+
+    padding: 25px 18px;
+
+    background: white;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.07);
+}
+
+
+.user-card p {
+
+    margin: 8px 0;
+
+    color: #666;
+}
+
+
+.user-card strong {
+
+    color: #0d6efd;
+
+    word-break: break-all;
+}
+
 
 @media (max-width: 480px) {
 
-    .loading-box {
-
-        width: 92%;
-
-        padding: 26px 16px;
+    #main-app {
+        padding: 15px;
     }
 
-    .loading-box h2 {
-
-        font-size: 21px;
+    .auth-box {
+        padding: 25px 18px;
     }
 
 }
