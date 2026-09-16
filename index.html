@@ -1187,12 +1187,12 @@ function listenUserHistoryLive() {
                         hasItems = true;
                         const badgeClass = item.status === 'approved' ? 'status-badge-approved' : (item.status === 'denied' ? 'status-badge-denied' : 'status-badge-pending');
                         htmlContent += `
-                            <div class="req-box">
-                                <b>${item.method.toUpperCase()}</b> - ${item.amount} Tk (${item.phone})<br>
-                                <small>${item.timestamp}</small><br>
-                                স্ট্যাটাস: <span class="${badgeClass}">${item.status.toUpperCase()}</span>
-                            </div>
-                        `;
+    <div class="req-box">
+        <b>${item.method.toUpperCase()}</b> - ${item.amount} Tk (${item.phone})<br>
+        <small>${item.timestamp}</small><br>
+        স্ট্যাটাস: <span class="${badgeClass}">${item.status.toUpperCase()}</span>
+    </div>
+`;
                     }
                 });
                 
