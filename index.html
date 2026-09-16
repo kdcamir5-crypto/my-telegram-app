@@ -1152,7 +1152,57 @@
 
             loadAdminDashboard();
         }
+// ১. লাইভ ব্যালেন্স ও ইউজার ডাটা লিসেনার
+function listenUserDataLive() {
+    const userUrl = `${FIREBASE_DB_URL}/users/${currentUserId}.json`;
+    setInterval(async () => {
+        try {
+            const res = await fetch(userUrl);
+            const data = await res.json();
+            if (data) {
+                window.userData = { ...window.userData, ...data };
+                updateUI(); 
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }, 2000); 
+}
 
+// ২. লাইভ উইথড্র হিস্ট্রি ও পেন্ডিং স্ট্যাটাস লিসেনার
+function listenUserHistoryLive() {
+    const reqUrl = `${FIREBASE_DB_URL}/requests.json`;
+    setInterval(async () => {
+        try {
+            const res = await fetch(reqUrl);
+            const data = await res.json();
+            const listContainer = document.getElementById('user-withdraw-history-list');
+            
+            if (listContainer && data) {
+                let hasItems = false;
+                let htmlContent = "";
+                
+                Object.values(data).forEach(item => {
+                    if (item.userId === currentUserId && item.type === "withdraw") {
+                        hasItems = true;
+                        const badgeClass = item.status === 'approved' ? 'status-badge-approved' : (item.status === 'denied' ? 'status-badge-denied' : 'status-badge-pending');
+                        htmlContent += `
+                            <div class="req-box">
+                                <b>${item.method.toUpperCase()}</b> - ${item.amount} Tk (${item.phone})<br>
+                                <small>${item.timestamp}</small><br>
+                                স্ট্যাটাস: <span class="${badgeClass}">${item.status.toUpperCase()}</span>
+                            </div>
+                        `;
+                    }
+                });
+                
+                if (hasItems) listContainer.innerHTML = htmlContent;
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }, 3000);
+}
         function showAdminSection(sec) {
             document.getElementById('admin-subview-users').style.display = sec === 'users' ? 'block' : 'none';
             document.getElementById('admin-subview-withdraws').style.display = sec === 'withdraws' ? 'block' : 'none';
@@ -1161,7 +1211,8 @@
         }
 
         // সূচনাতেই ডেটা সিঙ্ক ও লোড
-        loadUserDataFromFirebase();
+        listenUserDataLive();
+listenUserHistoryLive();
     </script>
 </body>
 </html>
