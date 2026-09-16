@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Freelancing with Ariyan</title>
-    <!-- Telegram Web App SDK & FontAwesome Icons -->
+    <!-- টেলিগ্রাম ওয়েব অ্যাপ SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- CSS স্টাইল সেকশন -->
     <style>
         :root {
             --primary-color: #177a6d;
@@ -27,7 +28,7 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            padding-bottom: 80px;
+            padding-bottom: 75px;
         }
 
         .container {
@@ -36,6 +37,7 @@
             margin: 0 auto;
         }
 
+        /* ব্যানার সেকশন */
         .header-banner-container {
             width: 100%;
             border-radius: 12px;
@@ -52,26 +54,28 @@
             object-fit: contain;
         }
 
+        /* ব্যালেন্স এবং আইডি ব্যাজ */
         .balance-badge {
             background: rgba(23, 122, 109, 0.1);
             color: var(--primary-color);
             border: 1px solid var(--primary-color);
             display: block;
-            padding: 10px 15px;
+            padding: 8px 15px;
             border-radius: 20px;
             margin: 10px 0;
             font-weight: bold;
             text-align: center;
-            font-size: 16px;
+            font-size: 15px;
         }
 
         .user-id-badge {
             text-align: center;
-            font-size: 13px;
+            font-size: 12px;
             color: #666;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
+        /* ভিউ ইনটারফেস কন্ট্রোল */
         .view-section {
             display: none;
         }
@@ -80,6 +84,7 @@
             display: block;
         }
 
+        /* ফিচার গ্রিড সেকশন (গোল আইকন) */
         .features-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -103,8 +108,8 @@
         }
 
         .icon-circle {
-            width: 48px;
-            height: 48px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background: #e8f5e9;
             color: var(--primary-color);
@@ -112,7 +117,7 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto 6px auto;
-            font-size: 20px;
+            font-size: 22px;
         }
 
         .feature-card span {
@@ -121,6 +126,7 @@
             display: block;
         }
 
+        /* টেলিগ্রাম জয়েন বাটন */
         .telegram-btn-box {
             background: #0088cc;
             color: white;
@@ -134,6 +140,7 @@
             box-shadow: 0 3px 8px rgba(0,136,204,0.3);
         }
 
+        /* নোটিশ বোর্ড সেকশন */
         .notice-board {
             background: var(--card-bg);
             padding: 18px;
@@ -197,6 +204,7 @@
             font-size: 14px;
         }
 
+        /* ফুটার নেভিগেশন সেকশন */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -232,6 +240,7 @@
             font-weight: bold;
         }
 
+        /* পপ-আপ এবং মডাল উইন্ডো সেকশন */
         .modal {
             display: none;
             position: fixed;
@@ -254,6 +263,7 @@
             width: 100%;
             max-width: 450px;
             text-align: center;
+            position: relative;
         }
 
         .slide-popup-notification {
@@ -279,11 +289,12 @@
             right: 0;
         }
 
+        /* সিক্রেট অ্যাডমিন ট্রিগার */
         .secret-admin-trigger {
             position: fixed;
             bottom: 75px;
             right: 10px;
-            opacity: 0.3;
+            opacity: 0.25;
             font-size: 20px;
             cursor: pointer;
             z-index: 90;
@@ -295,19 +306,18 @@
 
         .admin-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
             margin-bottom: 15px;
         }
 
         .admin-card {
             background: #fff;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
             border-left: 4px solid var(--primary-color);
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             cursor: pointer;
-            text-align: center;
         }
 
         .req-box, .user-row {
@@ -326,10 +336,25 @@
             margin-top: 8px;
         }
 
-        .btn-approve { background: #2e7d32; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
-        .btn-deny { background: #c62828; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
-        .btn-delete { background: #d32f2f; color: white; padding: 4px 8px; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; margin-top: 5px; margin-left: 5px; }
-        .btn-edit-bal { background: #177a6d; color: white; padding: 4px 8px; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; margin-top: 5px; }
+        .btn-approve {
+            background: #2e7d32;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-deny {
+            background: #c62828;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
 
         .status-badge-pending { color: #d97706; font-weight: bold; background: #fef3c7; padding: 2px 6px; border-radius: 4px; }
         .status-badge-approved { color: #2e7d32; font-weight: bold; background: #dcfce7; padding: 2px 6px; border-radius: 4px; }
@@ -338,7 +363,7 @@
 </head>
 <body>
 
-    <!-- Notification Toast -->
+    <!-- পপ-আপ নোটিফিকেশন ব্যানার -->
     <div id="slide-popup" class="slide-popup-notification">
         <i class="fas fa-bell"></i>
         <span id="slide-popup-text"></span>
@@ -346,20 +371,21 @@
 
     <div class="container">
 
-        <!-- HOME TAB -->
+        <!-- হোম পেজ সেকশন -->
         <div id="tab-home" class="view-section active">
             <div class="header-banner-container">
-                <img src="https://i.ibb.co.com/vvM61Pqt/Gemini-Generated-Image-8lbv8q8lbv8q8lbv-640x360.jpg" alt="Freelancing Banner">
+                <img src="https://i.ibb.co.com/vvM61Pqt/Gemini-Generated-Image-8lbv8q8lbv8q8lbv-640x360.jpg" alt="Freelancing with Ariyan Banner">
             </div>
 
             <div class="balance-badge">
-                মোট ব্যালেন্স: <span id="user-total-balance">0</span> টাকা
+                মোট ব্যালেন্স: <span id="user-total-balance">150</span> টাকা
             </div>
 
             <div class="user-id-badge">
-                ইউজার আইডি: <b id="display-user-id">Loading...</b> | Status: <b id="display-user-status" style="color:red;">Inactive</b>
+                ইউজার আইডি: <b id="display-user-id">Loading...</b>
             </div>
 
+            <!-- ৪টি গোল আইকন ফিচার সেকশন -->
             <div class="features-grid">
                 <div class="feature-card" onclick="openSubView('view-daily-task')">
                     <div class="icon-circle"><i class="fas fa-tasks"></i></div>
@@ -379,25 +405,30 @@
                 </div>
             </div>
 
+            <!-- টেলিগ্রাম চ্যানেল জয়েন বাটন -->
             <a href="https://t.me/bechelor_point_season" target="_blank" class="telegram-btn-box">
                 আমাদের টেলিগ্রাম চ্যানেলে জয়েন করুন
             </a>
 
+            <!-- অফিশিয়াল নোটিশ বোর্ড সেকশন -->
             <div class="notice-board">
                 <h3>📢 অফিশিয়াল নোটিশ</h3>
                 <p style="font-weight: bold; color: #2c3e50;">🪙 Communitytask</p>
                 <p>✨ আমাদের প্ল্যাটফর্মে ইনকাম করা এখন আগের চেয়ে আরও সহজ ও বিশ্বাসযোগ্য।</p>
                 <p>🚀 ঘরে বসেই অল্প সময় দিয়ে আয় করার দারুণ সুযোগ।</p>
                 <p>👉 দ্রুত পেমেন্ট সিস্টেম।</p>
+                <p>🌟 নতুনদের জন্য সহজ এবং সবার জন্য লাভজনক একটি প্ল্যাটফর্ম।</p>
                 <br>
                 <p style="color: #1565c0; font-weight: bold;">💸 প্রতিটি রেফারে পাবেন 100টাকা।</p>
                 <p style="color: #2e7d32; font-weight: bold;">📺 প্রতিটি বিজ্ঞাপন দেখলে পাবেন 20 টাকা।</p>
                 <p style="color: #d97706; font-weight: bold;">🎁 একাউন্ট খুললেই সাথে সাথে 150 টাকা বোনাস।</p>
-                <p style="color: #c62828; font-weight: bold;">🏦 1000 টাকা হলেই উত্তোলন করতে পারবেন বিকাশ ও নগদের মাধ্যমে।</p>
+                <p style="color: #c62828; font-weight: bold;">🏦 1000 টাকা হলেই উত্তোলন করতে পারবেন বিকাশ ও নগদের মাধ্যমে। (সম্পূর্ণ অটোমেশন সিস্টেম)</p>
+                <br>
+                <p style="text-align: center; font-weight: bold; color: var(--primary-color);">👉 আয় শুরু করুন আজ থেকেই 💚</p>
             </div>
         </div>
 
-        <!-- SUB VIEWS -->
+        <!-- বিজ্ঞাপন সেকশন (Daily Task) -->
         <div id="view-daily-task" class="view-section">
             <div class="card" style="text-align: center;">
                 <h2>📺 ডেইলি টাস্ক</h2>
@@ -408,6 +439,7 @@
             </div>
         </div>
 
+        <!-- আর্নিং ভিউ সেকশন -->
         <div id="view-earning" class="view-section">
             <div class="card">
                 <h2>📊 ইনকাম ডিটেইলস</h2>
@@ -416,12 +448,13 @@
                     <p>👥 আপনি রেফার করে আয় করেছেন: <b><span id="ref-earning-text">0</span> টাকা</b></p>
                     <p>🎁 আপনি বোনাস পেয়েছেন: <b><span id="bonus-earning-text">150</span> টাকা</b></p>
                     <hr>
-                    <h3 style="color: var(--primary-color); margin-top: 8px;">মোট সর্বমোট ইনকাম: <span id="total-earning-text">0</span> টাকা</h3>
+                    <h3 style="color: var(--primary-color); margin-top: 8px;">মোট সর্বমোট ইনকাম: <span id="total-earning-text">150</span> টাকা</h3>
                 </div>
                 <button class="btn btn-secondary" onclick="backToHome()">হোমে ফিরে যান</button>
             </div>
         </div>
 
+        <!-- রেফারেল সেকশন -->
         <div id="view-referral" class="view-section">
             <div class="card">
                 <h2>🔗 রেফারেল আর্নিং</h2>
@@ -429,16 +462,24 @@
                 <p style="font-size: 13px; color: #555; margin-bottom: 12px;">প্রতিটি সফল রেফারে পাবেন ১০০ টাকা।</p>
                 
                 <div class="input-group">
-                    <label>আপনার ইউনিক রেফারেল লিঙ্ক:</label>
+                    <label>আপনার ইউনিক রেফারেল কোড/লিঙ্ক:</label>
                     <div style="display: flex; gap: 5px;">
                         <input type="text" id="ref-link-input" readonly value="">
                         <button style="padding: 0 15px; background: var(--primary-color); color: white; border: none; border-radius: 6px;" onclick="copyRefLink()"><i class="fas fa-copy"></i></button>
                     </div>
                 </div>
+
+                <div class="notice-board" style="font-size: 13px; margin-top: 15px;">
+                    💸 প্রতিটি রেফারে পাবেন 100টাকা।<br>
+                    📺 প্রতিটি বিজ্ঞাপন দেখলে পাবেন 20 টাকা।<br>
+                    🎁 একাউন্ট খুললেই সাথে সাথে 150 টাকা বোনাস।<br>
+                    🏦 1000 টাকা হলেই উত্তোলন করতে পারবেন বিকাশ ও নগদের মাধ্যমে। (সম্পূর্ণ অটোমেশন সিস্টেম)
+                </div>
                 <button class="btn btn-secondary" onclick="backToHome()">হোমে ফিরে যান</button>
             </div>
         </div>
 
+        <!-- বোনাস সেকশন -->
         <div id="view-bonus" class="view-section">
             <div class="card" style="text-align: center;">
                 <h2>🎁 বোনাস সেকশন</h2>
@@ -450,21 +491,21 @@
             </div>
         </div>
 
-        <!-- WALLET TAB -->
+        <!-- ওয়ালেট সেকশন (Wallet) -->
         <div id="tab-wallet" class="view-section">
             <div class="card">
                 <h2>👛 ওয়ালেট (Wallet)</h2>
                 <div style="margin-top: 15px; line-height: 2.2;">
-                    <p>📺 বিজ্ঞাপন ইনকাম: <b><span id="wallet-ad-earn">0</span> টাকা</b></p>
-                    <p>👥 রেফার ইনকাম: <b><span id="wallet-ref-earn">0</span> টাকা</b></p>
-                    <p>🎁 বোনাস ইনকাম: <b><span id="wallet-bonus-earn">150</span> টাকা</b></p>
+                    <p>📺 আপনি বিজ্ঞাপন থেকে আয় করেছেন: <b><span id="wallet-ad-earn">0</span> টাকা</b></p>
+                    <p>👥 আপনি রেফার থেকে আয় করেছেন: <b><span id="wallet-ref-earn">0</span> টাকা</b></p>
+                    <p>🎁 আপনি বোনাস পেয়েছেন: <b><span id="wallet-bonus-earn">150</span> টাকা</b></p>
                     <hr>
-                    <h3 style="color: var(--primary-color); margin-top: 8px;">বর্তমান ব্যালেন্স: <span id="wallet-total-balance">0</span> টাকা</h3>
+                    <h3 style="color: var(--primary-color); margin-top: 8px;">আপনার টোটাল ব্যালেন্স আছে: <span id="wallet-total-balance">150</span> টাকা</h3>
                 </div>
             </div>
         </div>
 
-        <!-- WITHDRAW TAB -->
+        <!-- উইথড্র সেকশন (Withdraw & History) FIXED -->
         <div id="tab-withdraw" class="view-section">
             <div class="card">
                 <h2>🏦 টাকা উত্তোলন (Withdraw)</h2>
@@ -487,14 +528,14 @@
             </div>
 
             <div class="card">
-                <h3>📜 Withdraw History (Real-Time)</h3>
+                <h3>📜 Withdraw History</h3>
                 <div id="user-withdraw-history-list" style="margin-top: 10px;">
                     <p style="font-size: 12px; color: #888;">কোনো উইথড্র ইতিহাস পাওয়া যায়নি।</p>
                 </div>
             </div>
         </div>
 
-        <!-- SUPPORT TAB -->
+        <!-- কাস্টমার সাপোর্ট সেকশন -->
         <div id="tab-support" class="view-section">
             <div class="card" style="text-align: center;">
                 <h2>🎧 কাস্টমার সাপোর্ট</h2>
@@ -502,11 +543,11 @@
                 <a href="https://t.me/Kdcariyan" target="_blank" class="btn" style="text-decoration: none; display: block; margin-bottom: 15px;">
                     <i class="fab fa-telegram"></i> Telegram Admin Contact
                 </a>
-                <p style="color: #2e7d32; font-weight: bold; font-size: 13px;">💚 24/7 হেল্প লাইন এক্টিভ।</p>
+                <p style="color: #2e7d32; font-weight: bold; font-size: 13px;">💚 24/7 হেল্প লাইন এক্টিভ, আপনার যেকোনো প্রয়োজনে এডমিন কে মেসেজ করুন।</p>
             </div>
         </div>
 
-        <!-- PROFILE TAB -->
+        <!-- ইউজার প্রোফাইল সেকশন -->
         <div id="tab-profile" class="view-section">
             <div class="card">
                 <h2 style="text-align: center;">👤 ইউজার প্রোফাইল</h2>
@@ -539,39 +580,51 @@
             </div>
         </div>
 
-        <!-- ADMIN PANEL TAB -->
+        <!-- সিক্রেট অ্যাডমিন প্যানেল সেকশন -->
         <div id="tab-admin" class="view-section">
             <div class="card">
-                <h2 style="color: #c62828;">👑 অ্যাডমিন কন্ট্রোল প্যানেল (Real-Time)</h2>
+                <h2 style="color: #c62828;">👑 অ্যাডমিন কন্ট্রোল প্যানেল</h2>
+                <p style="font-size: 12px; color: #666; margin-bottom: 15px;">গোপন অ্যাডমিন কন্ট্রোল সেকশন</p>
                 
-                <div class="admin-grid" style="margin-top: 15px;">
+                <div class="admin-grid">
                     <div class="admin-card" onclick="showAdminSection('users')">
-                        <small>Users</small>
+                        <small>1. Total User</small>
                         <h3 id="admin-stat-users">0</h3>
                     </div>
-                    <div class="admin-card" onclick="showAdminSection('requests')">
-                        <small>Requests</small>
-                        <h3 id="admin-stat-reqs" style="color:#d97706;">0</h3>
+                    <div class="admin-card" onclick="showAdminSection('withdraws')">
+                        <small>2. Total Requests</small>
+                        <h3 id="admin-stat-reqs">0</h3>
                     </div>
-                    <div class="admin-card" onclick="showAdminSection('approved')">
-                        <small>Payments</small>
-                        <h3 id="admin-stat-approved" style="color:#2e7d32;">0</h3>
+                    <div class="admin-card" onclick="showAdminSection('removed')">
+                        <small>3. User Remove</small>
+                        <h3 id="admin-stat-removed">0</h3>
+                    </div>
+                    <div class="admin-card" onclick="showAdminSection('earning')">
+                        <small>4. Total Paid</small>
+                        <h3 id="admin-stat-total-paid">0 Tk</h3>
                     </div>
                 </div>
 
                 <div id="admin-subview-users">
-                    <h3>👥 সকল ইউজার লিস্ট, ব্যালেন্স & অ্যাকশন:</h3>
+                    <h3>👥 সকল ইউজার লিস্ট ও ব্যালেন্স এডিট:</h3>
                     <div id="admin-user-list" style="margin-top: 10px;"></div>
                 </div>
 
-                <div id="admin-subview-requests" style="display:none;">
-                    <h3>📥 রিকোয়েস্ট সমূহ (Pending Requests):</h3>
+                <div id="admin-subview-withdraws" style="display:none;">
+                    <h3>📥 উইথড্র এবং এক্টিভেশন রিকোয়েস্ট:</h3>
                     <div id="admin-requests-list" style="margin-top: 10px;"></div>
                 </div>
 
-                <div id="admin-subview-approved" style="display:none;">
-                    <h3>✅ Total Approved Payments History:</h3>
-                    <div id="admin-approved-list" style="margin-top: 10px;"></div>
+                <div id="admin-subview-removed" style="display:none;">
+                    <h3>🗑️ রিমুভকৃত ইউজারদের তালিকা:</h3>
+                    <div id="admin-removed-list" style="margin-top: 10px;"></div>
+                </div>
+
+                <div id="admin-subview-earning" style="display:none;">
+                    <h3>💰 লাইফটাইম টোটাল পেইড হিসাব:</h3>
+                    <div class="card" style="background: #e8f5e9; text-align: center; margin-top: 10px;">
+                        <h2>মোট প্রদানকৃত টাকা: <span id="admin-lifetime-paid">0</span> টাকা</h2>
+                    </div>
                 </div>
 
                 <button class="btn btn-secondary" style="margin-top:20px;" onclick="backToHome()">হোমে ফিরে যান</button>
@@ -580,7 +633,7 @@
 
     </div>
 
-    <!-- MODALS -->
+    <!-- ডেমো অ্যাড মডাল সেকশন -->
     <div id="ad-modal" class="modal">
         <div class="modal-content">
             <h3 id="ad-modal-title">Demo Ad #1</h3>
@@ -589,19 +642,16 @@
         </div>
     </div>
 
+    <!-- আইডি অ্যাক্টিভেশন পপ-আপ মডাল -->
     <div id="activation-modal" class="modal">
         <div class="modal-content" style="text-align: left;">
             <h3 style="color: #c62828; text-align: center; margin-bottom: 8px;">⚠️ আইডি এক্টিভেশন আবশ্যক</h3>
             <p style="margin: 8px 0; font-size: 13px; color: #333; line-height: 1.5;">
                 উইথড্র করতে দয়া করে আপনার আইডি টি এক্টিভ করুন। Activation fee 120 taka send money only.
             </p>
-            
-            <div class="input-group" style="margin-bottom: 12px;">
-                <label>পেমেন্ট মেথড সিলেক্ট করুন:</label>
-                <select id="activation-gateway-select" onchange="switchPaymentGateway(this.value)">
-                    <option value="bkash">bKash (বিকাশ)</option>
-                    <option value="nagad">Nagad (নগদ)</option>
-                </select>
+            <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+                <button id="gate-bkash-btn" class="btn" style="margin:0; font-size:12px; padding: 8px;" onclick="switchPaymentGateway('bkash')">bKash</button>
+                <button id="gate-nagad-btn" class="btn btn-secondary" style="margin:0; font-size:12px; padding: 8px;" onclick="switchPaymentGateway('nagad')">Nagad</button>
             </div>
             
             <div id="gateway-bkash-box">
@@ -628,11 +678,12 @@
         </div>
     </div>
 
+    <!-- গোপন অ্যাডমিন প্যানেল ক্লিক বাটন -->
     <div class="secret-admin-trigger" onclick="promptAdminLogin()">
         <i class="fas fa-user-shield"></i>
     </div>
 
-    <!-- BOTTOM NAVIGATION -->
+    <!-- ফুটার নেভিগেশন বার -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchNavTab('home', this)">
             <i class="fas fa-home"></i> Home
@@ -651,20 +702,9 @@
         </div>
     </div>
 
-    <!-- ==========================================
-         FIREBASE REALTIME DATABASE V10 JAVASCRIPT
-    ========================================== -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, update, remove, get, child, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-        // 🔥 আপনার ফায়ারবেস প্রজেক্ট সেটিংস (প্রয়োজনে API Key ইত্যাদি এখানে বসাতে পারেন)
-        const firebaseConfig = {
-            databaseURL: "https://frelancing-mini-app-default-rtdb.firebaseio.com"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+    <!-- JAVASCRIPT & FIREBASE ENGINE -->
+    <script>
+        const FIREBASE_DB_URL = "https://frelancing-mini-app-default-rtdb.firebaseio.com";
 
         const tg = window.Telegram ? window.Telegram.WebApp : null;
         if(tg) { tg.ready(); tg.expand(); }
@@ -672,7 +712,7 @@
         let currentUserId = "";
         let currentUserName = "";
 
-        // Identity init
+        // ১. ইউনিক ইউজার আইডি জেনারেটর
         function initUserIdentity() {
             if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 const tgUser = tg.initDataUnsafe.user;
@@ -702,430 +742,458 @@
             refEarning: 0,
             adsWatchedToday: 0,
             isActivated: false,
-            withdrawals: {},
-            profilePic: "https://via.placeholder.com/90"
+            profileImg: "https://via.placeholder.com/90"
         };
 
-        window.showNotification = function(text) {
-            const popup = document.getElementById('slide-popup');
-            document.getElementById('slide-popup-text').innerText = text;
-            popup.classList.add('show');
-            setTimeout(() => { popup.classList.remove('show'); }, 3000);
-        };
+        window.selectedGateway = "bkash";
 
-        function calculateTotalBalance() {
-            return (window.userData.signupBonus || 0) + 
-                   (window.userData.adEarning || 0) + 
-                   (window.userData.refEarning || 0);
+        // ২. ফায়ারবেস ডেটা লোড ও সিঙ্ক সেকশন
+        async function loadUserDataFromFirebase() {
+            try {
+                const res = await fetch(`${FIREBASE_DB_URL}/users/${currentUserId}.json`);
+                const data = await res.json();
+                if (data) {
+                    window.userData = { ...window.userData, ...data };
+                } else {
+                    await syncDataToFirebase();
+                }
+            } catch (e) {
+                console.error("Firebase Read Error:", e);
+            }
+            updateUI();
         }
 
+        async function syncDataToFirebase() {
+            try {
+                await fetch(`${FIREBASE_DB_URL}/users/${currentUserId}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(window.userData)
+                });
+            } catch (e) {
+                console.error("Firebase Sync Error:", e);
+            }
+            updateUI();
+        }
+
+        function getTotalBalance() {
+            return (window.userData.signupBonus || 0) + (window.userData.adEarning || 0) + (window.userData.refEarning || 0);
+        }
+
+        // ৩. UI আপডেট সেকশন
         function updateUI() {
-            const totalBal = calculateTotalBalance();
-            
-            document.getElementById('user-total-balance').innerText = totalBal;
+            const total = getTotalBalance();
+            document.getElementById('user-total-balance').innerText = total;
             document.getElementById('display-user-id').innerText = window.userData.username;
             
-            const statusElem = document.getElementById('display-user-status');
-            if(window.userData.isActivated) {
-                statusElem.innerText = "Active";
-                statusElem.style.color = "green";
-            } else {
-                statusElem.innerText = "Inactive";
-                statusElem.style.color = "red";
-            }
-            
+            document.getElementById('ads-watched-count').innerText = window.userData.adsWatchedToday || 0;
             document.getElementById('ad-earning-text').innerText = window.userData.adEarning || 0;
             document.getElementById('ref-earning-text').innerText = window.userData.refEarning || 0;
             document.getElementById('bonus-earning-text').innerText = window.userData.signupBonus || 150;
-            document.getElementById('total-earning-text').innerText = totalBal;
+            document.getElementById('total-earning-text').innerText = total;
 
             document.getElementById('wallet-ad-earn').innerText = window.userData.adEarning || 0;
             document.getElementById('wallet-ref-earn').innerText = window.userData.refEarning || 0;
             document.getElementById('wallet-bonus-earn').innerText = window.userData.signupBonus || 150;
-            document.getElementById('wallet-total-balance').innerText = totalBal;
+            document.getElementById('wallet-total-balance').innerText = total;
 
-            document.getElementById('ads-watched-count').innerText = window.userData.adsWatchedToday || 0;
-            
+            document.getElementById('ref-link-input').value = `https://t.me/bechelor_point_season?start=${currentUserId}`;
+
             document.getElementById('prof-username').value = window.userData.username;
             document.getElementById('prof-name').value = window.userData.name || "";
             document.getElementById('prof-fullname').value = window.userData.fullName || "";
             document.getElementById('prof-mobile').value = window.userData.mobile || "";
             document.getElementById('prof-dob').value = window.userData.dob || "";
-            if(window.userData.profilePic) {
-                document.getElementById('profile-img').src = window.userData.profilePic;
+            if (window.userData.profileImg) {
+                document.getElementById('profile-img').src = window.userData.profileImg;
             }
 
-            document.getElementById('ref-link-input').value = window.location.origin + window.location.pathname + "?ref=" + window.userData.username;
-            renderWithdrawHistory();
+            loadUserWithdrawHistory();
         }
 
-        // ==========================================
-        //  REALTIME USER DATA LISTENER
-        // ==========================================
-        function startRealtimeUserSync() {
-            const userRef = ref(db, 'users/' + currentUserId);
+        function showSlidePopup(msg) {
+            const popup = document.getElementById('slide-popup');
+            document.getElementById('slide-popup-text').innerText = msg;
+            popup.classList.add('show');
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 3000);
+        }
+
+        function switchNavTab(tabName, el) {
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             
-            onValue(userRef, (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    window.userData = { ...window.userData, ...data };
-                    updateUI();
-                } else {
-                    set(userRef, window.userData);
-                    updateUI();
-                }
-            });
+            const target = document.getElementById('tab-' + tabName);
+            if (target) target.classList.add('active');
+            if (el) el.classList.add('active');
         }
 
-        async function saveUserDataToFirebase() {
-            const userRef = ref(db, 'users/' + currentUserId);
-            await update(userRef, window.userData);
+        function openSubView(viewId) {
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+            const target = document.getElementById(viewId);
+            if (target) target.classList.add('active');
         }
 
-        // NAVIGATION
-        window.switchNavTab = function(tabName, el) {
-            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-            document.getElementById(`tab-${tabName}`).classList.add('active');
-            if(el) el.classList.add('active');
-        };
+        function backToHome() {
+            switchNavTab('home', document.querySelectorAll('.nav-item')[0]);
+        }
 
-        window.openSubView = function(viewId) {
-            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-        };
-
-        window.backToHome = function() {
-            window.switchNavTab('home', document.querySelectorAll('.nav-item')[0]);
-        };
-
-        // ADS TIMER
-        let adTimerInterval;
-        window.startAdTimer = function() {
-            if (window.userData.adsWatchedToday >= 20) {
-                window.showNotification("আজকে আপনার ২০টি বিজ্ঞাপনের লিমিট শেষ!");
+        // ৪. ডেইলি টাস্ক সেকশন
+        let adInterval = null;
+        function startAdTimer() {
+            if ((window.userData.adsWatchedToday || 0) >= 20) {
+                showSlidePopup("আজকের দিনের ২০টি অ্যাডের লিমিট শেষ!");
                 return;
             }
-            
             document.getElementById('ad-modal').classList.add('active');
             let timeLeft = 10;
             document.getElementById('ad-timer').innerText = timeLeft;
 
-            adTimerInterval = setInterval(() => {
+            adInterval = setInterval(() => {
                 timeLeft--;
                 document.getElementById('ad-timer').innerText = timeLeft;
-                if(timeLeft <= 0) {
-                    clearInterval(adTimerInterval);
+                if (timeLeft <= 0) {
+                    clearInterval(adInterval);
                     document.getElementById('ad-modal').classList.remove('active');
-                    
                     window.userData.adsWatchedToday = (window.userData.adsWatchedToday || 0) + 1;
                     window.userData.adEarning = (window.userData.adEarning || 0) + 20;
-                    
-                    saveUserDataToFirebase();
-                    window.showNotification("অভিনন্দন! ২০ টাকা যোগ হয়েছে।");
+                    syncDataToFirebase();
+                    showSlidePopup("অভিনন্দন! ২০ টাকা যোগ হয়েছে।");
                 }
             }, 1000);
-        };
+        }
 
-        // WITHDRAW ACTION WITH INSTANT DEDUCTION
-        window.handleWithdrawClick = function() {
-            const amount = parseFloat(document.getElementById('withdraw-amount').value);
-            const phone = document.getElementById('withdraw-phone').value;
-            const method = document.getElementById('withdraw-method').value;
-            const totalBal = calculateTotalBalance();
-
-            if (!phone || phone.length < 11) {
-                window.showNotification("সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন!");
-                return;
-            }
-            if (isNaN(amount) || amount < 1000) {
-                window.showNotification("সর্বনিম্ন উইথড্র পরিমাণ ১০০০ টাকা!");
-                return;
-            }
-            if (amount > totalBal) {
-                window.showNotification("আপনার পর্যাপ্ত ব্যালেন্স নেই!");
-                return;
-            }
-
+        // ৫. উইথড্র ও অ্যাক্টিভেশন লজিক (FIXED)
+        function handleWithdrawClick() {
+            // যদি ইউজার অ্যাক্টিভ না থাকে, তবে বাধ্যতামূলক পপ-আপ মডাল দেখাবে
             if (!window.userData.isActivated) {
                 document.getElementById('activation-modal').classList.add('active');
                 return;
             }
 
-            processWithdrawal(amount, phone, method);
-        };
+            const method = document.getElementById('withdraw-method').value;
+            const phone = document.getElementById('withdraw-phone').value.trim();
+            const amount = parseFloat(document.getElementById('withdraw-amount').value);
+            const total = getTotalBalance();
 
-        async function processWithdrawal(amount, phone, method) {
-            const reqId = "req_" + Date.now();
-            const withdrawData = {
-                id: reqId,
-                type: "withdraw",
-                userId: window.userData.username,
-                phone: phone,
+            if (!phone || phone.length < 11) {
+                showSlidePopup("সঠিক মোবাইল নম্বর দিন!");
+                return;
+            }
+
+            if (isNaN(amount) || amount < 1000) {
+                showSlidePopup("সর্বনিম্ন উইথড্র পরিমাণ ১০০০ টাকা!");
+                return;
+            }
+
+            if (amount > total) {
+                showSlidePopup("আপনার পর্যাপ্ত ব্যালেন্স নেই!");
+                return;
+            }
+
+            // ব্যালেন্স কাটা
+            if (window.userData.signupBonus >= amount) {
+                window.userData.signupBonus -= amount;
+            } else {
+                let rem = amount - window.userData.signupBonus;
+                window.userData.signupBonus = 0;
+                if (window.userData.adEarning >= rem) {
+                    window.userData.adEarning -= rem;
+                } else {
+                    rem -= window.userData.adEarning;
+                    window.userData.adEarning = 0;
+                    window.userData.refEarning -= rem;
+                }
+            }
+
+            // উইথড্র রিকোয়েস্ট সেভ (type: withdraw)
+            const reqData = {
+                userId: currentUserId,
                 method: method,
+                phone: phone,
                 amount: amount,
+                type: "withdraw",
                 status: "pending",
-                timestamp: new Date().toLocaleString()
+                timestamp: Date.now()
             };
 
-            // সাথে সাথে টাকা কেটে নেওয়া (Hold Balance)
-            window.userData.adEarning = (window.userData.adEarning || 0) - amount;
-            if (!window.userData.withdrawals) window.userData.withdrawals = {};
-            window.userData.withdrawals[reqId] = withdrawData;
-
-            await saveUserDataToFirebase();
-            await set(ref(db, 'requests/' + reqId), withdrawData);
-
-            window.showNotification("উইথড্র রিকোয়েস্ট জমা হয়েছে! ব্যালেন্স কাটা হয়েছে।");
-            document.getElementById('withdraw-amount').value = "";
-            document.getElementById('withdraw-phone').value = "";
-        }
-
-        window.switchPaymentGateway = function(val) {
-            document.getElementById('gateway-bkash-box').style.display = (val === 'bkash') ? 'block' : 'none';
-            document.getElementById('gateway-nagad-box').style.display = (val === 'nagad') ? 'block' : 'none';
-        };
-
-        window.closeActivationModal = function() {
-            document.getElementById('activation-modal').classList.remove('active');
-        };
-
-        window.submitActivationRequest = async function() {
-            const trxId = document.getElementById('activation-trxid').value.trim();
-            const gateway = document.getElementById('activation-gateway-select').value;
-            
-            if(!trxId) {
-                window.showNotification("দয়া করে TrxID প্রবেশ করান!");
-                return;
-            }
-
-            const reqId = "act_" + Date.now();
-            const actData = {
-                id: reqId,
-                type: "activation",
-                userId: window.userData.username,
-                gateway: gateway,
-                trxId: trxId,
-                amount: 120,
-                status: "pending",
-                timestamp: new Date().toLocaleString()
-            };
-
-            await set(ref(db, 'requests/' + reqId), actData);
-
-            window.closeActivationModal();
-            document.getElementById('activation-trxid').value = "";
-            window.showNotification("এক্টিভেশন রিকোয়েস্ট এডমিনের কাছে পাঠানো হয়েছে!");
-        };
-
-        function renderWithdrawHistory() {
-            const listDiv = document.getElementById('user-withdraw-history-list');
-            listDiv.innerHTML = "";
-
-            if (!window.userData.withdrawals || Object.keys(window.userData.withdrawals).length === 0) {
-                listDiv.innerHTML = `<p style="font-size: 12px; color: #888;">কোনো উইথড্র ইতিহাস পাওয়া যায়নি।</p>`;
-                return;
-            }
-
-            Object.values(window.userData.withdrawals).reverse().forEach(item => {
-                let badgeClass = "status-badge-pending";
-                if (item.status === "approved") badgeClass = "status-badge-approved";
-                if (item.status === "denied") badgeClass = "status-badge-denied";
-
-                listDiv.innerHTML += `
-                    <div class="req-box">
-                        <small>${item.timestamp}</small><br>
-                        <b>${item.method.toUpperCase()} (${item.phone}):</b> ${item.amount} Tk <br>
-                        স্ট্যাটাস: <span class="${badgeClass}">${item.status.toUpperCase()}</span>
-                    </div>
-                `;
+            fetch(`${FIREBASE_DB_URL}/requests.json`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reqData)
+            }).then(() => {
+                syncDataToFirebase();
+                showSlidePopup("উইথড্র রিকোয়েস্ট সফলভাবে জমা হয়েছে!");
+                document.getElementById('withdraw-phone').value = "";
+                document.getElementById('withdraw-amount').value = "";
             });
         }
 
-        window.saveProfile = async function() {
+        // ৬. অ্যাক্টিভেশন রিকোয়েস্ট সাবমিট (FIXED)
+        function switchPaymentGateway(gw) {
+            window.selectedGateway = gw;
+            if(gw === 'bkash') {
+                document.getElementById('gateway-bkash-box').style.display = 'block';
+                document.getElementById('gateway-nagad-box').style.display = 'none';
+                document.getElementById('gate-bkash-btn').className = 'btn';
+                document.getElementById('gate-nagad-btn').className = 'btn btn-secondary';
+            } else {
+                document.getElementById('gateway-bkash-box').style.display = 'none';
+                document.getElementById('gateway-nagad-box').style.display = 'block';
+                document.getElementById('gate-bkash-btn').className = 'btn btn-secondary';
+                document.getElementById('gate-nagad-btn').className = 'btn';
+            }
+        }
+
+        function submitActivationRequest() {
+            const trxId = document.getElementById('activation-trxid').value.trim();
+            if (!trxId || trxId.length < 5) {
+                showSlidePopup("সঠিক ট্রাঞ্জেকশন আইডি (TrxID) দিন!");
+                return;
+            }
+
+            const reqData = {
+                userId: currentUserId,
+                gateway: window.selectedGateway,
+                trxId: trxId,
+                amount: 120,
+                type: "activation",
+                status: "pending",
+                timestamp: Date.now()
+            };
+
+            fetch(`${FIREBASE_DB_URL}/requests.json`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reqData)
+            }).then(() => {
+                closeActivationModal();
+                showSlidePopup("অ্যাক্টিভেশন রিকোয়েস্ট জমা হয়েছে! এডমিন শীঘ্রই যাচাই করবে।");
+            });
+        }
+
+        function closeActivationModal() {
+            document.getElementById('activation-modal').classList.remove('active');
+        }
+
+        // 📋 ইউজার হিস্ট্রি লোড
+        async function loadUserWithdrawHistory() {
+            try {
+                const res = await fetch(`${FIREBASE_DB_URL}/requests.json`);
+                const data = await res.json();
+                const container = document.getElementById('user-withdraw-history-list');
+                
+                if (!data) {
+                    container.innerHTML = `<p style="font-size: 12px; color: #888;">কোনো ইতিহাস পাওয়া যায়নি।</p>`;
+                    return;
+                }
+
+                let html = "";
+                Object.keys(data).forEach(key => {
+                    const item = data[key];
+                    if (item.userId === currentUserId) {
+                        const dateStr = new Date(item.timestamp).toLocaleDateString('bn-BD');
+                        const statusClass = item.status === 'approved' ? 'status-badge-approved' : (item.status === 'denied' ? 'status-badge-denied' : 'status-badge-pending');
+                        const statusText = item.status === 'approved' ? 'অনুমোদিত' : (item.status === 'denied' ? 'বাতিল' : 'পেন্ডিং');
+
+                        if(item.type === "activation") {
+                            html += `
+                            <div class="req-box">
+                                <b>আইডি অ্যাক্টিভেশন রিকোয়েস্ট</b> (${item.gateway})<br>
+                                TrxID: ${item.trxId} | ফি: ৳${item.amount}<br>
+                                স্ট্যাটাস: <span class="${statusClass}">${statusText}</span> <small style="float:right;">${dateStr}</small>
+                            </div>`;
+                        } else {
+                            html += `
+                            <div class="req-box">
+                                <b>উইথড্র রিকোয়েস্ট</b> (${item.method})<br>
+                                নাম্বার: ${item.phone} | পরিমাণ: ৳${item.amount}<br>
+                                স্ট্যাটাস: <span class="${statusClass}">${statusText}</span> <small style="float:right;">${dateStr}</small>
+                            </div>`;
+                        }
+                    }
+                });
+
+                container.innerHTML = html || `<p style="font-size: 12px; color: #888;">কোনো ইতিহাস পাওয়া যায়নি।</p>`;
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
+        // 👤 প্রোফাইল সেভ
+        function saveProfile() {
             window.userData.name = document.getElementById('prof-name').value;
             window.userData.fullName = document.getElementById('prof-fullname').value;
             window.userData.mobile = document.getElementById('prof-mobile').value;
             window.userData.dob = document.getElementById('prof-dob').value;
+            syncDataToFirebase();
+            showSlidePopup("প্রোফাইল আপডেট হয়েছে!");
+        }
 
-            await saveUserDataToFirebase();
-            window.showNotification("প্রোফাইল আপডেট করা হয়েছে!");
-        };
-
-        window.loadProfileImage = function(event) {
+        function loadProfileImage(event) {
             const reader = new FileReader();
             reader.onload = function() {
+                window.userData.profileImg = reader.result;
                 document.getElementById('profile-img').src = reader.result;
-                window.userData.profilePic = reader.result;
-                saveUserDataToFirebase();
-            };
+                syncDataToFirebase();
+            }
             if(event.target.files[0]) reader.readAsDataURL(event.target.files[0]);
-        };
+        }
 
-        window.copyRefLink = function() {
+        function copyRefLink() {
             const copyText = document.getElementById("ref-link-input");
             copyText.select();
             document.execCommand("copy");
-            window.showNotification("রেফারেল লিঙ্ক কপি করা হয়েছে!");
-        };
+            showSlidePopup("লিঙ্ক কপি হয়েছে!");
+        }
 
-        // ADMIN PANEL REALTIME LISTENERS
-        window.promptAdminLogin = function() {
-            const pass = prompt("অ্যাডমিন পাসওয়ার্ড দিন:");
-            if (pass === "1234") { 
-                window.switchNavTab('admin', null);
-                startAdminRealtimeListeners();
-            } else if(pass !== null) {
+        // 👑 সিক্রেট অ্যাডমিন প্যানেল ইঞ্জিন (FIXED & FULL AUTOMATED)
+        function promptAdminLogin() {
+            const pass = prompt("অ্যাডমিন প্যানেল পাসওয়ার্ড দিন:");
+            if (pass === "ariyan123") {
+                switchNavTab('admin', null);
+                loadAdminData();
+            } else if (pass !== null) {
                 alert("ভুল পাসওয়ার্ড!");
             }
-        };
-
-        function startAdminRealtimeListeners() {
-            // Realtime Users Sync
-            onValue(ref(db, 'users'), (snapshot) => {
-                const users = snapshot.val() || {};
-                document.getElementById('admin-stat-users').innerText = Object.keys(users).length;
-                renderAdminUsers(users);
-            });
-
-            // Realtime Requests Sync
-            onValue(ref(db, 'requests'), (snapshot) => {
-                const reqs = snapshot.val() || {};
-                const reqArray = Object.values(reqs);
-                document.getElementById('admin-stat-reqs').innerText = reqArray.length;
-                renderAdminRequests(reqs);
-            });
-
-            // Realtime Approved Payments History Sync
-            onValue(ref(db, 'approved_payments'), (snapshot) => {
-                const apprs = snapshot.val() || {};
-                const apprArray = Object.values(apprs);
-                document.getElementById('admin-stat-approved').innerText = apprArray.length;
-                renderAdminApprovedList(apprs);
-            });
         }
 
-        function renderAdminUsers(users) {
-            const div = document.getElementById('admin-user-list');
-            div.innerHTML = "";
-            Object.values(users).forEach(u => {
-                const total = (u.signupBonus||0) + (u.adEarning||0) + (u.refEarning||0);
-                div.innerHTML += `
+        function showAdminSection(sec) {
+            document.getElementById('admin-subview-users').style.display = sec === 'users' ? 'block' : 'none';
+            document.getElementById('admin-subview-withdraws').style.display = sec === 'withdraws' ? 'block' : 'none';
+            document.getElementById('admin-subview-removed').style.display = sec === 'removed' ? 'block' : 'none';
+            document.getElementById('admin-subview-earning').style.display = sec === 'earning' ? 'block' : 'none';
+        }
+
+        async function loadAdminData() {
+            try {
+                // ১. ইউজার ডাটা ফেচ
+                const uRes = await fetch(`${FIREBASE_DB_URL}/users.json`);
+                const uData = await uRes.json() || {};
+                
+                const userKeys = Object.keys(uData);
+                document.getElementById('admin-stat-users').innerText = userKeys.length;
+
+                let userListHtml = "";
+                userKeys.forEach(uid => {
+                    const u = uData[uid];
+                    const uTotal = (u.signupBonus || 0) + (u.adEarning || 0) + (u.refEarning || 0);
+                    userListHtml += `
                     <div class="user-row">
-                        <b>ID:</b> ${u.username} | <b>Name:</b> ${u.name||'N/A'}<br>
-                        <b>Balance:</b> ${total} Tk | <b>Active:</b> ${u.isActivated ? 'YES' : 'NO'} <br>
-                        <button class="btn-edit-bal" onclick="editUserBal('${u.username}', ${u.adEarning||0})">Edit Balance</button>
-                        <button class="btn-delete" onclick="deleteUser('${u.username}')">Remove User</button>
-                    </div>
-                `;
-            });
-        }
-
-        function renderAdminRequests(reqs) {
-            const div = document.getElementById('admin-requests-list');
-            div.innerHTML = "";
-            const keys = Object.keys(reqs);
-            if(keys.length === 0) {
-                div.innerHTML = `<p style="font-size: 13px; color: #888;">কোনো পেন্ডিং রিকোয়েস্ট নেই (0)।</p>`;
-                return;
-            }
-            Object.values(reqs).reverse().forEach(r => {
-                div.innerHTML += `
-                    <div class="req-box">
-                        <b>Type:</b> ${r.type.toUpperCase()} | <b>User:</b> ${r.userId}<br>
-                        ${r.type==='withdraw' ? `<b>Method:</b> ${r.method.toUpperCase()} (${r.phone}) - <b>${r.amount}Tk</b>` : `<b>TrxID:</b> ${r.trxId} (${r.gateway.toUpperCase()})`}<br>
-                        <small>Time: ${r.timestamp}</small>
+                        <b>ID:</b> ${u.username} | <b>Name:</b> ${u.name || 'N/A'}<br>
+                        <b>Status:</b> ${u.isActivated ? '<span class="status-badge-approved">Activated</span>' : '<span class="status-badge-denied">Not Active</span>'}<br>
+                        <b>Balance:</b> ৳${uTotal} (Bonus: ${u.signupBonus||0}, Ads: ${u.adEarning||0}, Ref: ${u.refEarning||0})
                         <div class="action-btns">
-                            <button class="btn-approve" onclick="handleReqAction('${r.id}', '${r.userId}', '${r.type}', 'approve', ${r.amount||0}, '${r.method||''}', '${r.phone||''}')">Approve</button>
-                            <button class="btn-deny" onclick="handleReqAction('${r.id}', '${r.userId}', '${r.type}', 'deny', ${r.amount||0}, '${r.method||''}', '${r.phone||''}')">Deny</button>
+                            <button class="btn-approve" onclick="toggleUserActivation('${uid}', ${!u.isActivated})">${u.isActivated ? 'Deactivate' : 'Activate ID'}</button>
+                            <button class="btn-deny" onclick="deleteUserFromAdmin('${uid}')">Delete User</button>
                         </div>
-                    </div>
-                `;
-            });
+                    </div>`;
+                });
+                document.getElementById('admin-user-list').innerHTML = userListHtml || "কোনো ইউজার নেই।";
+
+                // ২. রিকোয়েস্ট ডাটা ফেচ (Withdraw & Activation)
+                const rRes = await fetch(`${FIREBASE_DB_URL}/requests.json`);
+                const rData = await rRes.json() || {};
+                
+                const reqKeys = Object.keys(rData);
+                document.getElementById('admin-stat-reqs').innerText = reqKeys.length;
+
+                let reqListHtml = "";
+                let totalPaid = 0;
+
+                reqKeys.forEach(reqId => {
+                    const req = rData[reqId];
+                    if(req.status === 'approved' && req.type === 'withdraw') {
+                        totalPaid += parseFloat(req.amount || 0);
+                    }
+
+                    const statusClass = req.status === 'approved' ? 'status-badge-approved' : (req.status === 'denied' ? 'status-badge-denied' : 'status-badge-pending');
+
+                    if (req.type === 'activation') {
+                        reqListHtml += `
+                        <div class="req-box" style="border-left: 4px solid #d97706;">
+                            <span class="status-badge-pending">ID ACTIVATION REQ</span><br>
+                            <b>User ID:</b> ${req.userId}<br>
+                            <b>Method:</b> ${req.gateway} | <b>TrxID:</b> ${req.trxId}<br>
+                            <b>Amount:</b> ৳${req.amount} | <b>Status:</b> <span class="${statusClass}">${req.status}</span>
+                            ${req.status === 'pending' ? `
+                            <div class="action-btns">
+                                <button class="btn-approve" onclick="handleAdminAction('${reqId}', 'approve_activation', '${req.userId}')">Approve & Activate</button>
+                                <button class="btn-deny" onclick="handleAdminAction('${reqId}', 'deny', '${req.userId}')">Deny</button>
+                            </div>` : ''}
+                        </div>`;
+                    } else {
+                        reqListHtml += `
+                        <div class="req-box" style="border-left: 4px solid #177a6d;">
+                            <span class="status-badge-approved">WITHDRAWAL REQ</span><br>
+                            <b>User ID:</b> ${req.userId}<br>
+                            <b>Method:</b> ${req.method} | <b>Phone:</b> ${req.phone}<br>
+                            <b>Amount:</b> ৳${req.amount} | <b>Status:</b> <span class="${statusClass}">${req.status}</span>
+                            ${req.status === 'pending' ? `
+                            <div class="action-btns">
+                                <button class="btn-approve" onclick="handleAdminAction('${reqId}', 'approve_withdraw', '${req.userId}')">Approve & Pay</button>
+                                <button class="btn-deny" onclick="handleAdminAction('${reqId}', 'deny_withdraw', '${req.userId}', ${req.amount})">Deny & Refund</button>
+                            </div>` : ''}
+                        </div>`;
+                    }
+                });
+
+                document.getElementById('admin-requests-list').innerHTML = reqListHtml || "কোনো রিকোয়েস্ট নেই।";
+                document.getElementById('admin-stat-total-paid').innerText = `${totalPaid} Tk`;
+                document.getElementById('admin-lifetime-paid').innerText = totalPaid;
+
+            } catch (e) {
+                console.error("Admin Load Error:", e);
+            }
         }
 
-        function renderAdminApprovedList(apprs) {
-            const div = document.getElementById('admin-approved-list');
-            div.innerHTML = "";
-            const keys = Object.keys(apprs);
-            if(keys.length === 0) {
-                div.innerHTML = `<p style="font-size: 13px; color: #888;">কোনো সফল পেমেন্ট ইতিহাস নেই।</p>`;
-                return;
+        // অ্যাডমিন একশন হ্যান্ডলার
+        async function handleAdminAction(reqId, action, userId, amount = 0) {
+            if (action === 'approve_activation') {
+                // আইডি অ্যাক্টিভেশন অনুমোদন
+                await fetch(`${FIREBASE_DB_URL}/requests/${reqId}.json`, { method: 'PATCH', body: JSON.stringify({ status: 'approved' }) });
+                await fetch(`${FIREBASE_DB_URL}/users/${userId}.json`, { method: 'PATCH', body: JSON.stringify({ isActivated: true }) });
+                alert("আইডি অ্যাক্টিভেশন সফলভাবে অনুমোদন করা হয়েছে!");
+            } else if (action === 'approve_withdraw') {
+                // উইথড্র অনুমোদন
+                await fetch(`${FIREBASE_DB_URL}/requests/${reqId}.json`, { method: 'PATCH', body: JSON.stringify({ status: 'approved' }) });
+                alert("উইথড্র অনুমোদন করা হয়েছে!");
+            } else if (action === 'deny_withdraw') {
+                // উইথড্র বাতিল এবং রিফান্ড
+                await fetch(`${FIREBASE_DB_URL}/requests/${reqId}.json`, { method: 'PATCH', body: JSON.stringify({ status: 'denied' }) });
+                const uRes = await fetch(`${FIREBASE_DB_URL}/users/${userId}.json`);
+                const uData = await uRes.json();
+                if(uData) {
+                    await fetch(`${FIREBASE_DB_URL}/users/${userId}.json`, { 
+                        method: 'PATCH', 
+                        body: JSON.stringify({ adEarning: (uData.adEarning || 0) + amount }) 
+                    });
+                }
+                alert("উইথড্র বাতিল এবং ব্যালেন্স ফেরত দেওয়া হয়েছে!");
+            } else if (action === 'deny') {
+                await fetch(`${FIREBASE_DB_URL}/requests/${reqId}.json`, { method: 'PATCH', body: JSON.stringify({ status: 'denied' }) });
+                alert("রিকোয়েস্ট বাতিল করা হয়েছে!");
             }
-            Object.values(apprs).reverse().forEach(a => {
-                div.innerHTML += `
-                    <div class="req-box" style="border-left: 4px solid #2e7d32;">
-                        <b>User:</b> ${a.userId} | <b>Type:</b> ${a.type.toUpperCase()}<br>
-                        ${a.type==='withdraw' ? `<b>Amount:</b> ${a.amount}Tk (${a.method.toUpperCase()} - ${a.phone})` : `<b>Activation Approved</b>`}<br>
-                        <small>Time: ${a.timestamp}</small>
-                    </div>
-                `;
-            });
+            loadAdminData();
         }
 
-        // REQUEST HANDLE (APPROVE / DENY) & REMOVE FROM REQUEST LIST
-        window.handleReqAction = async function(reqId, uId, type, action, amount, method, phone) {
-            if (type === 'activation') {
-                if (action === 'approve') {
-                    await update(ref(db, `users/${uId}`), { isActivated: true });
-                    await set(ref(db, `approved_payments/${reqId}`), {
-                        reqId, userId: uId, type: 'activation', timestamp: new Date().toLocaleString()
-                    });
-                }
-            } else if (type === 'withdraw') {
-                const userRef = ref(db, `users/${uId}`);
-                const uSnap = await get(userRef);
-                const uData = uSnap.val();
+        async function toggleUserActivation(userId, newStatus) {
+            await fetch(`${FIREBASE_DB_URL}/users/${userId}.json`, { method: 'PATCH', body: JSON.stringify({ isActivated: newStatus }) });
+            loadAdminData();
+        }
 
-                if (action === 'deny') {
-                    // Denied -> refund amount back to user's balance
-                    if(uData) {
-                        const newAdEarning = (uData.adEarning || 0) + amount;
-                        const withdrawals = uData.withdrawals || {};
-                        if(withdrawals[reqId]) withdrawals[reqId].status = "denied";
-                        await update(userRef, { adEarning: newAdEarning, withdrawals: withdrawals });
-                    }
-                } else if (action === 'approve') {
-                    // Approved -> permanently keep deducted and store in Approved History
-                    if(uData) {
-                        const withdrawals = uData.withdrawals || {};
-                        if(withdrawals[reqId]) withdrawals[reqId].status = "approved";
-                        await update(userRef, { withdrawals: withdrawals });
-                    }
-                    await set(ref(db, `approved_payments/${reqId}`), {
-                        reqId, userId: uId, type: 'withdraw', amount, method, phone, timestamp: new Date().toLocaleString()
-                    });
-                }
+        async function deleteUserFromAdmin(userId) {
+            if (confirm("আপনি কি নিশ্চিত এই ইউজারকে ডিলিট করবেন?")) {
+                await fetch(`${FIREBASE_DB_URL}/users/${userId}.json`, { method: 'DELETE' });
+                loadAdminData();
             }
+        }
 
-            // রিকোয়েস্ট সমাধান হওয়ার পর Requests টেবিল থেকে রিমুভ করে দেওয়া (লিস্ট খালি করার জন্য)
-            await remove(ref(db, `requests/${reqId}`));
-            window.showNotification(`রিকোয়েস্টটি ${action === 'approve' ? 'Approve' : 'Deny'} করা হয়েছে!`);
+        // অ্যাপ ইনিশিয়ালাইজেশন
+        window.onload = function() {
+            loadUserDataFromFirebase();
         };
-
-        window.editUserBal = async function(uId, currentAdEarn) {
-            const newBal = prompt("নতুন এড আর্নিং ব্যালেন্স লিখুন:", currentAdEarn);
-            if(newBal !== null && !isNaN(parseFloat(newBal))) {
-                await update(ref(db, `users/${uId}`), { adEarning: parseFloat(newBal) });
-                window.showNotification("ইউজার ব্যালেন্স আপডেট হয়েছে!");
-            }
-        };
-
-        window.deleteUser = async function(uId) {
-            if(confirm(`আপনি কি সত্যিই ইউজার ${uId} রিমুভ করতে চান?`)) {
-                await remove(ref(db, `users/${uId}`));
-                window.showNotification("ইউজার রিমুভ করা হয়েছে!");
-            }
-        };
-
-        window.showAdminSection = function(sec) {
-            ['users', 'requests', 'approved'].forEach(s => {
-                document.getElementById(`admin-subview-${s}`).style.display = (s === sec) ? 'block' : 'none';
-            });
-        };
-
-        // Start App Logic
-        startRealtimeUserSync();
     </script>
 </body>
 </html>
