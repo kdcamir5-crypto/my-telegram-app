@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Freelancing with Ariyan</title>
-    <!-- টেলিগ্রাম ওয়েব অ্যাপ SDK ও ফন্ট-অসাম আইকন -->
+    <!-- Telegram Web App SDK & FontAwesome Icons -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- ==========================================
-          ১. স্টাইল সেকশন (CSS SECTION)
-    ========================================== -->
     <style>
         :root {
             --primary-color: #177a6d;
@@ -30,7 +27,7 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            padding-bottom: 75px;
+            padding-bottom: 80px;
         }
 
         .container {
@@ -60,19 +57,19 @@
             color: var(--primary-color);
             border: 1px solid var(--primary-color);
             display: block;
-            padding: 8px 15px;
+            padding: 10px 15px;
             border-radius: 20px;
             margin: 10px 0;
             font-weight: bold;
             text-align: center;
-            font-size: 15px;
+            font-size: 16px;
         }
 
         .user-id-badge {
             text-align: center;
-            font-size: 12px;
+            font-size: 13px;
             color: #666;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .view-section {
@@ -106,8 +103,8 @@
         }
 
         .icon-circle {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             background: #e8f5e9;
             color: var(--primary-color);
@@ -115,7 +112,7 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto 6px auto;
-            font-size: 22px;
+            font-size: 20px;
         }
 
         .feature-card span {
@@ -257,7 +254,6 @@
             width: 100%;
             max-width: 450px;
             text-align: center;
-            position: relative;
         }
 
         .slide-popup-notification {
@@ -287,7 +283,7 @@
             position: fixed;
             bottom: 75px;
             right: 10px;
-            opacity: 0.25;
+            opacity: 0.3;
             font-size: 20px;
             cursor: pointer;
             z-index: 90;
@@ -299,18 +295,19 @@
 
         .admin-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
             margin-bottom: 15px;
         }
 
         .admin-card {
             background: #fff;
-            padding: 12px;
+            padding: 10px;
             border-radius: 8px;
             border-left: 4px solid var(--primary-color);
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             cursor: pointer;
+            text-align: center;
         }
 
         .req-box, .user-row {
@@ -331,6 +328,7 @@
 
         .btn-approve { background: #2e7d32; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
         .btn-deny { background: #c62828; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .btn-delete { background: #d32f2f; color: white; padding: 4px 8px; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; margin-top: 5px; margin-left: 5px; }
         .btn-edit-bal { background: #177a6d; color: white; padding: 4px 8px; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; margin-top: 5px; }
 
         .status-badge-pending { color: #d97706; font-weight: bold; background: #fef3c7; padding: 2px 6px; border-radius: 4px; }
@@ -340,6 +338,7 @@
 </head>
 <body>
 
+    <!-- Notification Toast -->
     <div id="slide-popup" class="slide-popup-notification">
         <i class="fas fa-bell"></i>
         <span id="slide-popup-text"></span>
@@ -347,18 +346,18 @@
 
     <div class="container">
 
-        <!-- HOME PAGE -->
+        <!-- HOME TAB -->
         <div id="tab-home" class="view-section active">
             <div class="header-banner-container">
                 <img src="https://i.ibb.co.com/vvM61Pqt/Gemini-Generated-Image-8lbv8q8lbv8q8lbv-640x360.jpg" alt="Freelancing Banner">
             </div>
 
             <div class="balance-badge">
-                মোট ব্যালেন্স: <span id="user-total-balance">150</span> টাকা
+                মোট ব্যালেন্স: <span id="user-total-balance">0</span> টাকা
             </div>
 
             <div class="user-id-badge">
-                ইউজার আইডি: <b id="display-user-id">Loading...</b>
+                ইউজার আইডি: <b id="display-user-id">Loading...</b> | Status: <b id="display-user-status" style="color:red;">Inactive</b>
             </div>
 
             <div class="features-grid">
@@ -390,18 +389,15 @@
                 <p>✨ আমাদের প্ল্যাটফর্মে ইনকাম করা এখন আগের চেয়ে আরও সহজ ও বিশ্বাসযোগ্য।</p>
                 <p>🚀 ঘরে বসেই অল্প সময় দিয়ে আয় করার দারুণ সুযোগ।</p>
                 <p>👉 দ্রুত পেমেন্ট সিস্টেম।</p>
-                <p>🌟 নতুনদের জন্য সহজ এবং সবার জন্য লাভজনক একটি প্ল্যাটফর্ম।</p>
                 <br>
                 <p style="color: #1565c0; font-weight: bold;">💸 প্রতিটি রেফারে পাবেন 100টাকা।</p>
                 <p style="color: #2e7d32; font-weight: bold;">📺 প্রতিটি বিজ্ঞাপন দেখলে পাবেন 20 টাকা।</p>
                 <p style="color: #d97706; font-weight: bold;">🎁 একাউন্ট খুললেই সাথে সাথে 150 টাকা বোনাস।</p>
                 <p style="color: #c62828; font-weight: bold;">🏦 1000 টাকা হলেই উত্তোলন করতে পারবেন বিকাশ ও নগদের মাধ্যমে।</p>
-                <br>
-                <p style="text-align: center; font-weight: bold; color: var(--primary-color);">👉 আয় শুরু করুন আজ থেকেই 💚</p>
             </div>
         </div>
 
-        <!-- DAILY TASK -->
+        <!-- SUB VIEWS -->
         <div id="view-daily-task" class="view-section">
             <div class="card" style="text-align: center;">
                 <h2>📺 ডেইলি টাস্ক</h2>
@@ -412,7 +408,6 @@
             </div>
         </div>
 
-        <!-- EARNING -->
         <div id="view-earning" class="view-section">
             <div class="card">
                 <h2>📊 ইনকাম ডিটেইলস</h2>
@@ -421,13 +416,12 @@
                     <p>👥 আপনি রেফার করে আয় করেছেন: <b><span id="ref-earning-text">0</span> টাকা</b></p>
                     <p>🎁 আপনি বোনাস পেয়েছেন: <b><span id="bonus-earning-text">150</span> টাকা</b></p>
                     <hr>
-                    <h3 style="color: var(--primary-color); margin-top: 8px;">মোট সর্বমোট ইনকাম: <span id="total-earning-text">150</span> টাকা</h3>
+                    <h3 style="color: var(--primary-color); margin-top: 8px;">মোট সর্বমোট ইনকাম: <span id="total-earning-text">0</span> টাকা</h3>
                 </div>
                 <button class="btn btn-secondary" onclick="backToHome()">হোমে ফিরে যান</button>
             </div>
         </div>
 
-        <!-- REFERRAL -->
         <div id="view-referral" class="view-section">
             <div class="card">
                 <h2>🔗 রেফারেল আর্নিং</h2>
@@ -435,7 +429,7 @@
                 <p style="font-size: 13px; color: #555; margin-bottom: 12px;">প্রতিটি সফল রেফারে পাবেন ১০০ টাকা।</p>
                 
                 <div class="input-group">
-                    <label>আপনার ইউনিক রেফারেল কোড/লিঙ্ক:</label>
+                    <label>আপনার ইউনিক রেফারেল লিঙ্ক:</label>
                     <div style="display: flex; gap: 5px;">
                         <input type="text" id="ref-link-input" readonly value="">
                         <button style="padding: 0 15px; background: var(--primary-color); color: white; border: none; border-radius: 6px;" onclick="copyRefLink()"><i class="fas fa-copy"></i></button>
@@ -445,7 +439,6 @@
             </div>
         </div>
 
-        <!-- BONUS -->
         <div id="view-bonus" class="view-section">
             <div class="card" style="text-align: center;">
                 <h2>🎁 বোনাস সেকশন</h2>
@@ -457,21 +450,21 @@
             </div>
         </div>
 
-        <!-- WALLET -->
+        <!-- WALLET TAB -->
         <div id="tab-wallet" class="view-section">
             <div class="card">
                 <h2>👛 ওয়ালেট (Wallet)</h2>
                 <div style="margin-top: 15px; line-height: 2.2;">
-                    <p>📺 আপনি বিজ্ঞাপন থেকে আয় করেছেন: <b><span id="wallet-ad-earn">0</span> টাকা</b></p>
-                    <p>👥 আপনি রেফার থেকে আয় করেছেন: <b><span id="wallet-ref-earn">0</span> টাকা</b></p>
-                    <p>🎁 আপনি বোনাস পেয়েছেন: <b><span id="wallet-bonus-earn">150</span> টাকা</b></p>
+                    <p>📺 বিজ্ঞাপন ইনকাম: <b><span id="wallet-ad-earn">0</span> টাকা</b></p>
+                    <p>👥 রেফার ইনকাম: <b><span id="wallet-ref-earn">0</span> টাকা</b></p>
+                    <p>🎁 বোনাস ইনকাম: <b><span id="wallet-bonus-earn">150</span> টাকা</b></p>
                     <hr>
-                    <h3 style="color: var(--primary-color); margin-top: 8px;">আপনার টোটাল ব্যালেন্স আছে: <span id="wallet-total-balance">150</span> টাকা</h3>
+                    <h3 style="color: var(--primary-color); margin-top: 8px;">বর্তমান ব্যালেন্স: <span id="wallet-total-balance">0</span> টাকা</h3>
                 </div>
             </div>
         </div>
 
-        <!-- WITHDRAW -->
+        <!-- WITHDRAW TAB -->
         <div id="tab-withdraw" class="view-section">
             <div class="card">
                 <h2>🏦 টাকা উত্তোলন (Withdraw)</h2>
@@ -501,7 +494,7 @@
             </div>
         </div>
 
-        <!-- SUPPORT -->
+        <!-- SUPPORT TAB -->
         <div id="tab-support" class="view-section">
             <div class="card" style="text-align: center;">
                 <h2>🎧 কাস্টমার সাপোর্ট</h2>
@@ -509,11 +502,11 @@
                 <a href="https://t.me/Kdcariyan" target="_blank" class="btn" style="text-decoration: none; display: block; margin-bottom: 15px;">
                     <i class="fab fa-telegram"></i> Telegram Admin Contact
                 </a>
-                <p style="color: #2e7d32; font-weight: bold; font-size: 13px;">💚 24/7 হেল্প লাইন এক্টিভ, আপনার যেকোনো প্রয়োজনে এডমিন কে মেসেজ করুন।</p>
+                <p style="color: #2e7d32; font-weight: bold; font-size: 13px;">💚 24/7 হেল্প লাইন এক্টিভ।</p>
             </div>
         </div>
 
-        <!-- PROFILE -->
+        <!-- PROFILE TAB -->
         <div id="tab-profile" class="view-section">
             <div class="card">
                 <h2 style="text-align: center;">👤 ইউজার প্রোফাইল</h2>
@@ -546,30 +539,39 @@
             </div>
         </div>
 
-        <!-- ADMIN PANEL -->
+        <!-- ADMIN PANEL TAB -->
         <div id="tab-admin" class="view-section">
             <div class="card">
                 <h2 style="color: #c62828;">👑 অ্যাডমিন কন্ট্রোল প্যানেল (Real-Time)</h2>
                 
-                <div class="admin-grid">
+                <div class="admin-grid" style="margin-top: 15px;">
                     <div class="admin-card" onclick="showAdminSection('users')">
-                        <small>1. Total User</small>
+                        <small>Users</small>
                         <h3 id="admin-stat-users">0</h3>
                     </div>
-                    <div class="admin-card" onclick="showAdminSection('withdraws')">
-                        <small>2. Total Requests</small>
-                        <h3 id="admin-stat-reqs">0</h3>
+                    <div class="admin-card" onclick="showAdminSection('requests')">
+                        <small>Requests</small>
+                        <h3 id="admin-stat-reqs" style="color:#d97706;">0</h3>
+                    </div>
+                    <div class="admin-card" onclick="showAdminSection('approved')">
+                        <small>Payments</small>
+                        <h3 id="admin-stat-approved" style="color:#2e7d32;">0</h3>
                     </div>
                 </div>
 
                 <div id="admin-subview-users">
-                    <h3>👥 সকল ইউজার লিস্ট ও ব্যালেন্স এডিট:</h3>
+                    <h3>👥 সকল ইউজার লিস্ট, ব্যালেন্স & অ্যাকশন:</h3>
                     <div id="admin-user-list" style="margin-top: 10px;"></div>
                 </div>
 
-                <div id="admin-subview-withdraws" style="display:none;">
-                    <h3>📥 রিকোয়েস্ট সমূহ:</h3>
+                <div id="admin-subview-requests" style="display:none;">
+                    <h3>📥 রিকোয়েস্ট সমূহ (Pending Requests):</h3>
                     <div id="admin-requests-list" style="margin-top: 10px;"></div>
+                </div>
+
+                <div id="admin-subview-approved" style="display:none;">
+                    <h3>✅ Total Approved Payments History:</h3>
+                    <div id="admin-approved-list" style="margin-top: 10px;"></div>
                 </div>
 
                 <button class="btn btn-secondary" style="margin-top:20px;" onclick="backToHome()">হোমে ফিরে যান</button>
@@ -630,6 +632,7 @@
         <i class="fas fa-user-shield"></i>
     </div>
 
+    <!-- BOTTOM NAVIGATION -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchNavTab('home', this)">
             <i class="fas fa-home"></i> Home
@@ -649,13 +652,13 @@
     </div>
 
     <!-- ==========================================
-         FIREBASE REALTIME SDK (v10) INTEGRATION
+         FIREBASE REALTIME DATABASE V10 JAVASCRIPT
     ========================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, update, get, child, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, set, update, remove, get, child, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // ফায়ারবেস কনফিগারেশন
+        // 🔥 আপনার ফায়ারবেস প্রজেক্ট সেটিংস (প্রয়োজনে API Key ইত্যাদি এখানে বসাতে পারেন)
         const firebaseConfig = {
             databaseURL: "https://frelancing-mini-app-default-rtdb.firebaseio.com"
         };
@@ -669,7 +672,7 @@
         let currentUserId = "";
         let currentUserName = "";
 
-        // ব্রাউজার ও টেলিগ্রামে আইডেন্টিটি স্থির রাখা
+        // Identity init
         function initUserIdentity() {
             if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 const tgUser = tg.initDataUnsafe.user;
@@ -722,6 +725,15 @@
             document.getElementById('user-total-balance').innerText = totalBal;
             document.getElementById('display-user-id').innerText = window.userData.username;
             
+            const statusElem = document.getElementById('display-user-status');
+            if(window.userData.isActivated) {
+                statusElem.innerText = "Active";
+                statusElem.style.color = "green";
+            } else {
+                statusElem.innerText = "Inactive";
+                statusElem.style.color = "red";
+            }
+            
             document.getElementById('ad-earning-text').innerText = window.userData.adEarning || 0;
             document.getElementById('ref-earning-text').innerText = window.userData.refEarning || 0;
             document.getElementById('bonus-earning-text').innerText = window.userData.signupBonus || 150;
@@ -748,19 +760,17 @@
         }
 
         // ==========================================
-        //  রিয়েল-টাইম ফায়ারবেস লিসেনার (REAL-TIME LISTENER)
+        //  REALTIME USER DATA LISTENER
         // ==========================================
         function startRealtimeUserSync() {
             const userRef = ref(db, 'users/' + currentUserId);
             
-            // রিয়েলটাইমে ডাটা পর্যবেক্ষণ করা (অ্যাডমিন চেঞ্জ করলেও সাথে সাথে আপডেট হবে)
             onValue(userRef, (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
                     window.userData = { ...window.userData, ...data };
                     updateUI();
                 } else {
-                    // প্রথমবার ফায়ারবেসে ডাটা তৈরি
                     set(userRef, window.userData);
                     updateUI();
                 }
@@ -772,7 +782,7 @@
             await update(userRef, window.userData);
         }
 
-        // Global functions for inline HTML events
+        // NAVIGATION
         window.switchNavTab = function(tabName, el) {
             document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
@@ -789,6 +799,7 @@
             window.switchNavTab('home', document.querySelectorAll('.nav-item')[0]);
         };
 
+        // ADS TIMER
         let adTimerInterval;
         window.startAdTimer = function() {
             if (window.userData.adsWatchedToday >= 20) {
@@ -816,6 +827,7 @@
             }, 1000);
         };
 
+        // WITHDRAW ACTION WITH INSTANT DEDUCTION
         window.handleWithdrawClick = function() {
             const amount = parseFloat(document.getElementById('withdraw-amount').value);
             const phone = document.getElementById('withdraw-phone').value;
@@ -856,14 +868,15 @@
                 timestamp: new Date().toLocaleString()
             };
 
-            window.userData.adEarning = Math.max(0, (window.userData.adEarning || 0) - amount);
+            // সাথে সাথে টাকা কেটে নেওয়া (Hold Balance)
+            window.userData.adEarning = (window.userData.adEarning || 0) - amount;
             if (!window.userData.withdrawals) window.userData.withdrawals = {};
             window.userData.withdrawals[reqId] = withdrawData;
 
             await saveUserDataToFirebase();
             await set(ref(db, 'requests/' + reqId), withdrawData);
 
-            window.showNotification("উইথড্র রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে!");
+            window.showNotification("উইথড্র রিকোয়েস্ট জমা হয়েছে! ব্যালেন্স কাটা হয়েছে।");
             document.getElementById('withdraw-amount').value = "";
             document.getElementById('withdraw-phone').value = "";
         }
@@ -902,7 +915,7 @@
 
             window.closeActivationModal();
             document.getElementById('activation-trxid').value = "";
-            window.showNotification("এক্টিভেশন রিকোয়েস্ট জমা হয়েছে!");
+            window.showNotification("এক্টিভেশন রিকোয়েস্ট এডমিনের কাছে পাঠানো হয়েছে!");
         };
 
         function renderWithdrawHistory() {
@@ -956,7 +969,7 @@
             window.showNotification("রেফারেল লিঙ্ক কপি করা হয়েছে!");
         };
 
-        // ADMIN REAL-TIME LISTENERS
+        // ADMIN PANEL REALTIME LISTENERS
         window.promptAdminLogin = function() {
             const pass = prompt("অ্যাডমিন পাসওয়ার্ড দিন:");
             if (pass === "1234") { 
@@ -968,18 +981,27 @@
         };
 
         function startAdminRealtimeListeners() {
-            // Realtime user sync in Admin Panel
+            // Realtime Users Sync
             onValue(ref(db, 'users'), (snapshot) => {
                 const users = snapshot.val() || {};
                 document.getElementById('admin-stat-users').innerText = Object.keys(users).length;
                 renderAdminUsers(users);
             });
 
-            // Realtime request sync in Admin Panel
+            // Realtime Requests Sync
             onValue(ref(db, 'requests'), (snapshot) => {
                 const reqs = snapshot.val() || {};
-                document.getElementById('admin-stat-reqs').innerText = Object.keys(reqs).length;
+                const reqArray = Object.values(reqs);
+                document.getElementById('admin-stat-reqs').innerText = reqArray.length;
                 renderAdminRequests(reqs);
+            });
+
+            // Realtime Approved Payments History Sync
+            onValue(ref(db, 'approved_payments'), (snapshot) => {
+                const apprs = snapshot.val() || {};
+                const apprArray = Object.values(apprs);
+                document.getElementById('admin-stat-approved').innerText = apprArray.length;
+                renderAdminApprovedList(apprs);
             });
         }
 
@@ -993,6 +1015,7 @@
                         <b>ID:</b> ${u.username} | <b>Name:</b> ${u.name||'N/A'}<br>
                         <b>Balance:</b> ${total} Tk | <b>Active:</b> ${u.isActivated ? 'YES' : 'NO'} <br>
                         <button class="btn-edit-bal" onclick="editUserBal('${u.username}', ${u.adEarning||0})">Edit Balance</button>
+                        <button class="btn-delete" onclick="deleteUser('${u.username}')">Remove User</button>
                     </div>
                 `;
             });
@@ -1001,51 +1024,107 @@
         function renderAdminRequests(reqs) {
             const div = document.getElementById('admin-requests-list');
             div.innerHTML = "";
+            const keys = Object.keys(reqs);
+            if(keys.length === 0) {
+                div.innerHTML = `<p style="font-size: 13px; color: #888;">কোনো পেন্ডিং রিকোয়েস্ট নেই (0)।</p>`;
+                return;
+            }
             Object.values(reqs).reverse().forEach(r => {
                 div.innerHTML += `
                     <div class="req-box">
                         <b>Type:</b> ${r.type.toUpperCase()} | <b>User:</b> ${r.userId}<br>
-                        ${r.type==='withdraw' ? `<b>Method:</b> ${r.method} (${r.phone}) - ${r.amount}Tk` : `<b>TrxID:</b> ${r.trxId} (${r.gateway})`}<br>
-                        <b>Status:</b> ${r.status}<br>
-                        ${r.status==='pending' ? `
-                            <div class="action-btns">
-                                <button class="btn-approve" onclick="updateReqStatus('${r.id}', '${r.userId}', '${r.type}', 'approved', ${r.amount||0})">Approve</button>
-                                <button class="btn-deny" onclick="updateReqStatus('${r.id}', '${r.userId}', '${r.type}', 'denied', ${r.amount||0})">Deny</button>
-                            </div>
-                        `: ''}
+                        ${r.type==='withdraw' ? `<b>Method:</b> ${r.method.toUpperCase()} (${r.phone}) - <b>${r.amount}Tk</b>` : `<b>TrxID:</b> ${r.trxId} (${r.gateway.toUpperCase()})`}<br>
+                        <small>Time: ${r.timestamp}</small>
+                        <div class="action-btns">
+                            <button class="btn-approve" onclick="handleReqAction('${r.id}', '${r.userId}', '${r.type}', 'approve', ${r.amount||0}, '${r.method||''}', '${r.phone||''}')">Approve</button>
+                            <button class="btn-deny" onclick="handleReqAction('${r.id}', '${r.userId}', '${r.type}', 'deny', ${r.amount||0}, '${r.method||''}', '${r.phone||''}')">Deny</button>
+                        </div>
                     </div>
                 `;
             });
         }
 
+        function renderAdminApprovedList(apprs) {
+            const div = document.getElementById('admin-approved-list');
+            div.innerHTML = "";
+            const keys = Object.keys(apprs);
+            if(keys.length === 0) {
+                div.innerHTML = `<p style="font-size: 13px; color: #888;">কোনো সফল পেমেন্ট ইতিহাস নেই।</p>`;
+                return;
+            }
+            Object.values(apprs).reverse().forEach(a => {
+                div.innerHTML += `
+                    <div class="req-box" style="border-left: 4px solid #2e7d32;">
+                        <b>User:</b> ${a.userId} | <b>Type:</b> ${a.type.toUpperCase()}<br>
+                        ${a.type==='withdraw' ? `<b>Amount:</b> ${a.amount}Tk (${a.method.toUpperCase()} - ${a.phone})` : `<b>Activation Approved</b>`}<br>
+                        <small>Time: ${a.timestamp}</small>
+                    </div>
+                `;
+            });
+        }
+
+        // REQUEST HANDLE (APPROVE / DENY) & REMOVE FROM REQUEST LIST
+        window.handleReqAction = async function(reqId, uId, type, action, amount, method, phone) {
+            if (type === 'activation') {
+                if (action === 'approve') {
+                    await update(ref(db, `users/${uId}`), { isActivated: true });
+                    await set(ref(db, `approved_payments/${reqId}`), {
+                        reqId, userId: uId, type: 'activation', timestamp: new Date().toLocaleString()
+                    });
+                }
+            } else if (type === 'withdraw') {
+                const userRef = ref(db, `users/${uId}`);
+                const uSnap = await get(userRef);
+                const uData = uSnap.val();
+
+                if (action === 'deny') {
+                    // Denied -> refund amount back to user's balance
+                    if(uData) {
+                        const newAdEarning = (uData.adEarning || 0) + amount;
+                        const withdrawals = uData.withdrawals || {};
+                        if(withdrawals[reqId]) withdrawals[reqId].status = "denied";
+                        await update(userRef, { adEarning: newAdEarning, withdrawals: withdrawals });
+                    }
+                } else if (action === 'approve') {
+                    // Approved -> permanently keep deducted and store in Approved History
+                    if(uData) {
+                        const withdrawals = uData.withdrawals || {};
+                        if(withdrawals[reqId]) withdrawals[reqId].status = "approved";
+                        await update(userRef, { withdrawals: withdrawals });
+                    }
+                    await set(ref(db, `approved_payments/${reqId}`), {
+                        reqId, userId: uId, type: 'withdraw', amount, method, phone, timestamp: new Date().toLocaleString()
+                    });
+                }
+            }
+
+            // রিকোয়েস্ট সমাধান হওয়ার পর Requests টেবিল থেকে রিমুভ করে দেওয়া (লিস্ট খালি করার জন্য)
+            await remove(ref(db, `requests/${reqId}`));
+            window.showNotification(`রিকোয়েস্টটি ${action === 'approve' ? 'Approve' : 'Deny'} করা হয়েছে!`);
+        };
+
         window.editUserBal = async function(uId, currentAdEarn) {
-            const newBal = prompt("নতুন ব্যালেন্স লিখুন:", currentAdEarn);
-            if(newBal !== null) {
+            const newBal = prompt("নতুন এড আর্নিং ব্যালেন্স লিখুন:", currentAdEarn);
+            if(newBal !== null && !isNaN(parseFloat(newBal))) {
                 await update(ref(db, `users/${uId}`), { adEarning: parseFloat(newBal) });
+                window.showNotification("ইউজার ব্যালেন্স আপডেট হয়েছে!");
             }
         };
 
-        window.updateReqStatus = async function(reqId, uId, type, status, amount) {
-            await update(ref(db, `requests/${reqId}`), { status: status });
-
-            if (type === 'activation' && status === 'approved') {
-                await update(ref(db, `users/${uId}`), { isActivated: true });
-            } else if (type === 'withdraw' && status === 'denied') {
-                const uSnap = await get(child(ref(db), `users/${uId}`));
-                const u = uSnap.val();
-                if(u) {
-                    await update(ref(db, `users/${uId}`), { adEarning: (u.adEarning||0) + amount });
-                }
+        window.deleteUser = async function(uId) {
+            if(confirm(`আপনি কি সত্যিই ইউজার ${uId} রিমুভ করতে চান?`)) {
+                await remove(ref(db, `users/${uId}`));
+                window.showNotification("ইউজার রিমুভ করা হয়েছে!");
             }
         };
 
         window.showAdminSection = function(sec) {
-            ['users', 'withdraws'].forEach(s => {
+            ['users', 'requests', 'approved'].forEach(s => {
                 document.getElementById(`admin-subview-${s}`).style.display = (s === sec) ? 'block' : 'none';
             });
         };
 
-        // Initialize Realtime System
+        // Start App Logic
         startRealtimeUserSync();
     </script>
 </body>
