@@ -354,32 +354,29 @@
                 <div></div>
             </div>
 
-            <div class="bg-amber-50 rounded-2xl p-4 border border-amber-300 text-xs text-amber-900 space-y-2 shadow-sm">
-                <div class="flex items-center space-x-2 font-bold text-amber-950 text-sm">
-                    <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
-                    <span>একাউন্ট অ্যাক্টিভেশন ফি সংক্রান্ত তথ্য</span>
+            <!-- Current Balance Banner -->
+            <div class="bg-gradient-to-r from-brand-700 to-indigo-900 text-white p-4 rounded-2xl shadow-md flex justify-between items-center">
+                <div>
+                    <p class="text-xs text-indigo-200">আপনার বর্তমান ব্যালেন্স</p>
+                    <h3 class="text-xl font-bold text-amber-300">৳ <span id="withdrawPageBalance">0</span></h3>
                 </div>
-                <p>উইথড্র চালু করার পূর্বে একাউন্ট ভেরিফিকেশন ও অ্যাক্টিভেশন ফি প্রযোজ্য হতে পারে।</p>
-                <div class="bg-white/80 p-2.5 rounded-xl border border-amber-200 font-mono space-y-1">
-                    <p><strong>ফি পরিমাণ:</strong> ৳ ১৫০ (এককালীন)</p>
-                    <p><strong>bKash (Send Money):</strong> <span class="font-bold text-pink-600 select-all">01720236858</span></p>
-                    <p><strong>Nagad (Send Money):</strong> <span class="font-bold text-orange-600 select-all">01683312033</span></p>
+                <div class="text-xs bg-white/10 px-3 py-1.5 rounded-xl border border-white/20 font-semibold">
+                    <span>সর্বনিম্ন উইথড্র: ৳১০০০</span>
                 </div>
-                <p class="text-[11px] text-amber-800">ফি প্রদান করে নিচের ফিল্ডে আপনার ট্রানজেকশন আইডি (TrxID) দিয়ে সাবমিট করুন।</p>
             </div>
 
             <div class="glass-card p-5 rounded-2xl shadow-sm space-y-4">
-                <form id="withdrawForm" onsubmit="handleWithdrawSubmit(event)" class="space-y-3">
+                <form id="withdrawForm" onsubmit="handleInitialWithdrawStep(event)" class="space-y-3">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">পেমেন্ট মেথড</label>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">পেমেন্ট মেথড সিলেক্ট করুন</label>
                         <select id="withdrawMethod" required class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500">
-                            <option value="bKash">bKash (বিক্যাশ)</option>
+                            <option value="bKash">bKash (বিকাশ)</option>
                             <option value="Nagad">Nagad (নগদ)</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">মোবাইল নম্বর</label>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">পেমেন্ট পাওয়ার মোবাইল নম্বর</label>
                         <input id="withdrawPhone" type="tel" placeholder="017XXXXXXXX" required class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500">
                     </div>
 
@@ -388,13 +385,9 @@
                         <input id="withdrawAmount" type="number" min="1000" placeholder="1000" required class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500">
                     </div>
 
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">একাউন্ট ফি ট্রানজেকশন আইডি (TrxID)</label>
-                        <input id="withdrawTrxId" type="text" placeholder="e.g. 9J38KS91" required class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500 font-mono">
-                    </div>
-
-                    <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all">
-                        Withdraw করুন
+                    <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow-md transition-all text-sm flex items-center justify-center gap-2">
+                        <span>উইথড্র এগিয়ে যান</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
                     </button>
                 </form>
             </div>
@@ -580,13 +573,82 @@
         </div>
     </div>
 
+    <!-- Account Activation & Withdraw Confirmation Modal Popup -->
+    <div id="activationWithdrawModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-card max-w-sm w-full rounded-2xl p-5 space-y-4 relative max-h-[90vh] overflow-y-auto hide-scrollbar">
+            <button onclick="closeActivationModal()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto text-xl">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 text-base">অ্যাকাউন্ট অ্যাক্টিভেশন অ্যান্ড উইথড্র</h3>
+            </div>
+
+            <div class="bg-amber-50 p-3.5 rounded-xl border border-amber-200 text-xs text-amber-900 space-y-2">
+                <p class="font-bold text-xs text-amber-950 flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-exclamation text-amber-600"></i>
+                    <span>জরুরী তথ্য:</span>
+                </p>
+                <p class="leading-relaxed font-semibold">আপনার অ্যাকাউন্ট উইথড্র করার জন্য প্রথমে অ্যাকাউন্ট অ্যাক্টিভেশন করতে হবে।</p>
+                <p class="font-bold text-rose-600 bg-rose-50 p-2 rounded-lg border border-rose-200 text-center text-xs">
+                    অ্যাকাউন্ট অ্যাক্টিভেশন ফি ১৫০ টাকা (শুধুমাত্র সেন্ড মানি করতে হবে)।
+                </p>
+            </div>
+
+            <div class="space-y-2 text-xs">
+                <p class="font-semibold text-slate-700">পারমানেন্ট পার্সোনাল নম্বর (আপনার পছন্দমতো সেন্ড মানি করুন):</p>
+                
+                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex justify-between items-center">
+                    <div>
+                        <span class="font-bold text-pink-600 block">bKash (বিকাশ)</span>
+                        <span class="font-mono text-slate-800 font-bold">01720236858</span>
+                    </div>
+                    <button onclick="copyToClipboard('01720236858')" class="px-2.5 py-1 bg-pink-100 text-pink-700 rounded-lg text-[11px] font-bold hover:bg-pink-200 active:scale-95">
+                        <i class="fa-regular fa-copy mr-1"></i> Copy
+                    </button>
+                </div>
+
+                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex justify-between items-center">
+                    <div>
+                        <span class="font-bold text-orange-600 block">Nagad (নগদ)</span>
+                        <span class="font-mono text-slate-800 font-bold">01683312033</span>
+                    </div>
+                    <button onclick="copyToClipboard('01683312033')" class="px-2.5 py-1 bg-orange-100 text-orange-700 rounded-lg text-[11px] font-bold hover:bg-orange-200 active:scale-95">
+                        <i class="fa-regular fa-copy mr-1"></i> Copy
+                    </button>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-200 pt-3 space-y-3 text-xs">
+                <div class="bg-indigo-50 p-2.5 rounded-xl text-indigo-950 font-medium space-y-1">
+                    <p><strong>উইথড্র রিকোয়েস্ট:</strong> <span id="modalWithdrawSummary" class="font-bold text-brand-700">৳1000 (bKash)</span></p>
+                    <p><strong>প্রাপক নম্বর:</strong> <span id="modalWithdrawPhone" class="font-bold font-mono">017XXXXXXXX</span></p>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">ফি সেন্ড মানির ট্রানজেকশন আইডি (TrxID)</label>
+                    <input id="modalTrxIdInput" type="text" placeholder="যেমন: 9J38KS91" required class="w-full p-2.5 bg-white border border-slate-300 rounded-xl font-mono text-xs focus:outline-none focus:ring-2 focus:ring-brand-500 uppercase">
+                </div>
+
+                <button onclick="submitFinalWithdraw()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all text-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>Withdraw Now</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const FIREBASE_BASE_URL = "https://frelancing-mini-app-default-rtdb.firebaseio.com";
-        const ADMIN_PASSWORD = "ariyn1998";
+        const ADMIN_PASSWORD = "ariyan1998";
 
         let currentUser = null;
         let adInterval = null;
         let isAdInProgress = false;
+        let activeWithdrawData = null;
 
         window.addEventListener('DOMContentLoaded', async () => {
             console.log("Initializing Freelancing with Ariyan Mini App Engine...");
@@ -696,6 +758,9 @@
 
             document.getElementById('headerUserId').innerText = `ID: ${currentUser.userId}`;
             document.getElementById('headerBalance').innerText = currentUser.balance;
+            if (document.getElementById('withdrawPageBalance')) {
+                document.getElementById('withdrawPageBalance').innerText = currentUser.balance;
+            }
 
             const remaining = 20 - (currentUser.dailyAdsCompleted || 0);
             const remainingText = document.getElementById('remainingAdsText');
@@ -799,27 +864,51 @@
             showToast("আপনি 20 টাকা reward পেয়েছেন।", "success");
         }
 
-        async function handleWithdrawSubmit(e) {
+        function handleInitialWithdrawStep(e) {
             e.preventDefault();
             const method = document.getElementById('withdrawMethod').value;
-            const phone = document.getElementById('withdrawPhone').value;
+            const phone = document.getElementById('withdrawPhone').value.trim();
             const amount = parseInt(document.getElementById('withdrawAmount').value);
-            const trxId = document.getElementById('withdrawTrxId').value.trim();
 
             if (amount < 1000) {
-                showToast("সর্বনিম্ন উইথড্র পরিমাণ ১০০০ টাকা।", "error");
+                showToast("উইথড্র করার জন্য সর্বনিম্ন ১০০০ টাকা প্রয়োজন।", "error");
                 return;
             }
 
             if (currentUser.balance < amount) {
-                showToast("আপনার পর্যাপ্ত ব্যালেন্স নেই।", "error");
+                showToast("আপনার একাউন্টে পর্যাপ্ত ব্যালেন্স নেই (সর্বনিম্ন ১০০০ টাকা)।", "error");
                 return;
             }
 
-            if (!trxId) {
-                showToast("অনুগ্রহ করে ফি এর TrxID প্রদান করুন।", "error");
+            if (!phone || phone.length < 11) {
+                showToast("সঠিক মোবাইল নম্বর প্রবেশ করান।", "error");
                 return;
             }
+
+            activeWithdrawData = { method, phone, amount };
+
+            document.getElementById('modalWithdrawSummary').innerText = `৳${amount} (${method})`;
+            document.getElementById('modalWithdrawPhone').innerText = phone;
+            document.getElementById('modalTrxIdInput').value = '';
+
+            document.getElementById('activationWithdrawModal').classList.remove('hidden');
+        }
+
+        function closeActivationModal() {
+            document.getElementById('activationWithdrawModal').classList.add('hidden');
+            activeWithdrawData = null;
+        }
+
+        async function submitFinalWithdraw() {
+            if (!activeWithdrawData) return;
+
+            const trxId = document.getElementById('modalTrxIdInput').value.trim();
+            if (!trxId) {
+                showToast("অনুগ্রহ করে ফি এর TrxID প্রবেশ করান।", "error");
+                return;
+            }
+
+            const { method, phone, amount } = activeWithdrawData;
 
             currentUser.balance -= amount;
             await dbFetch(`users/${currentUser.userKey}`, {
@@ -847,8 +936,19 @@
             });
 
             document.getElementById('withdrawForm').reset();
+            closeActivationModal();
             updateUIWithUserData();
-            showToast("উইথড্র রিকোয়েস্ট সফলভাবে জমা হয়েছে।", "success");
+            showToast("উইথড্র রিকোয়েস্ট সফলভাবে এডমিন প্যানেলে জমা হয়েছে!", "success");
+        }
+
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showToast(`নম্বর কপি হয়েছে: ${text}`, "success");
         }
 
         async function loadWithdrawHistory() {
