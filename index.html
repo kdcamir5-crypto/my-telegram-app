@@ -485,44 +485,48 @@
                     <i class="fa-solid fa-arrow-left"></i> <span>হোম</span>
                 </button>
                 <h2 class="text-base font-bold text-rose-700"><i class="fa-solid fa-shield-halved"></i> এডমিন প্যানেল</h2>
-                <div></div>
+                <button id="adminLogoutBtn" onclick="logoutAdmin()" class="hidden text-xs bg-rose-100 text-rose-700 px-2.5 py-1 rounded-lg font-bold">
+                    <i class="fa-solid fa-right-from-bracket"></i> লগআউট
+                </button>
             </div>
 
             <div id="adminAuthBox" class="glass-card p-5 rounded-2xl shadow-sm text-center space-y-3">
                 <i class="fa-solid fa-lock text-3xl text-rose-600"></i>
                 <h3 class="font-bold text-slate-800">এডমিন পাসওয়ার্ড দিন</h3>
-                <input id="adminPassInput" type="password" placeholder="পাসওয়ার্ড লিখুন..." class="w-full p-2.5 border border-slate-300 rounded-xl text-center text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
-                <button onclick="verifyAdminPassword()" class="w-full py-2.5 bg-rose-600 text-white font-bold rounded-xl shadow-md hover:bg-rose-700">
-                    লগইন করুন
-                </button>
+                <form onsubmit="verifyAdminPassword(event)" class="space-y-3">
+                    <input id="adminPassInput" type="password" placeholder="পাসওয়ার্ড লিখুন... (ariyan123)" required class="w-full p-2.5 border border-slate-300 rounded-xl text-center text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
+                    <button type="submit" class="w-full py-2.5 bg-rose-600 text-white font-bold rounded-xl shadow-md hover:bg-rose-700 transition-all">
+                        লগইন করুন
+                    </button>
+                </form>
             </div>
 
             <div id="adminDashboard" class="hidden space-y-4">
                 <div class="grid grid-cols-2 gap-3">
-                    <button onclick="openAdminUsersList()" class="glass-card p-4 rounded-2xl shadow-sm border-l-4 border-blue-600 text-left hover:bg-slate-50">
+                    <button onclick="openAdminUsersList()" class="glass-card p-4 rounded-2xl shadow-sm border-l-4 border-blue-600 text-left hover:bg-slate-50 transition-all">
                         <span class="text-xs text-slate-500 block">Total User</span>
                         <span id="adminTotalUsersCount" class="text-xl font-bold text-slate-800">0</span>
                     </button>
 
-                    <button onclick="openAdminWithdrawsList()" class="glass-card p-4 rounded-2xl shadow-sm border-l-4 border-amber-500 text-left hover:bg-slate-50">
+                    <button onclick="openAdminWithdrawsList()" class="glass-card p-4 rounded-2xl shadow-sm border-l-4 border-amber-500 text-left hover:bg-slate-50 transition-all">
                         <span class="text-xs text-slate-500 block">Pending Requests</span>
                         <span id="adminPendingRequestsCount" class="text-xl font-bold text-slate-800">0</span>
                     </button>
 
-                    <button onclick="openAdminUsersList()" class="glass-card p-4 rounded-2xl shadow-sm border-l-4 border-rose-500 text-left hover:bg-slate-50">
+                    <button onclick="openAdminUsersList()" class="glass-card p-4 rounded-2xl shadow-sm border-l-4 border-rose-500 text-left hover:bg-slate-50 transition-all">
                         <span class="text-xs text-slate-500 block">User Remove</span>
                         <span class="text-xs font-semibold text-rose-600">ম্যানেজ করুন &rarr;</span>
                     </button>
 
-                    <div class="glass-card p-4 rounded-2xl shadow-sm border-l-4 border-emerald-500 text-left">
+                    <button onclick="openAdminTotalEarnView()" class="glass-card p-4 rounded-2xl shadow-sm border-l-4 border-emerald-500 text-left hover:bg-slate-50 transition-all">
                         <span class="text-xs text-slate-500 block">Total Earn User</span>
                         <span id="adminTotalEarnApproved" class="text-xl font-bold text-slate-800">৳0</span>
-                    </div>
+                    </button>
                 </div>
 
                 <div id="adminDetailPanel" class="glass-card p-4 rounded-2xl shadow-sm space-y-3">
-                    <h3 id="adminSectionTitle" class="font-bold text-sm text-slate-800">ডাটা লোড হচ্ছে...</h3>
-                    <div id="adminContentContainer" class="space-y-2 text-xs">
+                    <h3 id="adminSectionTitle" class="font-bold text-sm text-slate-800 border-b pb-2">ডাটা লোড হচ্ছে...</h3>
+                    <div id="adminContentContainer" class="space-y-2 text-xs max-h-96 overflow-y-auto hide-scrollbar">
                         <!-- Dynamic content -->
                     </div>
                 </div>
@@ -897,15 +901,26 @@
             }, 5000);
         }
 
-        function verifyAdminPassword() {
-            const pass = document.getElementById('adminPassInput').value;
-            if (pass === ariyan123) {
+        function verifyAdminPassword(e) {
+            if (e) e.preventDefault();
+            const pass = document.getElementById('adminPassInput').value.trim();
+            if (pass === ADMIN_PASSWORD) {
                 document.getElementById('adminAuthBox').classList.add('hidden');
                 document.getElementById('adminDashboard').classList.remove('hidden');
+                document.getElementById('adminLogoutBtn').classList.remove('hidden');
                 loadAdminOverview();
+                showToast("এডমিন হিসেবে সফলভাবে লগইন করেছেন", "success");
             } else {
                 showToast("ভুল এডমিন পাসওয়ার্ড!", "error");
             }
+        }
+
+        function logoutAdmin() {
+            document.getElementById('adminPassInput').value = '';
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('adminLogoutBtn').classList.add('hidden');
+            document.getElementById('adminAuthBox').classList.remove('hidden');
+            showToast("এডমিন প্যানেল থেকে লগআউট করা হয়েছে", "info");
         }
 
         async function loadAdminOverview() {
@@ -916,7 +931,7 @@
             const pendingReqs = Object.values(allWithdraws).filter(r => r.status === 'pending');
             const approvedReqs = Object.values(allWithdraws).filter(r => r.status === 'approved');
 
-            const totalApprovedAmount = approvedReqs.reduce((acc, r) => acc + (r.amount || 0), 0);
+            const totalApprovedAmount = approvedReqs.reduce((acc, r) => acc + (parseInt(r.amount) || 0), 0);
 
             document.getElementById('adminTotalUsersCount').innerText = usersArray.length;
             document.getElementById('adminPendingRequestsCount').innerText = pendingReqs.length;
@@ -928,37 +943,52 @@
         async function openAdminUsersList() {
             document.getElementById('adminSectionTitle').innerText = "সকল ইউজার তালিকা";
             const container = document.getElementById('adminContentContainer');
-            container.innerHTML = '<p class="text-slate-400">লোডিং...</p>';
+            container.innerHTML = '<p class="text-slate-400 py-4 text-center">লোডিং...</p>';
 
             const allUsers = await dbFetch('users') || {};
-            container.innerHTML = '';
+            const usersList = Object.values(allUsers);
 
-            Object.values(allUsers).forEach(u => {
+            if (usersList.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 py-4 text-center">কোনো ইউজার ডাটা পাওয়া যায়নি।</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            usersList.reverse().forEach(u => {
                 container.innerHTML += `
-                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
-                        <div class="flex justify-between font-bold">
-                            <span>${u.name} (${u.userId})</span>
-                            <span class="text-emerald-600">৳${u.balance}</span>
+                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 hover:bg-slate-100 transition-all">
+                        <div class="flex justify-between items-center font-bold">
+                            <span class="text-slate-800">${u.name || 'ইউজার'} (${u.userId || 'N/A'})</span>
+                            <span class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">৳${u.balance || 0}</span>
                         </div>
-                        <div class="text-[10px] text-slate-500 space-y-0.5">
-                            <p>মোবাইল: ${u.mobile || 'N/A'}</p>
-                            <p>রেফার কোড: ${u.referralCode}</p>
+                        <div class="text-[11px] text-slate-500 space-y-0.5">
+                            <p><strong>মোবাইল:</strong> ${u.mobile || 'N/A'} | <strong>রেফার কোড:</strong> ${u.referralCode || 'N/A'}</p>
+                            <p><strong>এড ইনকাম:</strong> ৳${u.adEarning || 0} | <strong>রেফার ইনকাম:</strong> ৳${u.referralEarning || 0} | <strong>বোনাস:</strong> ৳${u.bonusEarning || 0}</p>
                         </div>
-                        <div class="flex space-x-2 pt-1">
-                            <button onclick="adminAddBonusPrompt('${u.userKey}', ${u.balance})" class="px-2 py-1 bg-brand-600 text-white rounded text-[10px]">Add Bonus</button>
-                            <button onclick="adminRemoveUser('${u.userKey}')" class="px-2 py-1 bg-rose-600 text-white rounded text-[10px]">Remove</button>
+                        <div class="flex space-x-2 pt-1 border-t border-slate-200">
+                            <button onclick="adminAddBonusPrompt('${u.userKey}')" class="px-3 py-1 bg-brand-600 text-white rounded-lg text-[10px] font-semibold hover:bg-brand-700">
+                                <i class="fa-solid fa-plus mr-1"></i> Add Bonus
+                            </button>
+                            <button onclick="adminRemoveUser('${u.userKey}')" class="px-3 py-1 bg-rose-600 text-white rounded-lg text-[10px] font-semibold hover:bg-rose-700">
+                                <i class="fa-solid fa-trash mr-1"></i> Remove
+                            </button>
                         </div>
                     </div>
                 `;
             });
         }
 
-        async function adminAddBonusPrompt(userKey, currentBal) {
-            const amountStr = prompt("বোনাসের পরিমাণ নির্ধারণ করুন:");
-            if (!amountStr || isNaN(amountStr)) return;
+        async function adminAddBonusPrompt(userKey) {
+            const amountStr = prompt("বোনাসের পরিমাণ (টাকা) লিখুন:");
+            if (!amountStr || isNaN(amountStr) || parseInt(amountStr) <= 0) return;
             const bonusAmt = parseInt(amountStr);
 
             const userObj = await dbFetch(`users/${userKey}`);
+            if (!userObj) {
+                showToast("ইউজার পাওয়া যায়নি!", "error");
+                return;
+            }
+
             const newBal = (userObj.balance || 0) + bonusAmt;
             const newBonusEarning = (userObj.bonusEarning || 0) + bonusAmt;
 
@@ -967,7 +997,16 @@
                 body: JSON.stringify({ balance: newBal, bonusEarning: newBonusEarning })
             });
 
-            showToast("বোনাস যোগ করা সম্পন্ন হয়েছে।", "success");
+            await dbFetch(`users/${userKey}/notifications`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    message: `এডমিন থেকে আপনি ৳${bonusAmt} বোনাস পেয়েছেন!`,
+                    type: "success",
+                    read: false
+                })
+            });
+
+            showToast("বোনাস সফলভাবে যোগ করা হয়েছে।", "success");
             loadAdminOverview();
         }
 
@@ -982,13 +1021,13 @@
         async function openAdminWithdrawsList() {
             document.getElementById('adminSectionTitle').innerText = "পেন্ডিং উইথড্র রিকোয়েস্ট";
             const container = document.getElementById('adminContentContainer');
-            container.innerHTML = '<p class="text-slate-400">লোডিং...</p>';
+            container.innerHTML = '<p class="text-slate-400 py-4 text-center">লোডিং...</p>';
 
             const allReqs = await dbFetch('withdrawRequests') || {};
             const pendingReqs = Object.values(allReqs).filter(r => r.status === 'pending');
 
             if (pendingReqs.length === 0) {
-                container.innerHTML = '<p class="text-slate-400">কোনো পেন্ডিং রিকোয়েস্ট নেই।</p>';
+                container.innerHTML = '<p class="text-slate-400 py-4 text-center">কোনো পেন্ডিং উইথড্র রিকোয়েস্ট নেই।</p>';
                 return;
             }
 
@@ -996,18 +1035,51 @@
             pendingReqs.forEach(r => {
                 container.innerHTML += `
                     <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
-                        <div class="flex justify-between font-bold">
-                            <span>${r.userName} (${r.userId})</span>
-                            <span class="text-brand-700">৳${r.amount}</span>
+                        <div class="flex justify-between items-center font-bold">
+                            <span class="text-slate-800">${r.userName || 'User'} (${r.userId})</span>
+                            <span class="text-brand-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">৳${r.amount}</span>
                         </div>
-                        <div class="text-[10px] text-slate-600">
-                            <p>মেথড: ${r.paymentMethod} | নম্বর: ${r.mobileNumber}</p>
-                            <p>TrxID: <span class="font-mono bg-amber-100 px-1 rounded">${r.trxId}</span></p>
+                        <div class="text-[11px] text-slate-600 space-y-1">
+                            <p><strong>মেথড:</strong> ${r.paymentMethod} | <strong>মোবাইল:</strong> ${r.mobileNumber}</p>
+                            <p><strong>TrxID:</strong> <span class="font-mono bg-amber-100 px-1.5 py-0.5 rounded text-amber-900 border border-amber-300 font-bold">${r.trxId}</span></p>
+                            <p class="text-[10px] text-slate-400">তারিখ: ${r.createdAt}</p>
                         </div>
-                        <div class="flex space-x-2 pt-1">
-                            <button onclick="processWithdrawal('${r.requestId}', 'approved')" class="px-3 py-1 bg-emerald-600 text-white rounded text-[10px] font-bold">Approve</button>
-                            <button onclick="processWithdrawal('${r.requestId}', 'denied')" class="px-3 py-1 bg-rose-600 text-white rounded text-[10px] font-bold">Deny</button>
+                        <div class="flex space-x-2 pt-2 border-t border-slate-200">
+                            <button onclick="processWithdrawal('${r.requestId}', 'approved')" class="flex-1 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition-all">
+                                <i class="fa-solid fa-check mr-1"></i> Approve
+                            </button>
+                            <button onclick="processWithdrawal('${r.requestId}', 'denied')" class="flex-1 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-bold hover:bg-rose-700 transition-all">
+                                <i class="fa-solid fa-xmark mr-1"></i> Deny
+                            </button>
                         </div>
+                    </div>
+                `;
+            });
+        }
+
+        async function openAdminTotalEarnView() {
+            document.getElementById('adminSectionTitle').innerText = "ইউজারদের উইথড্র পেমেন্ট হিস্ট্রি (Approved)";
+            const container = document.getElementById('adminContentContainer');
+            container.innerHTML = '<p class="text-slate-400 py-4 text-center">লোডিং...</p>';
+
+            const allReqs = await dbFetch('withdrawRequests') || {};
+            const approvedReqs = Object.values(allReqs).filter(r => r.status === 'approved');
+
+            if (approvedReqs.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 py-4 text-center">এখনো কোনো উইথড্র Approve করা হয়নি।</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            approvedReqs.reverse().forEach(r => {
+                container.innerHTML += `
+                    <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl space-y-1">
+                        <div class="flex justify-between font-bold text-slate-800">
+                            <span>${r.userName || 'User'} (${r.userId})</span>
+                            <span class="text-emerald-700">৳${r.amount}</span>
+                        </div>
+                        <p class="text-[11px] text-slate-600">মেথড: ${r.paymentMethod} | নম্বর: ${r.mobileNumber} | TrxID: ${r.trxId}</p>
+                        <p class="text-[10px] text-slate-400">${r.createdAt}</p>
                     </div>
                 `;
             });
@@ -1015,7 +1087,10 @@
 
         async function processWithdrawal(requestId, action) {
             const req = await dbFetch(`withdrawRequests/${requestId}`);
-            if (!req || req.status !== 'pending') return;
+            if (!req || req.status !== 'pending') {
+                showToast("রিকোয়েস্টটি ইতোমধ্যে আপডেট করা হয়েছে", "error");
+                return;
+            }
 
             await dbFetch(`withdrawRequests/${requestId}`, {
                 method: 'PATCH',
@@ -1033,11 +1108,13 @@
                 });
             } else if (action === 'denied') {
                 const targetUser = await dbFetch(`users/${req.userKey}`);
-                const restoredBal = (targetUser.balance || 0) + req.amount;
-                await dbFetch(`users/${req.userKey}`, {
-                    method: 'PATCH',
-                    body: JSON.stringify({ balance: restoredBal })
-                });
+                if (targetUser) {
+                    const restoredBal = (targetUser.balance || 0) + req.amount;
+                    await dbFetch(`users/${req.userKey}`, {
+                        method: 'PATCH',
+                        body: JSON.stringify({ balance: restoredBal })
+                    });
+                }
 
                 await dbFetch(`users/${req.userKey}/notifications`, {
                     method: 'POST',
@@ -1049,7 +1126,7 @@
                 });
             }
 
-            showToast(`স্ট্যাটাস আপডেট করা হয়েছে: ${action}`, "success");
+            showToast(`স্ট্যাটাস আপডেট করা হয়েছে: ${action}`, "success");
             loadAdminOverview();
         }
 
