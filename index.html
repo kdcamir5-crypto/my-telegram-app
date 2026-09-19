@@ -592,6 +592,20 @@
         window.addEventListener('DOMContentLoaded', async () => {
             console.log("Initializing Freelancing with Ariyan Mini App Engine...");
             await initializeUserAccount();
+            // Telegram WebAppInit
+            if (window.Telegram && window.Telegram.WebApp) {
+                const tg = window.Telegram.WebApp;
+                tg.ready();
+
+                // Telegram Deep Link theke referral code capture
+                const startParam = tg.initDataUnsafe?.start_param;
+                if (startParam) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    if (!urlParams.has('ref')) {
+                        urlParams.set('ref', startParam);
+                    }
+                }
+            }
             setupRouting();
             startNotificationPoller();
         });
