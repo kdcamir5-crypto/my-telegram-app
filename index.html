@@ -721,9 +721,8 @@
             document.getElementById('walletBonusEarn').innerText = currentUser.bonusEarning || 0;
             document.getElementById('walletTotalBalance').innerText = currentUser.balance || 0;
 
-            const domain = window.location.origin + window.location.pathname;
-            document.getElementById('referralLinkInput').value = `${domain}?ref=${currentUser.referralCode}`;
-
+            const botUsername = "freelancingapp_bot";
+document.getElementById('referralLinkInput').value = `https://t.me/${botUsername}?startapp=${currentUser.referralCode}`;
             document.getElementById('profileDisplayUserId').innerText = `User ID: ${currentUser.userId}`;
             document.getElementById('profileInputName').value = currentUser.name || '';
             document.getElementById('profileInputFullName').value = currentUser.fullName || '';
