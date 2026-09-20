@@ -599,12 +599,9 @@
 
                 // Telegram Deep Link theke referral code capture
                 const startParam = tg.initDataUnsafe?.start_param;
-                if (startParam) {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    if (!urlParams.has('ref')) {
-                        urlParams.set('ref', startParam);
-                    }
-                }
+if (startParam) {
+    localStorage.setItem('pending_ref_code', startParam);
+}
             }
             setupRouting();
             startNotificationPoller();
@@ -637,40 +634,46 @@
             let userData = await dbFetch(`users/${userKey}`);
 
             const todayStr = new Date().toISOString().split('T')[0];
+if (!userData) {
+            const generatedUserId = 'ARY-' + Math.floor(100000 + Math.random() * 900000);
+            const generatedRefCode = 'REF-' + Math.floor(100000 + Math.random() * 900000);
 
-            if (!userData) {
-                const generatedUserId = 'ARY-' + Math.floor(100000 + Math.random() * 900000);
-                const generatedRefCode = 'REF-' + Math.floor(100000 + Math.random() * 900000);
+            // Telegram, LocalStorage এবং URL থেকে সঠিক রেফার কোড নেওয়া
+            const urlParams = new URLSearchParams(window.location.search);
+            const savedRef = localStorage.getItem('pending_ref_code') || urlParams.get('ref') || urlParams.get('start');
 
-                userData = {
-                    userId: generatedUserId,
-                    userKey: userKey,
-                    referralCode: generatedRefCode,
-                    name: "ইউজার",
-                    fullName: "নতুন সদস্য",
-                    mobile: "",
-                    birthDate: "",
-                    balance: 150,
-                    adEarning: 0,
-                    referralEarning: 0,
-                    bonusEarning: 150,
-                    registrationBonusClaimed: true,
-                    dailyAdsCompleted: 0,
-                    lastTaskDate: todayStr,
-                    createdAt: new Date().toISOString()
-                };
+            userData = {
+                userId: generatedUserId,
+                userKey: userKey,
+                referralCode: generatedRefCode,
+                referredBy: savedRef || null,
+                name: "ইউজার",
+                fullName: "নতুন সদস্য",
+                mobile: "",
+                birthDate: "",
+                balance: 150,
+                adEarning: 0,
+                referralEarning: 0,
+                bonusEarning: 150,
+                registrationBonusClaimed: true,
+                dailyAdsCompleted: 0,
+                lastTaskDate: todayStr,
+                createdAt: new Date().toISOString()
+            };
 
-                const urlParams = new URLSearchParams(window.location.search);
-                const refCode = urlParams.get('ref');
-                if (refCode) {
-                    await processReferralCommission(refCode, generatedUserId);
-                }
+            // ১. ফায়ারবেসে ইউজার সেভ করা
+            await dbFetch(`users/${userKey}`, {
+                method: 'PUT',
+                body: JSON.stringify(userData)
+            });
 
-                await dbFetch(`users/${userKey}`, {
-                    method: 'PUT',
-                    body: JSON.stringify(userData)
-                });
-                showToast("স্বাগতম! আপনি ১৫০ টাকা একাউন্ট রেজিস্ট্রেশন বোনাস পেয়েছেন।", "success");
+            // ২. রেফারারকে ইনস্ট্যান্ট ১০০ টাকা বোনাস দেওয়া
+            if (savedRef) {
+                await processReferralCommission(savedRef, generatedUserId);
+                localStorage.removeItem('pending_ref_code');
+            }
+
+            showToast("স্বাগতম! আপনি ১৫০ টাকা একাউন্ট রেজিস্ট্রেশন বোনাস পেয়েছেন।", "success");
             } else {
                 if (userData.lastTaskDate !== todayStr) {
                     userData.dailyAdsCompleted = 0;
