@@ -687,24 +687,33 @@
         }
 
         async function processReferralCommission(refCode, newUserId) {
-            const allUsers = await dbFetch('users') || {};
-            for (let key in allUsers) {
-                const u = allUsers[key];
-                if (u.referralCode === refCode && u.userId !== newUserId) {
-                    const updatedBal = (u.balance || 0) + 100;
-                    const updatedRefEarn = (u.referralEarning || 0) + 100;
-                    
-                    await dbFetch(`users/${key}`, {
-                        method: 'PATCH',
-                        body: JSON.stringify({
-                            balance: updatedBal,
-                            referralEarning: updatedRefEarn
-                        })
-                    });
-                    break;
-                }
+    if (!refCode) return;
+    try {
+        const cleanRefCode = refCode.replace(/^REF-/, '').trim();
+        const allUsers = await dbFetch('users') || {};
+        
+        for (let key in allUsers) {
+            const u = allUsers[key];
+            
+            // আইডি বা রেফারেল কোড উভয়ের সাথেই ম্যাচ করানো হচ্ছে
+            if ((u.referralCode === cleanRefCode || u.userId === cleanRefCode || key === cleanRefCode) && u.userId !== newUserId) {
+                const updatedBal = (parseFloat(u.balance) || 0) + 100;
+                const updatedRefEarn = (parseFloat(u.referralEarning) || 0) + 100;
+
+                await dbFetch(`users/${key}`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({
+                        balance: updatedBal,
+                        referralEarning: updatedRefEarn
+                    })
+                });
+                break;
             }
         }
+    } catch (err) {
+        console.error("Referral Bonus Error:", err);
+    }
+}
 
         function updateUIWithUserData() {
             if (!currentUser) return;
