@@ -692,13 +692,12 @@ if (!userData) {
         async function processReferralCommission(refCode, newUserId) {
     if (!refCode) return;
     try {
-        const cleanRefCode = refCode.replace(/^REF-/, '').trim();
+        const cleanRefCode = refCode.trim();
         const allUsers = await dbFetch('users') || {};
         
         for (let key in allUsers) {
             const u = allUsers[key];
             
-            // আইডি বা রেফারেল কোড উভয়ের সাথেই ম্যাচ করানো হচ্ছে
             if ((u.referralCode === cleanRefCode || u.userId === cleanRefCode || key === cleanRefCode) && u.userId !== newUserId) {
                 const updatedBal = (parseFloat(u.balance) || 0) + 100;
                 const updatedRefEarn = (parseFloat(u.referralEarning) || 0) + 100;
