@@ -104,15 +104,17 @@
                     <p class="text-white text-xs font-medium"><i class="fa-solid fa-sparkles text-amber-400 mr-1"></i> অনলাইন আর্নিং এর বিশ্বস্ত প্ল্যাটফর্ম</p>
                 </div>
             </div>
-<!-- Rolling Notice Bar -->
-<div class="bg-amber-100 border border-amber-300 text-amber-900 px-3 py-1.5 rounded-xl flex items-center space-x-2 text-xs font-semibold shadow-sm overflow-hidden">
-    <span class="bg-amber-500 text-white text-[10px] px-2 py-0.5 rounded-md font-bold shrink-0 flex items-center gap-1">
-        <i class="fa-solid fa-bullhorn"></i> নোটিশ
-    </span>
-    <marquee id="rollingNoticeText" behavior="scroll" direction="left" scrollamount="5" class="w-full font-medium">
-        লোডিং হচ্ছে...
-    </marquee>
-</div>
+
+            <!-- Rolling Notice Bar -->
+            <div class="bg-amber-100 border border-amber-300 text-amber-900 px-3 py-1.5 rounded-xl flex items-center space-x-2 text-xs font-semibold shadow-sm overflow-hidden">
+                <span class="bg-amber-500 text-white text-[10px] px-2 py-0.5 rounded-md font-bold shrink-0 flex items-center gap-1">
+                    <i class="fa-solid fa-bullhorn"></i> নোটিশ
+                </span>
+                <marquee id="rollingNoticeText" behavior="scroll" direction="left" scrollamount="5" class="w-full font-medium">
+                    স্বাগতম! আমাদের প্ল্যাটফর্মে কাজ করে প্রতিদিন নিশ্চিত আয় করুন। রেফার করে অতিরিক্ত আয় করুন।
+                </marquee>
+            </div>
+
             <!-- 4 Main Circular Feature Cards -->
             <div class="grid grid-cols-4 gap-3">
                 <button onclick="switchView('viewDailyTask')" class="flex flex-col items-center group">
@@ -480,7 +482,6 @@
         </div>
     </nav>
 
-    <!-- AD MODAL -->
     <div id="adModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
         <div class="glass-card max-w-sm w-full rounded-2xl p-6 text-center space-y-4">
             <h3 id="adModalTitle" class="font-bold text-slate-800 text-lg">Demo Ad #1</h3>
@@ -497,7 +498,6 @@
         </div>
     </div>
 
-    <!-- ACTIVATION MODAL -->
     <div id="activationWithdrawModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
         <div class="glass-card max-w-sm w-full rounded-2xl p-5 space-y-4 relative max-h-[90vh] overflow-y-auto hide-scrollbar">
             <button onclick="closeActivationModal()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600">
@@ -576,7 +576,6 @@
         window.addEventListener('DOMContentLoaded', async () => {
             console.log("Initializing Freelancing with Ariyan App Core...");
             
-            // 1. Capture Telegram start parameter before account initialization
             if (window.Telegram && window.Telegram.WebApp) {
                 const tg = window.Telegram.WebApp;
                 tg.ready();
@@ -588,13 +587,27 @@
                 }
             }
 
-            // 2. Initialize account & user
+            // Also check URL query parameters as backup for direct browser links
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlRef = urlParams.get('ref') || urlParams.get('start');
+            if (urlRef) {
+                localStorage.setItem('pending_ref_code', urlRef.trim());
+            }
+
+            // Initialize account & user
             await initializeUserAccount();
             setupRouting();
             startNotificationPoller();
         });
 
         function getOrSetLocalUserKey() {
+            // Prioritize Telegram User ID for persistent login across devices/cleared storage
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe?.user?.id) {
+                const tgUserId = 'TG_' + window.Telegram.WebApp.initDataUnsafe.user.id;
+                localStorage.setItem('ariyan_app_user_key', tgUserId);
+                return tgUserId;
+            }
+
             let key = localStorage.getItem('ariyan_app_user_key');
             if (!key) {
                 key = 'USR_' + Math.random().toString(36).substring(2, 9).toUpperCase();
@@ -609,23 +622,16 @@
                     headers: { 'Content-Type': 'application/json' },
                     ...options
                 });
+                if (!res.ok) {
+                    throw new Error(`HTTP Error: ${res.status}`);
+                }
                 return await res.json();
             } catch (err) {
                 console.error("Firebase database error:", err);
                 return null;
             }
         }
-async function loadRollingNotice() {
-    try {
-        const noticeText = await dbFetch('settings/rollingNotice');
-        const noticeElement = document.getElementById('rollingNoticeText');
-        if (noticeElement) {
-            noticeElement.innerText = noticeText || "আমাদের অ্যাপে আপনাকে স্বাগতম!";
-        }
-    } catch (err) {
-        console.error("Notice load error:", err);
-    }
-}
+
         async function initializeUserAccount() {
             const userKey = getOrSetLocalUserKey();
             let userData = await dbFetch(`users/${userKey}`);
@@ -636,16 +642,21 @@ async function loadRollingNotice() {
                 const generatedUserId = 'ARY-' + Math.floor(100000 + Math.random() * 900000);
                 const generatedRefCode = 'REF-' + Math.floor(100000 + Math.random() * 900000);
 
-                // Fetch referral from all possible sources
-                const urlParams = new URLSearchParams(window.location.search);
-                const savedRef = localStorage.getItem('pending_ref_code') || urlParams.get('ref') || urlParams.get('start');
+                // Fetch referral code saved earlier
+                const savedRef = localStorage.getItem('pending_ref_code');
+
+                let tgFirstName = "";
+                if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe?.user) {
+                    const u = window.Telegram.WebApp.initDataUnsafe.user;
+                    tgFirstName = u.first_name || u.username || "ইউজার";
+                }
 
                 userData = {
                     userId: generatedUserId,
                     userKey: userKey,
                     referralCode: generatedRefCode,
                     referredBy: savedRef || null,
-                    name: "ইউজার",
+                    name: tgFirstName || "ইউজার",
                     fullName: "নতুন সদস্য",
                     mobile: "",
                     birthDate: "",
@@ -659,13 +670,13 @@ async function loadRollingNotice() {
                     createdAt: new Date().toISOString()
                 };
 
-                // Save user first
+                // Save new user profile first
                 await dbFetch(`users/${userKey}`, {
                     method: 'PUT',
                     body: JSON.stringify(userData)
                 });
 
-                // Grant referral bonus if applicable
+                // Grant referral bonus to referrer if applicable
                 if (savedRef) {
                     await processReferralCommission(savedRef, generatedUserId);
                     localStorage.removeItem('pending_ref_code');
@@ -673,7 +684,7 @@ async function loadRollingNotice() {
 
                 showToast("স্বাগতম! আপনি ১৫০ টাকা একাউন্ট রেজিস্ট্রেশন বোনাস পেয়েছেন।", "success");
             } else {
-                // Reset daily ads if date changed
+                // Reset daily ads count if new calendar date
                 if (userData.lastTaskDate !== todayStr) {
                     userData.dailyAdsCompleted = 0;
                     userData.lastTaskDate = todayStr;
@@ -686,7 +697,6 @@ async function loadRollingNotice() {
 
             currentUser = userData;
             updateUIWithUserData();
-            await loadRollingNotice();
         }
 
         async function processReferralCommission(refCode, newUserId) {
@@ -699,16 +709,18 @@ async function loadRollingNotice() {
                     const u = allUsers[key];
                     if (!u) continue;
 
-                    // Match against referralCode, userId or userKey
+                    // Match against referralCode, userId or database key
                     const uRefCode = (u.referralCode || "").toUpperCase();
                     const uUserId = (u.userId || "").toUpperCase();
                     const uKey = key.toUpperCase();
 
                     if ((uRefCode === cleanRefCode || uUserId === cleanRefCode || uKey === cleanRefCode) && u.userId !== newUserId) {
-                        const updatedBal = (parseFloat(u.balance) || 0) + 100;
-                        const updatedRefEarn = (parseFloat(u.referralEarning) || 0) + 100;
+                        const currentBal = parseFloat(u.balance) || 0;
+                        const currentRefEarn = parseFloat(u.referralEarning) || 0;
+                        const updatedBal = currentBal + 100;
+                        const updatedRefEarn = currentRefEarn + 100;
 
-                        // 1. Update referrer balance
+                        // 1. Update referrer balance and earnings
                         await dbFetch(`users/${key}`, {
                             method: 'PATCH',
                             body: JSON.stringify({
@@ -717,7 +729,7 @@ async function loadRollingNotice() {
                             })
                         });
 
-                        // 2. Send instant notification to referrer
+                        // 2. Send instant notification entry to referrer
                         const notifId = 'NOTIF_' + Date.now();
                         await dbFetch(`users/${key}/notifications/${notifId}`, {
                             method: 'PUT',
@@ -729,7 +741,7 @@ async function loadRollingNotice() {
                             })
                         });
 
-                        console.log(`Referral bonus 100 BDT awarded to ${key}`);
+                        console.log(`Referral bonus 100 BDT successfully awarded to ${key}`);
                         break;
                     }
                 }
@@ -769,8 +781,8 @@ async function loadRollingNotice() {
             document.getElementById('walletBonusEarn').innerText = currentUser.bonusEarning || 0;
             document.getElementById('walletTotalBalance').innerText = currentUser.balance || 0;
 
-            // Updated referral bot link structure
-            const botUsername = "freelancingapp_bot"; // Replace with your bot username
+            // Generate direct Telegram referral link
+            const botUsername = "freelancingapp_bot";
             document.getElementById('referralLinkInput').value = `https://t.me/${botUsername}?start=${currentUser.referralCode}`;
 
             document.getElementById('profileDisplayUserId').innerText = `User ID: ${currentUser.userId}`;
@@ -898,7 +910,7 @@ async function loadRollingNotice() {
 
             const { method, phone, amount } = activeWithdrawData;
 
-            // Deduct balance and create request
+            // Deduct balance and create withdrawal request record
             currentUser.balance -= amount;
             await dbFetch(`users/${currentUser.userKey}`, {
                 method: 'PATCH',
@@ -998,7 +1010,7 @@ async function loadRollingNotice() {
                             method: 'PATCH',
                             body: JSON.stringify({ read: true })
                         });
-                        // Refresh balance if notification is for bonus
+                        // Refresh user data from server after notification
                         const refreshedUser = await dbFetch(`users/${currentUser.userKey}`);
                         if (refreshedUser) {
                             currentUser = refreshedUser;
