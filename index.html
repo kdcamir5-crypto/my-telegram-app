@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts (Hind Siliguri) -->
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
     <script>
         tailwind.config = {
@@ -265,12 +267,12 @@
                     <i class="fa-solid fa-share-nodes"></i>
                 </div>
                 
-                <h3 class="font-bold text-slate-800 text-base">আপনার Referral Address</h3>
+                <h3 class="font-bold text-slate-800 text-base">আপনার Referral Link</h3>
 
                 <div class="bg-slate-100 p-3 rounded-xl border border-slate-300 flex items-center justify-between space-x-2">
                     <input id="referralLinkInput" type="text" readonly class="bg-transparent text-xs text-slate-700 font-mono w-full focus:outline-none">
-                    <button onclick="copyReferralLink()" class="px-3 py-1.5 bg-brand-600 text-white rounded-lg text-xs font-semibold hover:bg-brand-700 active:scale-95 transition-all">
-                        <i class="fa-regular fa-copy mr-1"></i> Copy
+                    <button onclick="copyReferralLink()" class="px-3 py-1.5 bg-brand-600 text-white rounded-lg text-xs font-semibold hover:bg-brand-700 active:scale-95 transition-all flex items-center gap-1">
+                        <i class="fa-regular fa-copy"></i> <span>Copy</span>
                     </button>
                 </div>
 
@@ -400,34 +402,6 @@
             </div>
         </section>
 
-        <section id="viewSupport" class="app-view hidden space-y-4">
-            <div class="flex items-center justify-between">
-                <button onclick="switchView('viewHome')" class="text-slate-600 hover:text-slate-900 flex items-center space-x-1 font-semibold text-sm">
-                    <i class="fa-solid fa-arrow-left"></i> <span>হোম</span>
-                </button>
-                <h2 class="text-base font-bold text-slate-800">সাপোর্ট সেন্টার</h2>
-                <div></div>
-            </div>
-
-            <div class="glass-card p-5 rounded-2xl shadow-sm text-center space-y-4">
-                <div class="w-16 h-16 rounded-full bg-blue-100 text-telegram mx-auto flex items-center justify-center text-3xl">
-                    <i class="fa-solid fa-headset"></i>
-                </div>
-
-                <h3 class="font-bold text-slate-800 text-lg">Support এর জন্য Admin-কে Knock দিন।</h3>
-
-                <a href="https://t.me/Kdcariyan" target="_blank" rel="noopener noreferrer" 
-                   class="inline-flex items-center justify-center space-x-2 w-full py-3 bg-telegram text-white font-bold rounded-xl shadow-md hover:bg-sky-600 transition-all">
-                    <i class="fa-brands fa-telegram text-lg"></i>
-                    <span>Open Telegram Support</span>
-                </a>
-
-                <p class="text-xs text-slate-500 leading-relaxed">
-                    24/7 help line active, আপনার যেকোনো প্রয়োজনে Admin-কে Message করুন।
-                </p>
-            </div>
-        </section>
-
         <section id="viewProfile" class="app-view hidden space-y-4">
             <div class="flex items-center justify-between">
                 <button onclick="switchView('viewHome')" class="text-slate-600 hover:text-slate-900 flex items-center space-x-1 font-semibold text-sm">
@@ -498,6 +472,7 @@
         </div>
     </nav>
 
+    <!-- AD MODAL -->
     <div id="adModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
         <div class="glass-card max-w-sm w-full rounded-2xl p-6 text-center space-y-4">
             <h3 id="adModalTitle" class="font-bold text-slate-800 text-lg">Demo Ad #1</h3>
@@ -514,6 +489,7 @@
         </div>
     </div>
 
+    <!-- ACTIVATION MODAL -->
     <div id="activationWithdrawModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
         <div class="glass-card max-w-sm w-full rounded-2xl p-5 space-y-4 relative max-h-[90vh] overflow-y-auto hide-scrollbar">
             <button onclick="closeActivationModal()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600">
@@ -590,19 +566,22 @@
         let activeWithdrawData = null;
 
         window.addEventListener('DOMContentLoaded', async () => {
-            console.log("Initializing Freelancing with Ariyan Mini App Engine...");
-            await initializeUserAccount();
-            // Telegram WebAppInit
+            console.log("Initializing Freelancing with Ariyan App Core...");
+            
+            // 1. Capture Telegram start parameter before account initialization
             if (window.Telegram && window.Telegram.WebApp) {
                 const tg = window.Telegram.WebApp;
                 tg.ready();
+                tg.expand();
 
-                // Telegram Deep Link theke referral code capture
                 const startParam = tg.initDataUnsafe?.start_param;
-if (startParam) {
-    localStorage.setItem('pending_ref_code', startParam);
-}
+                if (startParam) {
+                    localStorage.setItem('pending_ref_code', startParam.trim());
+                }
             }
+
+            // 2. Initialize account & user
+            await initializeUserAccount();
             setupRouting();
             startNotificationPoller();
         });
@@ -634,47 +613,49 @@ if (startParam) {
             let userData = await dbFetch(`users/${userKey}`);
 
             const todayStr = new Date().toISOString().split('T')[0];
-if (!userData) {
-            const generatedUserId = 'ARY-' + Math.floor(100000 + Math.random() * 900000);
-            const generatedRefCode = 'REF-' + Math.floor(100000 + Math.random() * 900000);
 
-            // Telegram, LocalStorage এবং URL থেকে সঠিক রেফার কোড নেওয়া
-            const urlParams = new URLSearchParams(window.location.search);
-            const savedRef = localStorage.getItem('pending_ref_code') || urlParams.get('ref') || urlParams.get('start');
+            if (!userData) {
+                const generatedUserId = 'ARY-' + Math.floor(100000 + Math.random() * 900000);
+                const generatedRefCode = 'REF-' + Math.floor(100000 + Math.random() * 900000);
 
-            userData = {
-                userId: generatedUserId,
-                userKey: userKey,
-                referralCode: generatedRefCode,
-                referredBy: savedRef || null,
-                name: "ইউজার",
-                fullName: "নতুন সদস্য",
-                mobile: "",
-                birthDate: "",
-                balance: 150,
-                adEarning: 0,
-                referralEarning: 0,
-                bonusEarning: 150,
-                registrationBonusClaimed: true,
-                dailyAdsCompleted: 0,
-                lastTaskDate: todayStr,
-                createdAt: new Date().toISOString()
-            };
+                // Fetch referral from all possible sources
+                const urlParams = new URLSearchParams(window.location.search);
+                const savedRef = localStorage.getItem('pending_ref_code') || urlParams.get('ref') || urlParams.get('start');
 
-            // ১. ফায়ারবেসে ইউজার সেভ করা
-            await dbFetch(`users/${userKey}`, {
-                method: 'PUT',
-                body: JSON.stringify(userData)
-            });
+                userData = {
+                    userId: generatedUserId,
+                    userKey: userKey,
+                    referralCode: generatedRefCode,
+                    referredBy: savedRef || null,
+                    name: "ইউজার",
+                    fullName: "নতুন সদস্য",
+                    mobile: "",
+                    birthDate: "",
+                    balance: 150,
+                    adEarning: 0,
+                    referralEarning: 0,
+                    bonusEarning: 150,
+                    registrationBonusClaimed: true,
+                    dailyAdsCompleted: 0,
+                    lastTaskDate: todayStr,
+                    createdAt: new Date().toISOString()
+                };
 
-            // ২. রেফারারকে ইনস্ট্যান্ট ১০০ টাকা বোনাস দেওয়া
-            if (savedRef) {
-                await processReferralCommission(savedRef, generatedUserId);
-                localStorage.removeItem('pending_ref_code');
-            }
+                // Save user first
+                await dbFetch(`users/${userKey}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(userData)
+                });
 
-            showToast("স্বাগতম! আপনি ১৫০ টাকা একাউন্ট রেজিস্ট্রেশন বোনাস পেয়েছেন।", "success");
+                // Grant referral bonus if applicable
+                if (savedRef) {
+                    await processReferralCommission(savedRef, generatedUserId);
+                    localStorage.removeItem('pending_ref_code');
+                }
+
+                showToast("স্বাগতম! আপনি ১৫০ টাকা একাউন্ট রেজিস্ট্রেশন বোনাস পেয়েছেন।", "success");
             } else {
+                // Reset daily ads if date changed
                 if (userData.lastTaskDate !== todayStr) {
                     userData.dailyAdsCompleted = 0;
                     userData.lastTaskDate = todayStr;
@@ -690,32 +671,53 @@ if (!userData) {
         }
 
         async function processReferralCommission(refCode, newUserId) {
-    if (!refCode) return;
-    try {
-        const cleanRefCode = refCode.trim();
-        const allUsers = await dbFetch('users') || {};
-        
-        for (let key in allUsers) {
-            const u = allUsers[key];
-            
-            if ((u.referralCode === cleanRefCode || u.userId === cleanRefCode || key === cleanRefCode) && u.userId !== newUserId) {
-                const updatedBal = (parseFloat(u.balance) || 0) + 100;
-                const updatedRefEarn = (parseFloat(u.referralEarning) || 0) + 100;
+            if (!refCode) return;
+            try {
+                const cleanRefCode = refCode.trim().toUpperCase();
+                const allUsers = await dbFetch('users') || {};
+                
+                for (let key in allUsers) {
+                    const u = allUsers[key];
+                    if (!u) continue;
 
-                await dbFetch(`users/${key}`, {
-                    method: 'PATCH',
-                    body: JSON.stringify({
-                        balance: updatedBal,
-                        referralEarning: updatedRefEarn
-                    })
-                });
-                break;
+                    // Match against referralCode, userId or userKey
+                    const uRefCode = (u.referralCode || "").toUpperCase();
+                    const uUserId = (u.userId || "").toUpperCase();
+                    const uKey = key.toUpperCase();
+
+                    if ((uRefCode === cleanRefCode || uUserId === cleanRefCode || uKey === cleanRefCode) && u.userId !== newUserId) {
+                        const updatedBal = (parseFloat(u.balance) || 0) + 100;
+                        const updatedRefEarn = (parseFloat(u.referralEarning) || 0) + 100;
+
+                        // 1. Update referrer balance
+                        await dbFetch(`users/${key}`, {
+                            method: 'PATCH',
+                            body: JSON.stringify({
+                                balance: updatedBal,
+                                referralEarning: updatedRefEarn
+                            })
+                        });
+
+                        // 2. Send instant notification to referrer
+                        const notifId = 'NOTIF_' + Date.now();
+                        await dbFetch(`users/${key}/notifications/${notifId}`, {
+                            method: 'PUT',
+                            body: JSON.stringify({
+                                message: `অভিনন্দন! আপনার রেফারেল লিংকে একজন নতুন ইউজার জয়েন করেছে। ১০০ টাকা বোনাস যোগ হয়েছে।`,
+                                type: "success",
+                                read: false,
+                                date: new Date().toISOString()
+                            })
+                        });
+
+                        console.log(`Referral bonus 100 BDT awarded to ${key}`);
+                        break;
+                    }
+                }
+            } catch (err) {
+                console.error("Referral Bonus Error:", err);
             }
         }
-    } catch (err) {
-        console.error("Referral Bonus Error:", err);
-    }
-}
 
         function updateUIWithUserData() {
             if (!currentUser) return;
@@ -730,6 +732,8 @@ if (!userData) {
             const remainingText = document.getElementById('remainingAdsText');
             if (remaining > 0) {
                 remainingText.innerText = `আপনার বাকি আছে ${remaining} টি ad`;
+                document.getElementById('btnWatchAd').disabled = false;
+                document.getElementById('btnWatchAd').classList.remove('opacity-50', 'cursor-not-allowed');
             } else {
                 remainingText.innerText = "আজকের সব বিজ্ঞাপন দেখা সম্পূর্ণ হয়েছে। আগামীকাল আবার চেষ্টা করুন।";
                 document.getElementById('btnWatchAd').disabled = true;
@@ -746,8 +750,10 @@ if (!userData) {
             document.getElementById('walletBonusEarn').innerText = currentUser.bonusEarning || 0;
             document.getElementById('walletTotalBalance').innerText = currentUser.balance || 0;
 
-            const botUsername = "freelancingapp_bot";
-document.getElementById('referralLinkInput').value = `https://t.me/${botUsername}?start=${currentUser.referralCode}`;
+            // Updated referral bot link structure
+            const botUsername = "freelancingapp_bot"; // Replace with your bot username
+            document.getElementById('referralLinkInput').value = `https://t.me/${botUsername}?start=${currentUser.referralCode}`;
+
             document.getElementById('profileDisplayUserId').innerText = `User ID: ${currentUser.userId}`;
             document.getElementById('profileInputName').value = currentUser.name || '';
             document.getElementById('profileInputFullName').value = currentUser.fullName || '';
@@ -873,6 +879,7 @@ document.getElementById('referralLinkInput').value = `https://t.me/${botUsername
 
             const { method, phone, amount } = activeWithdrawData;
 
+            // Deduct balance and create request
             currentUser.balance -= amount;
             await dbFetch(`users/${currentUser.userKey}`, {
                 method: 'PATCH',
@@ -904,14 +911,27 @@ document.getElementById('referralLinkInput').value = `https://t.me/${botUsername
             showToast("উইথড্র রিকোয়েস্ট সফলভাবে জমা হয়েছে!", "success");
         }
 
-        function copyToClipboard(text) {
-            const tempInput = document.createElement('input');
-            tempInput.value = text;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            showToast(`নম্বর কপি হয়েছে: ${text}`, "success");
+        async function copyToClipboard(text) {
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(text);
+                } else {
+                    const tempInput = document.createElement('input');
+                    tempInput.value = text;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+                }
+                showToast(`কপি করা হয়েছে: ${text}`, "success");
+            } catch (err) {
+                showToast("কপি করতে সমস্যা হয়েছে!", "error");
+            }
+        }
+
+        function copyReferralLink() {
+            const input = document.getElementById('referralLinkInput');
+            copyToClipboard(input.value);
         }
 
         async function loadWithdrawHistory() {
@@ -919,7 +939,7 @@ document.getElementById('referralLinkInput').value = `https://t.me/${botUsername
             listContainer.innerHTML = '<p class="text-xs text-slate-400">লোডিং...</p>';
 
             const allReqs = await dbFetch('withdrawRequests') || {};
-            const userReqs = Object.values(allReqs).filter(r => r.userId === currentUser.userId);
+            const userReqs = Object.values(allReqs).filter(r => r && r.userId === currentUser.userId);
 
             if (userReqs.length === 0) {
                 listContainer.innerHTML = '<p class="text-xs text-slate-400">কোনো পূর্ববর্তী উইথড্র হিস্ট্রি পাওয়া যায়নি।</p>';
@@ -953,12 +973,18 @@ document.getElementById('referralLinkInput').value = `https://t.me/${botUsername
                 const notifs = await dbFetch(`users/${currentUser.userKey}/notifications`) || {};
                 for (let id in notifs) {
                     const n = notifs[id];
-                    if (!n.read) {
+                    if (n && !n.read) {
                         showToast(n.message, n.type || "info");
                         await dbFetch(`users/${currentUser.userKey}/notifications/${id}`, {
                             method: 'PATCH',
                             body: JSON.stringify({ read: true })
                         });
+                        // Refresh balance if notification is for bonus
+                        const refreshedUser = await dbFetch(`users/${currentUser.userKey}`);
+                        if (refreshedUser) {
+                            currentUser = refreshedUser;
+                            updateUIWithUserData();
+                        }
                     }
                 }
             }, 5000);
@@ -982,13 +1008,6 @@ document.getElementById('referralLinkInput').value = `https://t.me/${botUsername
             });
 
             showToast("প্রোফাইল তথ্য সংরক্ষণ করা হয়েছে।", "success");
-        }
-
-        function copyReferralLink() {
-            const input = document.getElementById('referralLinkInput');
-            input.select();
-            document.execCommand('copy');
-            showToast("Referral link copy হয়েছে।", "success");
         }
 
         function showToast(msg, type = "info") {
