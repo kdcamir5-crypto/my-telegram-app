@@ -104,7 +104,15 @@
                     <p class="text-white text-xs font-medium"><i class="fa-solid fa-sparkles text-amber-400 mr-1"></i> অনলাইন আর্নিং এর বিশ্বস্ত প্ল্যাটফর্ম</p>
                 </div>
             </div>
-
+<!-- Rolling Notice Bar -->
+<div class="bg-amber-100 border border-amber-300 text-amber-900 px-3 py-1.5 rounded-xl flex items-center space-x-2 text-xs font-semibold shadow-sm overflow-hidden">
+    <span class="bg-amber-500 text-white text-[10px] px-2 py-0.5 rounded-md font-bold shrink-0 flex items-center gap-1">
+        <i class="fa-solid fa-bullhorn"></i> নোটিশ
+    </span>
+    <marquee id="rollingNoticeText" behavior="scroll" direction="left" scrollamount="5" class="w-full font-medium">
+        লোডিং হচ্ছে...
+    </marquee>
+</div>
             <!-- 4 Main Circular Feature Cards -->
             <div class="grid grid-cols-4 gap-3">
                 <button onclick="switchView('viewDailyTask')" class="flex flex-col items-center group">
@@ -607,7 +615,17 @@
                 return null;
             }
         }
-
+async function loadRollingNotice() {
+    try {
+        const noticeText = await dbFetch('settings/rollingNotice');
+        const noticeElement = document.getElementById('rollingNoticeText');
+        if (noticeElement) {
+            noticeElement.innerText = noticeText || "আমাদের অ্যাপে আপনাকে স্বাগতম!";
+        }
+    } catch (err) {
+        console.error("Notice load error:", err);
+    }
+}
         async function initializeUserAccount() {
             const userKey = getOrSetLocalUserKey();
             let userData = await dbFetch(`users/${userKey}`);
@@ -668,6 +686,7 @@
 
             currentUser = userData;
             updateUIWithUserData();
+            await loadRollingNotice();
         }
 
         async function processReferralCommission(refCode, newUserId) {
