@@ -644,16 +644,20 @@ async function loadRollingNotice() {
             }
         }
         async function initializeUserAccount() {
-            const userKey = getOrSetLocalUserKey();
+            let userKey = getOrSetLocalUserKey();
             let userData = await dbFetch(`users/${userKey}`);
 
             const todayStr = new Date().toISOString().split('T')[0];
 
             if (!userData) {
+                if (!window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
+                    userKey = 'USR_' + Math.random().toString(36).substring(2, 9).toUpperCase();
+                    localStorage.setItem('ariyan_app_user_key', userKey);
+                }
+
                 const generatedUserId = 'ARY-' + Math.floor(100000 + Math.random() * 900000);
                 const generatedRefCode = 'REF-' + Math.floor(100000 + Math.random() * 900000);
 
-                // Fetch referral code saved earlier
                 const savedRef = localStorage.getItem('pending_ref_code');
 
                 let tgFirstName = "";
@@ -681,13 +685,11 @@ async function loadRollingNotice() {
                     createdAt: new Date().toISOString()
                 };
 
-                // Save new user profile first
                 await dbFetch(`users/${userKey}`, {
                     method: 'PUT',
                     body: JSON.stringify(userData)
                 });
 
-                // Grant referral bonus to referrer if applicable
                 if (savedRef) {
                     await processReferralCommission(savedRef, generatedUserId);
                     localStorage.removeItem('pending_ref_code');
@@ -695,7 +697,6 @@ async function loadRollingNotice() {
 
                 showToast("স্বাগতম! আপনি ১৫০ টাকা একাউন্ট রেজিস্ট্রেশন বোনাস পেয়েছেন।", "success");
             } else {
-                // Reset daily ads count if new calendar date
                 if (userData.lastTaskDate !== todayStr) {
                     userData.dailyAdsCompleted = 0;
                     userData.lastTaskDate = todayStr;
