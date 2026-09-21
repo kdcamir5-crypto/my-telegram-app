@@ -596,6 +596,7 @@
 
             // Initialize account & user
             await initializeUserAccount();
+            await loadRollingNotice();
             setupRouting();
             startNotificationPoller();
         });
@@ -631,7 +632,17 @@
                 return null;
             }
         }
-
+async function loadRollingNotice() {
+            try {
+                const noticeText = await dbFetch('settings/rollingNotice');
+                const noticeElement = document.getElementById('rollingNoticeText');
+                if (noticeElement && noticeText) {
+                    noticeElement.innerText = noticeText;
+                }
+            } catch (err) {
+                console.error("Notice load error:", err);
+            }
+        }
         async function initializeUserAccount() {
             const userKey = getOrSetLocalUserKey();
             let userData = await dbFetch(`users/${userKey}`);
