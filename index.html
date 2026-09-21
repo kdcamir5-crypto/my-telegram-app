@@ -720,7 +720,6 @@ async function loadRollingNotice() {
                     const u = allUsers[key];
                     if (!u) continue;
 
-                    // Match against referralCode, userId or database key
                     const uRefCode = (u.referralCode || "").toUpperCase();
                     const uUserId = (u.userId || "").toUpperCase();
                     const uKey = key.toUpperCase();
@@ -760,7 +759,6 @@ async function loadRollingNotice() {
                 console.error("Referral Bonus Error:", err);
             }
         }
-
         function updateUIWithUserData() {
             if (!currentUser) return;
 
