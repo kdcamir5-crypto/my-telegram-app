@@ -662,6 +662,20 @@
 
         async function initializeUserAccount() {
             const userKey = getOrSetUniformUserKey();
+            // Firebase theke dynamic rolling notice load korar function
+async function loadRollingNotice() {
+    try {
+        const noticeData = await dbFetch('settings/rollingNotice');
+        if (noticeData) {
+            const marqueeElement = document.getElementById('rollingNoticeText');
+            if (marqueeElement) {
+                marqueeElement.innerText = noticeData;
+            }
+        }
+    } catch (err) {
+        console.error("Notice load error:", err);
+    }
+}
             let userData = await dbFetch(`users/${userKey}`);
 
             const todayStr = new Date().toISOString().split('T')[0];
