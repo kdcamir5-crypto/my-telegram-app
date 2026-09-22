@@ -602,20 +602,24 @@
         });
 
         function getOrSetLocalUserKey() {
-            // Prioritize Telegram User ID for persistent login across devices/cleared storage
-            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe?.user?.id) {
-                const tgUserId = 'TG_' + window.Telegram.WebApp.initDataUnsafe.user.id;
-                localStorage.setItem('ariyan_app_user_key', tgUserId);
-                return tgUserId;
-            }
+    // প্রথমে চেক করুন লোকাল স্টোরেজে ইতিমধ্যে কোনো ইউজার কি আছে কি না
+    let existingKey = localStorage.getItem('ariyan_app_user_key');
+    if (existingKey) {
+        return existingKey;
+    }
 
-            let key = localStorage.getItem('ariyan_app_user_key');
-            if (!key) {
-                key = 'USR_' + Math.random().toString(36).substring(2, 9).toUpperCase();
-                localStorage.setItem('ariyan_app_user_key', key);
-            }
-            return key;
-        }
+    // যদি টেলিগ্রাম থেকে ওপেন করা হয় এবং টেলিগ্রাম আইডি থাকে
+    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe?.user?.id) {
+        const tgUserId = 'TG_' + window.Telegram.WebApp.initDataUnsafe.user.id;
+        localStorage.setItem('ariyan_app_user_key', tgUserId);
+        return tgUserId;
+    }
+
+    // অন্যথায় নতুন সাধারণ ইউজার কি তৈরি করুন
+    let key = 'USR_' + Math.random().toString(36).substring(2, 9).toUpperCase();
+    localStorage.setItem('ariyan_app_user_key', key);
+    return key;
+}
 
         async function dbFetch(path, options = {}) {
             try {
