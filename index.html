@@ -654,20 +654,31 @@ if (urlRef && urlRef.trim()) {
         }
 
         async function dbFetch(path, options = {}) {
+    const url = `${FIREBASE_BASE_URL}/${path}.json`;
+    try {
+        const res = await fetch(url, {
+            headers: { 'Content-Type': 'application/json' },
+            ...options
+        });
+        
+        if (!res.ok) {
+            let errorBody = "";
             try {
-                const res = await fetch(`${FIREBASE_BASE_URL}/${path}.json`, {
-                    headers: { 'Content-Type': 'application/json' },
-                    ...options
-                });
-                if (!res.ok) {
-                    throw new Error(`HTTP Error: ${res.status}`);
-                }
-                return await res.json();
-            } catch (err) {
-                console.warn("Firebase fetch fallback active:", err);
-                return null;
+                errorBody = await res.text();
+            } catch (e) {
+                errorBody = "Could not parse error body";
             }
+            
+            console.error(`[Firebase Error] Status: ${res.status} | Path: ${path} | Response: ${errorBody}`);
+            throw new Error(`HTTP Error: ${res.status} at path: ${path}`);
         }
+        
+        return await res.json();
+    } catch (err) {
+        console.warn(`[dbFetch Failed] Path: ${path} | Message:`, err.message);
+        return null;
+    }
+}
 
         async function initializeUserAccount() {
             const userKey = getOrSetUniformUserKey();
@@ -763,13 +774,19 @@ if (urlRef && urlRef.trim()) {
                 const updatedBal = currentBal + 100;
                 const updatedRefEarn = currentRefEarn + 100;
 
-                await dbFetch(`users/${key}`, {
+                const updateRes = await dbFetch(`users/${key}`, {
                     method: 'PATCH',
                     body: JSON.stringify({
                         balance: updatedBal,
                         referralEarning: updatedRefEarn
                     })
                 });
+
+                if (updateRes !== null) {
+                    console.log(`Referral commission successfully updated for user: ${key}`);
+                } else {
+                    console.error(`Failed to update referral commission for user: ${key}`);
+                }
 
                 const notifId = 'NOTIF_' + Date.now();
                 await dbFetch(`users/${key}/notifications/${notifId}`, {
@@ -782,7 +799,6 @@ if (urlRef && urlRef.trim()) {
                     })
                 });
 
-                console.log(`Instant 100 BDT referral commission sent to referrer: ${key}`);
                 break;
             }
         }
