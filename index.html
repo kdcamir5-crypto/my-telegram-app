@@ -604,13 +604,22 @@
             } else {
                 console.log("Running in preview mode simulator.");
             }
+const urlParams = new URLSearchParams(window.location.search);
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const urlRef = urlParams.get('ref') || urlParams.get('start');
-            if (urlRef) {
-                localStorage.setItem('pending_ref_code', urlRef.trim());
-            }
+const telegramStartParam =
+    window.Telegram?.WebApp?.initDataUnsafe?.start_param || "";
 
+const urlRef =
+    urlParams.get("ref") ||
+    urlParams.get("start") ||
+    urlParams.get("startapp") ||
+    urlParams.get("tgWebAppStartParam") ||
+    telegramStartParam;
+
+if (urlRef && urlRef.trim()) {
+    localStorage.setItem("pending_ref_code", urlRef.trim());
+    console.log("Referral code captured:", urlRef.trim());
+}
             await initializeUserAccount();
             setupRouting();
             startNotificationPoller();
