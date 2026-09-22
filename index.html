@@ -734,53 +734,53 @@
             updateUIWithUserData();
         }
 
-        async function processReferralCommission(refCode, newUserIdKey) {
-            if (!refCode) return;
-            try {
-                const cleanRefCode = refCode.trim().toUpperCase();
-                const allUsers = await dbFetch('users') || {};
-                
-                for (let key in allUsers) {
-                    const u = allUsers[key];
-                    if (!u) continue;
+       async function processReferralCommission(refCode, newUserIdKey) {
+    if (!refCode) return;
+    try {
+        const cleanRefCode = refCode.trim().toUpperCase();
+        const allUsers = await dbFetch('users') || {};
+        
+        for (let key in allUsers) {
+            const u = allUsers[key];
+            if (!u) continue;
 
-                    const uRefCode = (u.referralCode || "").toUpperCase();
-                    const uUserId = (u.userId || "").toUpperCase();
-                    const uKey = key.toUpperCase();
+            const uRefCode = (u.referralCode || "").toUpperCase();
+            const uUserId = (u.userId || "").toUpperCase();
+            const uKey = key.toUpperCase();
 
-                    if ((uRefCode === cleanRefCode || uUserId === cleanRefCode || uKey === cleanRefCode) && u.userKey !== newUserIdKey) {
-                        const currentBal = parseFloat(u.balance) || 0;
-                        const currentRefEarn = parseFloat(u.referralEarning) || 0;
-                        const updatedBal = currentBal + 100;
-                        const updatedRefEarn = currentRefEarn + 100;
+            if ((uRefCode === cleanRefCode || uUserId === cleanRefCode || uKey === cleanRefCode) && u.userKey !== newUserIdKey) {
+                const currentBal = parseFloat(u.balance) || 0;
+                const currentRefEarn = parseFloat(u.referralEarning) || 0;
+                const updatedBal = currentBal + 100;
+                const updatedRefEarn = currentRefEarn + 100;
 
-                        await dbFetch(`users/${key}`, {
-                            method: 'PATCH',
-                            body: JSON.stringify({
-                                balance: updatedBal,
-                                referralEarning: updatedRefEarn
-                            })
-                        });
+                await dbFetch(`users/${key}`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({
+                        balance: updatedBal,
+                        referralEarning: updatedRefEarn
+                    })
+                });
 
-                        const notifId = 'NOTIF_' + Date.now();
-                        await dbFetch(`users/${key}/notifications/${notifId}`, {
-                            method: 'PUT',
-                            body: JSON.stringify({
-                                message: `অভিনন্দন! আপনার রেফারেল লিংকে একজন নতুন ইউজার জয়েন করেছে। ১০০ টাকা বোনাস যোগ হয়েছে।`,
-                                type: "success",
-                                read: false,
-                                date: new Date().toISOString()
-                            })
-                        });
+                const notifId = 'NOTIF_' + Date.now();
+                await dbFetch(`users/${key}/notifications/${notifId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        message: `abhinandan! Apnar referral link-e ekjon notun user joyen koreche. 100 taka bonus jog hoyeche.`,
+                        type: "success",
+                        read: false,
+                        date: new Date().toISOString()
+                    })
+                });
 
-                        console.log(`Instant 100 BDT referral commission sent to referrer: ${key}`);
-                        break;
-                    }
-                }
-            } catch (err) {
-                console.error("Referral Commission Error:", err);
+                console.log(`Instant 100 BDT referral commission sent to referrer: ${key}`);
+                break;
             }
         }
+    } catch (err) {
+        console.error("Referral Commission Error:", err);
+    }
+}
 
         function updateUIWithUserData() {
             if (!currentUser) return;
