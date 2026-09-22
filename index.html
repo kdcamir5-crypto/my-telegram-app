@@ -65,6 +65,12 @@
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col pb-20 selection:bg-brand-500 selection:text-white">
 
+    <!-- Standalone Preview Debug Banner (Visible if opened outside Telegram or if WebApp SDK fails) -->
+    <div id="previewModeBanner" class="bg-indigo-600 text-white text-[11px] px-3 py-1.5 text-center font-semibold flex items-center justify-between shadow-inner">
+        <span>🚀 Web Preview Mode Active (Standalone Simulator)</span>
+        <button onclick="toggleSimulatorUserId()" class="bg-white/20 hover:bg-white/30 px-2 py-0.5 rounded text-[10px] underline">Switch User ID</button>
+    </div>
+
     <header class="bg-gradient-to-r from-brand-700 to-indigo-900 text-white sticky top-0 z-40 shadow-md">
         <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-3">
@@ -186,6 +192,7 @@
             </div>
         </section>
 
+        <!-- DAILY TASK VIEW -->
         <section id="viewDailyTask" class="app-view hidden space-y-4">
             <div class="flex items-center justify-between">
                 <button onclick="switchView('viewHome')" class="text-slate-600 hover:text-slate-900 flex items-center space-x-1 font-semibold text-sm">
@@ -215,6 +222,7 @@
             </div>
         </section>
 
+        <!-- EARNING VIEW -->
         <section id="viewEarning" class="app-view hidden space-y-4">
             <div class="flex items-center justify-between">
                 <button onclick="switchView('viewHome')" class="text-slate-600 hover:text-slate-900 flex items-center space-x-1 font-semibold text-sm">
@@ -263,6 +271,7 @@
             </div>
         </section>
 
+        <!-- REFERRAL VIEW -->
         <section id="viewReferral" class="app-view hidden space-y-4">
             <div class="flex items-center justify-between">
                 <button onclick="switchView('viewHome')" class="text-slate-600 hover:text-slate-900 flex items-center space-x-1 font-semibold text-sm">
@@ -297,6 +306,7 @@
             </div>
         </section>
 
+        <!-- BONUS VIEW -->
         <section id="viewBonus" class="app-view hidden space-y-4">
             <div class="flex items-center justify-between">
                 <button onclick="switchView('viewHome')" class="text-slate-600 hover:text-slate-900 flex items-center space-x-1 font-semibold text-sm">
@@ -322,6 +332,7 @@
             </div>
         </section>
 
+        <!-- WALLET VIEW -->
         <section id="viewWallet" class="app-view hidden space-y-4">
             <div class="flex items-center justify-between">
                 <button onclick="switchView('viewHome')" class="text-slate-600 hover:text-slate-900 flex items-center space-x-1 font-semibold text-sm">
@@ -357,6 +368,7 @@
             </div>
         </section>
 
+        <!-- WITHDRAW VIEW -->
         <section id="viewWithdraw" class="app-view hidden space-y-4">
             <div class="flex items-center justify-between">
                 <button onclick="switchView('viewHome')" class="text-slate-600 hover:text-slate-900 flex items-center space-x-1 font-semibold text-sm">
@@ -412,6 +424,7 @@
             </div>
         </section>
 
+        <!-- PROFILE VIEW -->
         <section id="viewProfile" class="app-view hidden space-y-4">
             <div class="flex items-center justify-between">
                 <button onclick="switchView('viewHome')" class="text-slate-600 hover:text-slate-900 flex items-center space-x-1 font-semibold text-sm">
@@ -427,7 +440,7 @@
                         <img id="profileImageDisplay" src="https://placehold.co/150x150/4f46e5/ffffff?text=User" class="w-20 h-20 rounded-full border-2 border-brand-500 object-cover shadow">
                     </div>
                     <div class="bg-indigo-50 py-1.5 px-3 rounded-lg inline-block border border-indigo-200">
-                        <span id="profileDisplayUserId" class="font-bold text-xs text-brand-700 font-mono">User ID: ARY-XXXXXX</span>
+                        <span id="profileDisplayUserId" class="font-bold text-xs text-brand-700 font-mono">User ID: USR-XXXXXX</span>
                     </div>
                 </div>
 
@@ -482,6 +495,7 @@
         </div>
     </nav>
 
+    <!-- Ad Modal -->
     <div id="adModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
         <div class="glass-card max-w-sm w-full rounded-2xl p-6 text-center space-y-4">
             <h3 id="adModalTitle" class="font-bold text-slate-800 text-lg">Demo Ad #1</h3>
@@ -498,6 +512,7 @@
         </div>
     </div>
 
+    <!-- Activation Withdraw Modal -->
     <div id="activationWithdrawModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
         <div class="glass-card max-w-sm w-full rounded-2xl p-5 space-y-4 relative max-h-[90vh] overflow-y-auto hide-scrollbar">
             <button onclick="closeActivationModal()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600">
@@ -574,52 +589,60 @@
         let activeWithdrawData = null;
 
         window.addEventListener('DOMContentLoaded', async () => {
-            console.log("Initializing Freelancing with Ariyan App Core...");
+            console.log("Initializing Freelancing with Ariyan App Core (Preview Safe)...");
             
-            if (window.Telegram && window.Telegram.WebApp) {
-                const tg = window.Telegram.WebApp;
-                tg.ready();
-                tg.expand();
-
-                const startParam = tg.initDataUnsafe?.start_param;
-                if (startParam) {
-                    localStorage.setItem('pending_ref_code', startParam.trim());
+            // Check and handle Telegram WebApp SDK safely
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
+                try {
+                    const tg = window.Telegram.WebApp;
+                    tg.ready();
+                    tg.expand();
+                    document.getElementById('previewModeBanner').classList.add('hidden');
+                } catch(e) {
+                    console.log("Running in standard browser preview frame.");
                 }
+            } else {
+                console.log("Running in preview mode simulator.");
             }
 
-            // Also check URL query parameters as backup for direct browser links
             const urlParams = new URLSearchParams(window.location.search);
             const urlRef = urlParams.get('ref') || urlParams.get('start');
             if (urlRef) {
                 localStorage.setItem('pending_ref_code', urlRef.trim());
             }
 
-            // Initialize account & user
             await initializeUserAccount();
-            await loadRollingNotice();
             setupRouting();
             startNotificationPoller();
         });
 
-        function getOrSetLocalUserKey() {
-    // প্রথমে চেক করুন লোকাল স্টোরেজে ইতিমধ্যে কোনো ইউজার কি আছে কি না
-    let existingKey = localStorage.getItem('ariyan_app_user_key');
-    if (existingKey) {
-        return existingKey;
-    }
+        function getOrSetUniformUserKey() {
+            // Check if user clicked to switch simulated user key
+            let storedKey = localStorage.getItem('ariyan_uniform_user_key');
+            if (storedKey) {
+                return storedKey;
+            }
 
-    // যদি টেলিগ্রাম থেকে ওপেন করা হয় এবং টেলিগ্রাম আইডি থাকে
-    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe?.user?.id) {
-        const tgUserId = 'TG_' + window.Telegram.WebApp.initDataUnsafe.user.id;
-        localStorage.setItem('ariyan_app_user_key', tgUserId);
-        return tgUserId;
-    }
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe?.user?.id) {
+                const tgId = window.Telegram.WebApp.initDataUnsafe.user.id;
+                storedKey = `USR_${tgId}`;
+                localStorage.setItem('ariyan_uniform_user_key', storedKey);
+                return storedKey;
+            }
 
-    // অন্যথায় নতুন সাধারণ ইউজার কি তৈরি করুন
-    let key = 'USR_' + Math.random().toString(36).substring(2, 9).toUpperCase();
-    localStorage.setItem('ariyan_app_user_key', key);
-    return key;
-}
+            // Generate clean uniform USR key for preview testing
+            const randomIdNum = Math.floor(100000 + Math.random() * 900000);
+            storedKey = `USR_${randomIdNum}`;
+            localStorage.setItem('ariyan_uniform_user_key', storedKey);
+            return storedKey;
+        }
+
+        function toggleSimulatorUserId() {
+            const current = localStorage.getItem('ariyan_uniform_user_key');
+            const newId = current === 'USR_999999' ? 'USR_888888' : 'USR_999999';
+            localStorage.setItem('ariyan_uniform_user_key', newId);
+            window.location.reload();
+        }
 
         async function dbFetch(path, options = {}) {
             try {
@@ -632,36 +655,20 @@
                 }
                 return await res.json();
             } catch (err) {
-                console.error("Firebase database error:", err);
+                console.warn("Firebase fetch fallback active:", err);
                 return null;
             }
         }
-async function loadRollingNotice() {
-            try {
-                const noticeText = await dbFetch('settings/rollingNotice');
-                const noticeElement = document.getElementById('rollingNoticeText');
-                if (noticeElement && noticeText) {
-                    noticeElement.innerText = noticeText;
-                }
-            } catch (err) {
-                console.error("Notice load error:", err);
-            }
-        }
+
         async function initializeUserAccount() {
-            let userKey = getOrSetLocalUserKey();
+            const userKey = getOrSetUniformUserKey();
             let userData = await dbFetch(`users/${userKey}`);
 
             const todayStr = new Date().toISOString().split('T')[0];
 
             if (!userData) {
-                if (!window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
-                    userKey = 'USR_' + Math.random().toString(36).substring(2, 9).toUpperCase();
-                    localStorage.setItem('ariyan_app_user_key', userKey);
-                }
-
-                const generatedUserId = 'ARY-' + Math.floor(100000 + Math.random() * 900000);
+                // New Account Creation with Uniform USR ID format
                 const generatedRefCode = 'REF-' + Math.floor(100000 + Math.random() * 900000);
-
                 const savedRef = localStorage.getItem('pending_ref_code');
 
                 let tgFirstName = "";
@@ -671,7 +678,7 @@ async function loadRollingNotice() {
                 }
 
                 userData = {
-                    userId: generatedUserId,
+                    userId: userKey, // e.g. USR_482910 guarantees admin panel visibility
                     userKey: userKey,
                     referralCode: generatedRefCode,
                     referredBy: savedRef || null,
@@ -695,7 +702,7 @@ async function loadRollingNotice() {
                 });
 
                 if (savedRef) {
-                    await processReferralCommission(savedRef, generatedUserId);
+                    await processReferralCommission(savedRef, userKey);
                     localStorage.removeItem('pending_ref_code');
                 }
 
@@ -715,7 +722,7 @@ async function loadRollingNotice() {
             updateUIWithUserData();
         }
 
-        async function processReferralCommission(refCode, newUserId) {
+        async function processReferralCommission(refCode, newUserIdKey) {
             if (!refCode) return;
             try {
                 const cleanRefCode = refCode.trim().toUpperCase();
@@ -729,13 +736,12 @@ async function loadRollingNotice() {
                     const uUserId = (u.userId || "").toUpperCase();
                     const uKey = key.toUpperCase();
 
-                    if ((uRefCode === cleanRefCode || uUserId === cleanRefCode || uKey === cleanRefCode) && u.userId !== newUserId) {
+                    if ((uRefCode === cleanRefCode || uUserId === cleanRefCode || uKey === cleanRefCode) && u.userKey !== newUserIdKey) {
                         const currentBal = parseFloat(u.balance) || 0;
                         const currentRefEarn = parseFloat(u.referralEarning) || 0;
                         const updatedBal = currentBal + 100;
                         const updatedRefEarn = currentRefEarn + 100;
 
-                        // 1. Update referrer balance and earnings
                         await dbFetch(`users/${key}`, {
                             method: 'PATCH',
                             body: JSON.stringify({
@@ -744,7 +750,6 @@ async function loadRollingNotice() {
                             })
                         });
 
-                        // 2. Send instant notification entry to referrer
                         const notifId = 'NOTIF_' + Date.now();
                         await dbFetch(`users/${key}/notifications/${notifId}`, {
                             method: 'PUT',
@@ -756,14 +761,15 @@ async function loadRollingNotice() {
                             })
                         });
 
-                        console.log(`Referral bonus 100 BDT successfully awarded to ${key}`);
+                        console.log(`Instant 100 BDT referral commission sent to referrer: ${key}`);
                         break;
                     }
                 }
             } catch (err) {
-                console.error("Referral Bonus Error:", err);
+                console.error("Referral Commission Error:", err);
             }
         }
+
         function updateUIWithUserData() {
             if (!currentUser) return;
 
@@ -795,7 +801,6 @@ async function loadRollingNotice() {
             document.getElementById('walletBonusEarn').innerText = currentUser.bonusEarning || 0;
             document.getElementById('walletTotalBalance').innerText = currentUser.balance || 0;
 
-            // Generate direct Telegram referral link
             const botUsername = "freelancingapp_bot";
             document.getElementById('referralLinkInput').value = `https://t.me/${botUsername}?start=${currentUser.referralCode}`;
 
@@ -924,7 +929,6 @@ async function loadRollingNotice() {
 
             const { method, phone, amount } = activeWithdrawData;
 
-            // Deduct balance and create withdrawal request record
             currentUser.balance -= amount;
             await dbFetch(`users/${currentUser.userKey}`, {
                 method: 'PATCH',
@@ -1024,7 +1028,6 @@ async function loadRollingNotice() {
                             method: 'PATCH',
                             body: JSON.stringify({ read: true })
                         });
-                        // Refresh user data from server after notification
                         const refreshedUser = await dbFetch(`users/${currentUser.userKey}`);
                         if (refreshedUser) {
                             currentUser = refreshedUser;
@@ -1032,7 +1035,7 @@ async function loadRollingNotice() {
                         }
                     }
                 }
-            }, 15000);
+            }, 5000);
         }
 
         async function saveProfileData(e) {
