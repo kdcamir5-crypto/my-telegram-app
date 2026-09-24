@@ -2882,6 +2882,7 @@
           }
 
           updateUIWithUserData();
+          syncTaskLinksFromFirebase();
         }
       });
 
@@ -3415,7 +3416,23 @@ function triggerMonetagAdCall() {
         copyTextToClipboard(currentUserId, `User ID (${currentUserId}) কপি হয়েছে।`);
       }
     });
+// এটি কোনো ফাংশনের ভিতরে না রেখে একদম আলাদাভাবে বাইরে বসাবেন:
+function syncTaskLinksFromFirebase() {
+  db.ref('tasks').on('value', (snapshot) => {
+    if (!snapshot.exists()) return;
+    const tasksData = snapshot.val();
 
+    for (let i = 1; i <= 5; i++) {
+      const taskInfo = tasksData[`task_${i}`];
+      if (taskInfo && taskInfo.url) {
+        const btn = document.getElementById(`taskBtn-${i}`);
+        if (btn) {
+          btn.setAttribute('onclick', `performNewTask(${i}, '${taskInfo.url}', '${taskInfo.title || 'Task ' + i}')`);
+        }
+      }
+    }
+  });
+}
     /* -------------------------------------------------------------
        12. APP BOOTSTRAP
        ------------------------------------------------------------- */
