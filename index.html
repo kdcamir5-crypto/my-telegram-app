@@ -2754,8 +2754,8 @@
         } else {
           ref = startParam;
         }
-      }
-      return ref || null;
+      console.log("URL ba Telegram theke pawa incomingRef:", ref);
+  return ref || null;
     }
 
     /* -------------------------------------------------------------
@@ -2820,11 +2820,19 @@
     // Process incoming referral bonus (+100 TK for referrer)
     function processIncomingReferral(myRefCode) {
       const incomingRef = resolveIncomingReferralCode();
-      if (!incomingRef) return;
-      if (incomingRef === myRefCode || incomingRef === currentUserId) return; // Anti-fraud: prevent self-referral
+      console.log("processIncomingReferral execute holo. incomingRef:", incomingRef, "Amar RefCode:", myRefCode);
+     if (!incomingRef) {
+    console.log("Kono incomingRef pawa jayni, tai referral bonus add hobe na.");
+    return;
+  }
+     if (incomingRef === myRefCode || incomingRef === currentUserId) {
+    console.log("Self-referral detect hoyeche, tai ignore kora holo.");
+    return;
+  }
 
       // Find user with referralCode in Firebase
       db.ref('users').orderByChild('referralCode').equalTo(incomingRef).once('value').then((snap) => {
+        console.log("Referrer database-e khuje pawa geche kina (exists):", snap.exists());
         if (snap.exists()) {
           snap.forEach((child) => {
             const referrerId = child.key;
