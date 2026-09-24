@@ -3024,22 +3024,22 @@
         return;
       }
 
-      isWatchingAd = true;
-triggerMonetagAdCall();
-    }
-    function triggerMonetagAdCall() {
-      // Call Monetag show_11862019 function as defined in requirements
-      if (typeof window.show_11862019 === 'function') {
+      iswatchingAd = true;
+    triggerMonetagAdCall();
+} 
+function triggerMonetagAdCall() {
+    // Call Monetag show_11862019 function as defined in requirements
+    if (typeof window.show_11862019 === 'function') {
         window.show_11862019().then(() => {
-          awardAdReward();
+            awardAdReward();
         }).catch((err) => {
-          console.warn("Monetag ad finished/handled:", err);
-          awardAdReward();
+            console.warn("Monetag ad finished/handled:", err);
+            awardAdReward();
         });
-      } else {
+    } else {
         awardAdReward();
-      }
     }
+} 
 
     function awardAdReward() {
       if (!currentUser || !currentUserId) return;
