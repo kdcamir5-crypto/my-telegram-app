@@ -1866,81 +1866,6 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    /* ADMIN PANEL */
-    .admin-tab-nav {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding-bottom: 8px;
-    }
-
-    .admin-tab-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-dim);
-      font-size: 12px;
-      font-weight: 700;
-      padding: 6px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .admin-tab-btn.active {
-      background: rgba(0, 209, 143, 0.15);
-      color: var(--primary);
-    }
-
-    .admin-req-card {
-      background: rgba(255, 255, 255, 0.025);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: var(--radius-md);
-      padding: 12px;
-      margin-bottom: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .arc-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-    }
-
-    .arc-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 6px;
-    }
-
-    .btn-approve {
-      background: #00d18f;
-      color: #052115;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      flex: 1;
-    }
-
-    .btn-deny {
-      background: #ef4444;
-      color: #ffffff;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      flex: 1;
-    }
-
-    ::-webkit-scrollbar { width: 4px; height: 4px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
   </style>
 </head>
 <body>
@@ -2141,7 +2066,7 @@
           </div>
         </div>
 
-        <!-- New Task Section (Admin Controlled) -->
+        <!-- New Task Section -->
         <div class="new-tasks-section">
           <div class="ad-grid-title">
             <span><i class="fa-solid fa-fire" style="color:var(--accent-gold)"></i> New Task (নতুন টাস্ক)</span>
@@ -2580,13 +2505,6 @@
             <button class="btn-primary" style="width:auto; padding:10px 16px;" onclick="syncExistingAccount()">কানেক্ট</button>
           </div>
         </div>
-
-        <!-- Hidden Admin Control Panel Entry -->
-        <div style="text-align:center; padding:10px 0;">
-          <button style="background:none; border:none; color:var(--text-dim); font-size:11.5px; cursor:pointer;" onclick="openAdminModal()">
-            <i class="fa-solid fa-shield"></i> Admin Control Panel
-          </button>
-        </div>
       </div>
     </section>
 
@@ -2730,63 +2648,6 @@
     </div>
   </div>
 
-  <!-- 3. ADMIN CONTROL PANEL MODAL -->
-  <div id="modal-admin" class="modal-overlay">
-    <div class="modal-card">
-      <button class="modal-close-btn" onclick="closeAdminModal()"><i class="fa-solid fa-xmark"></i></button>
-      <h3 class="modal-title">
-        <i class="fa-solid fa-shield-halved" style="color:var(--accent-gold)"></i> Admin Control Panel
-      </h3>
-
-      <!-- Admin PIN Protection -->
-      <div id="adminPinSection">
-        <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">অ্যাডমিন প্যানেলে প্রবেশের জন্য পাসওয়ার্ড/পিন দিন:</p>
-        <div class="form-group" style="margin-bottom:12px;">
-          <input type="password" id="adminPinInput" class="form-input" placeholder="অ্যাডমিন পিন দিন">
-        </div>
-        <button class="btn-primary" onclick="verifyAdminPin()">লগইন করুন</button>
-      </div>
-
-      <!-- Admin Dashboard Content -->
-      <div id="adminContentSection" style="display:none;">
-        <div class="admin-tab-nav">
-          <button class="admin-tab-btn active" id="tabBtnWithdraws" onclick="switchAdminTab('withdraws')">উইথড্র রিকোয়েস্ট</button>
-          <button class="admin-tab-btn" id="tabBtnNotice" onclick="switchAdminTab('notice')">নোটিশ আপডেট</button>
-          <button class="admin-tab-btn" id="tabBtnBonus" onclick="switchAdminTab('bonus')">বোনাস পাঠান</button>
-        </div>
-
-        <!-- Admin Tab 1: Withdraw Requests -->
-        <div id="adminTabWithdraws">
-          <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">অপেক্ষমান উইথড্র ও একাউন্ট সক্রিয়করণ তালিকা:</div>
-          <div id="adminWithdrawList" style="max-height:300px; overflow-y:auto;">
-            <!-- Rendered by JS -->
-          </div>
-        </div>
-
-        <!-- Admin Tab 2: Update Rolling Notice -->
-        <div id="adminTabNotice" style="display:none;">
-          <div class="form-group" style="margin-bottom:12px;">
-            <label class="form-label">রোলিং নোটিশ টেক্সট লিখুন:</label>
-            <textarea id="adminNoticeInput" class="form-input" rows="4" placeholder="হোম পেজের স্ক্রলিং নোটিশ লিখুন..."></textarea>
-          </div>
-          <button class="btn-primary" onclick="saveAdminNotice()">নোটিশ পাবলিশ করুন</button>
-        </div>
-
-        <!-- Admin Tab 3: Send Bonus to User -->
-        <div id="adminTabBonus" style="display:none;">
-          <div class="form-group" style="margin-bottom:10px;">
-            <label class="form-label">User ID (যেমন: USR-XXXXXX)</label>
-            <input type="text" id="adminBonusUserId" class="form-input" placeholder="USR-XXXXXX" style="text-transform:uppercase;">
-          </div>
-          <div class="form-group" style="margin-bottom:14px;">
-            <label class="form-label">বোনাস পরিমাণ (টাকা)</label>
-            <input type="number" id="adminBonusAmount" class="form-input" placeholder="যেমন: 50">
-          </div>
-          <button class="btn-primary" onclick="sendAdminBonus()">বোনাস পাঠান</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- TOAST NOTIFICATION -->
   <div id="toast-notification">
@@ -3015,7 +2876,7 @@
         }
       });
 
-      // Listen for rolling notice updates from Firebase admin panel
+      // Listen for rolling notice updates from Firebase
       db.ref('notices/rolling').on('value', (snap) => {
         const val = snap.val();
         if (val && typeof val === 'string' && val.trim() !== '') {
