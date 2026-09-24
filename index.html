@@ -3025,36 +3025,7 @@
       }
 
       isWatchingAd = true;
-      const modal = document.getElementById('modal-ad-timer');
-      const countdownEl = document.getElementById('timerCountdown');
-      const circleEl = document.getElementById('timerProgressCircle');
-      
-      modal.classList.add('show');
-      let timeLeft = 15;
-      const totalDuration = 15;
-      const circumference = 283; // 2 * PI * 45
-
-      countdownEl.textContent = `${timeLeft}s`;
-      circleEl.style.strokeDashoffset = '0';
-
-      clearInterval(adCountdownInterval);
-      adCountdownInterval = setInterval(() => {
-        timeLeft--;
-        countdownEl.textContent = `${timeLeft}s`;
-        
-        const offset = circumference - (timeLeft / totalDuration) * circumference;
-        circleEl.style.strokeDashoffset = offset;
-
-        if (timeLeft <= 0) {
-          clearInterval(adCountdownInterval);
-          modal.classList.remove('show');
-          isWatchingAd = false;
-
-          triggerMonetagAdCall();
-        }
-      }, 1000);
-    }
-
+triggerMonetagAdCall();
     function triggerMonetagAdCall() {
       // Call Monetag show_11862019 function as defined in requirements
       if (typeof window.show_11862019 === 'function') {
