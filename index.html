@@ -2939,7 +2939,7 @@
 
       // Referral Page
       const refCode = currentUser.referralCode || ('REF' + currentUserId.replace('USR-', ''));
-      const refUrl = `https://t.me/bechelor_point_season?start=ref-${refCode}`;
+      const refUrl = `https://t.me/freelancingapp_bot?start=ref-${refCode}`;
       document.getElementById('referralLinkInput').textContent = refUrl;
       document.getElementById('totalRefCount').textContent = currentUser.referrals || 0;
       document.getElementById('refIncomeStats').textContent = referralEarning.toFixed(2);
