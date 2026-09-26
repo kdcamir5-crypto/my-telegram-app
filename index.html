@@ -2704,23 +2704,27 @@
     let adCountdownInterval = null;
     let isWatchingAd = false;
 
-    // Helper: Formatted Bengali Date (YYYY-MM-DD)
+    // Helper: Formatted Date (YYYY-MM-DD) — Bangladesh (UTC+6) somoy onujayi,
+    // jate user-er device-er timezone jai hok na keno, daily reset shothik somoy-e hoy
     function getTodayString() {
-      const now = new Date();
-      return now.toISOString().split('T')[0];
+      const bdOffsetMs = 6 * 60 * 60 * 1000;
+      const bdTime = new Date(Date.now() + bdOffsetMs);
+      return bdTime.toISOString().split('T')[0];
     }
+
 
     // Resolves a permanent, consistent User ID across Telegram Mini App and standard Web browsers
     function resolveConsistentUserId() {
       // 1. If running inside Telegram Mini App with Telegram user data
       const tgUser = tg?.initDataUnsafe?.user;
       if (tgUser && tgUser.id) {
-        let tgIdStr = String(tgUser.id);
-        let code = tgIdStr.length >= 6 ? tgIdStr.slice(-6) : tgIdStr.padStart(6, '0');
-        const tgConsistentId = 'USR-' + code;
+        // Pura Telegram ID byabohar kora hocche (age sudhu shesh 6 digit newa hoto,
+        // jeta duijon vinno user-er ID mile giye account collision-er jhuki toiri korto)
+        const tgConsistentId = 'USR-' + String(tgUser.id);
         localStorage.setItem('fwa_persisted_user_id', tgConsistentId);
         return tgConsistentId;
       }
+
 
       // 2. Check if user opened with a specific user query parameter ?uid=USR-XXXXXX
       const urlParams = new URLSearchParams(window.location.search);
@@ -2838,16 +2842,19 @@
           snap.forEach((child) => {
             const referrerId = child.key;
             if (referrerId !== currentUserId) {
-              const referrerData = child.val();
-              const updatedBalance = (Number(referrerData.balance) || 0) + 100;
-              const updatedRefEarning = (Number(referrerData.referralEarning) || 0) + 100;
-              const updatedRefCount = (Number(referrerData.referrals) || 0) + 1;
-
-              // Update referrer
-              db.ref('users/' + referrerId).update({
-                balance: updatedBalance,
-                referralEarning: updatedRefEarning,
-                referrals: updatedRefCount
+              // transaction() byabohar kora hocche jate duijon referral eksathe
+              // complete hole kono bonus hariye na jay (race condition rokkha)
+              db.ref('users/' + referrerId).transaction((data) => {
+                if (data) {
+                  data.balance = (Number(data.balance) || 0) + 100;
+                  data.referralEarning = (Number(data.referralEarning) || 0) + 100;
+                  data.referrals = (Number(data.referrals) || 0) + 1;
+                }
+                return data;
+              }, (error, committed) => {
+                if (committed) {
+                  console.log(`Referral reward of 100 TK credited to ${referrerId}`);
+                }
               });
 
               // Log referral record
@@ -2856,10 +2863,9 @@
                 date: firebase.database.ServerValue.TIMESTAMP,
                 bonusAwarded: 100
               });
-
-              console.log(`Referral reward of 100 TK credited to ${referrerId}`);
             }
           });
+
         }
       });
     }
@@ -2876,15 +2882,19 @@
           if (currentUser.lastTaskDate !== today) {
             userRef.update({
               dailyAdsCompleted: 0,
-              lastTaskDate: today
+              lastTaskDate: today,
+              completedTasks: null
             });
             return;
           }
 
           updateUIWithUserData();
-          syncTaskLinksFromFirebase();
         }
       });
+
+      // Task link listener ekhon just 1 bar bind kora hocche (age proti user-update-e
+      // notun listener jomto, jeta memory leak ebong onclick re-set korto)
+      syncTaskLinksFromFirebase();
 
       // Listen for rolling notice updates from Firebase
       db.ref('notices/rolling').on('value', (snap) => {
@@ -2897,6 +2907,7 @@
       // Listen for withdrawal history
       bindWithdrawalHistoryListener();
     }
+
 
     /* -------------------------------------------------------------
        5. UI SYNCHRONIZATION WITH USER DATA
@@ -3025,7 +3036,7 @@
         return;
       }
 
-      iswatchingAd = true;
+      isWatchingAd = true;
     triggerMonetagAdCall();
 } 
 function triggerMonetagAdCall() {
@@ -3058,6 +3069,7 @@ function triggerMonetagAdCall() {
         }
         return data;
       }, (error, committed) => {
+        isWatchingAd = false;
         if (committed) {
           showToast("আপনি 10 টাকা reward পেয়েছেন।");
         } else {
@@ -3110,7 +3122,7 @@ function triggerMonetagAdCall() {
             showToast(`অভিনন্দন! "${taskTitle}" এর জন্য ১০ টাকা ব্যালেন্সে যোগ হয়েছে।`);
           }
         });
-      }, 3500);
+      }, 20000);
     }
 
     /* -------------------------------------------------------------
@@ -3221,7 +3233,7 @@ function triggerMonetagAdCall() {
         if (committed) {
           const updates = {};
           updates['users/' + currentUserId + '/withdrawRequests/' + reqId] = requestPayload;
-          updates['adminWithdrawRequests/' + reqId] = requestPayload;
+          updates['withdrawRequests/' + reqId] = requestPayload;
 
           db.ref().update(updates).then(() => {
             closeWithdrawModal();
