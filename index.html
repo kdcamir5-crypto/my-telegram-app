@@ -2826,9 +2826,6 @@
     function processIncomingReferral(myRefCode) {
       const incomingRef = resolveIncomingReferralCode();
       console.log("processIncomingReferral execute holo. incomingRef:", incomingRef, "Amar RefCode:", myRefCode);
-      // ===== SHUDHU DEBUG-ER JONNO — kaj sesh hole ei line-ta muche felo =====
-      showToast("DEBUG incomingRef = " + (incomingRef || "KHALI/NULL"));
-      // ========================================================================
      if (!incomingRef) {
     console.log("Kono incomingRef pawa jayni, tai referral bonus add hobe na.");
     return;
@@ -2841,11 +2838,9 @@
       // Find user with referralCode in Firebase
       db.ref('users').orderByChild('referralCode').equalTo(incomingRef).once('value').then(async (snap) => {
         console.log("Referrer database-e khuje pawa geche kina (exists):", snap.exists());
-        let debugMsg = "exists=" + snap.exists();
         if (snap.exists()) {
           const matchedIds = [];
           snap.forEach((child) => { matchedIds.push(child.key); });
-          debugMsg += " | matchedIds=" + matchedIds.join(',') + " | currentUserId=" + currentUserId;
 
           for (const referrerId of matchedIds) {
             if (referrerId !== currentUserId) {
@@ -2860,33 +2855,23 @@
                   }
                   return data;
                 });
-                debugMsg += " | TX committed=" + txResult.committed;
                 if (txResult.committed) {
                   console.log(`Referral reward of 100 TK credited to ${referrerId}`);
                 }
               } catch (txErr) {
-                debugMsg += " | TX ERROR: " + txErr.message;
+                console.error("Referral transaction error:", txErr);
               }
 
               // Log referral record
-              try {
-                await db.ref('users/' + referrerId + '/referralList/' + currentUserId).set({
-                  referredUserId: currentUserId,
-                  date: firebase.database.ServerValue.TIMESTAMP,
-                  bonusAwarded: 100
-                });
-                debugMsg += " | referralList SET ok";
-              } catch (logErr) {
-                debugMsg += " | referralList SET ERROR: " + logErr.message;
-              }
-            } else {
-              debugMsg += " | SKIPPED (self-referral, referrerId===currentUserId)";
+              db.ref('users/' + referrerId + '/referralList/' + currentUserId).set({
+                referredUserId: currentUserId,
+                date: firebase.database.ServerValue.TIMESTAMP,
+                bonusAwarded: 100
+              });
             }
           }
         }
-        debugAlert("DEBUG SUMMARY: " + debugMsg);
       }).catch(err => {
-        debugAlert("DEBUG: referrer QUERY FAILED — " + err.message);
         console.error("processIncomingReferral query error:", err);
       });
     }
@@ -3399,16 +3384,6 @@ function triggerMonetagAdCall() {
         targetNav.classList.add('active');
       }
     }
-
-    // ===== SHUDHU DEBUG-ER JONNO — kaj sesh hole ei function ebong shob call muche felo =====
-    function debugAlert(msg) {
-      if (window.Telegram?.WebApp?.showAlert) {
-        window.Telegram.WebApp.showAlert(String(msg));
-      } else {
-        alert(msg);
-      }
-    }
-    // ========================================================================
 
     function showToast(message) {
       const toast = document.getElementById('toast-notification');
