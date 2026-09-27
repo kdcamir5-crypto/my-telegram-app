@@ -2839,40 +2839,52 @@
   }
 
       // Find user with referralCode in Firebase
-      db.ref('users').orderByChild('referralCode').equalTo(incomingRef).once('value').then((snap) => {
+      db.ref('users').orderByChild('referralCode').equalTo(incomingRef).once('value').then(async (snap) => {
         console.log("Referrer database-e khuje pawa geche kina (exists):", snap.exists());
-        debugAlert("DEBUG: referrer found (snap.exists) = " + snap.exists());
+        let debugMsg = "exists=" + snap.exists();
         if (snap.exists()) {
-          snap.forEach((child) => {
-            const referrerId = child.key;
-            debugAlert("DEBUG: referrerId = " + referrerId + " | currentUserId = " + currentUserId);
+          const matchedIds = [];
+          snap.forEach((child) => { matchedIds.push(child.key); });
+          debugMsg += " | matchedIds=" + matchedIds.join(',') + " | currentUserId=" + currentUserId;
+
+          for (const referrerId of matchedIds) {
             if (referrerId !== currentUserId) {
               // transaction() byabohar kora hocche jate duijon referral eksathe
               // complete hole kono bonus hariye na jay (race condition rokkha)
-              db.ref('users/' + referrerId).transaction((data) => {
-                if (data) {
-                  data.balance = (Number(data.balance) || 0) + 100;
-                  data.referralEarning = (Number(data.referralEarning) || 0) + 100;
-                  data.referrals = (Number(data.referrals) || 0) + 1;
-                }
-                return data;
-              }, (error, committed) => {
-                debugAlert("DEBUG: transaction committed = " + committed + (error ? (" | error: " + error.message) : " | no error"));
-                if (committed) {
+              try {
+                const txResult = await db.ref('users/' + referrerId).transaction((data) => {
+                  if (data) {
+                    data.balance = (Number(data.balance) || 0) + 100;
+                    data.referralEarning = (Number(data.referralEarning) || 0) + 100;
+                    data.referrals = (Number(data.referrals) || 0) + 1;
+                  }
+                  return data;
+                });
+                debugMsg += " | TX committed=" + txResult.committed;
+                if (txResult.committed) {
                   console.log(`Referral reward of 100 TK credited to ${referrerId}`);
                 }
-              });
+              } catch (txErr) {
+                debugMsg += " | TX ERROR: " + txErr.message;
+              }
 
               // Log referral record
-              db.ref('users/' + referrerId + '/referralList/' + currentUserId).set({
-                referredUserId: currentUserId,
-                date: firebase.database.ServerValue.TIMESTAMP,
-                bonusAwarded: 100
-              });
+              try {
+                await db.ref('users/' + referrerId + '/referralList/' + currentUserId).set({
+                  referredUserId: currentUserId,
+                  date: firebase.database.ServerValue.TIMESTAMP,
+                  bonusAwarded: 100
+                });
+                debugMsg += " | referralList SET ok";
+              } catch (logErr) {
+                debugMsg += " | referralList SET ERROR: " + logErr.message;
+              }
+            } else {
+              debugMsg += " | SKIPPED (self-referral, referrerId===currentUserId)";
             }
-          });
-
+          }
         }
+        debugAlert("DEBUG SUMMARY: " + debugMsg);
       }).catch(err => {
         debugAlert("DEBUG: referrer QUERY FAILED — " + err.message);
         console.error("processIncomingReferral query error:", err);
