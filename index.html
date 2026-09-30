@@ -1905,11 +1905,13 @@
         <div class="notice-icon-badge">
           <i class="fa-solid fa-bullhorn"></i> নোটিশ
         </div>
-        <div class="marquee-container">
-          <div class="marquee-content" id="rollingNoticeText">
-            স্বাগতম Freelancing with Ariyan-এ! প্রতিটি রেফারে পাবেন ১০০ টাকা, প্রতিটি বিজ্ঞাপনে ১০ টাকা এবং একাউন্ট খুললেই পাচ্ছেন ৫০ টাকা ইনস্ট্যান্ট বোনাস!
-          </div>
+                <div class="marquee-container" style="width: 100%; overflow: hidden; display: flex; align-items: center;">
+          <!-- ফিক্সড লেখা মুছে খালি করা হলো, যেন অ্যাডমিন প্যানেলের কম্যান্ডে টেক্সট লাইভ নড়াচড়া করে -->
+          <marquee behavior="scroll" direction="left" id="rollingNoticeText" style="color: #ffffff; font-size: 14px; width: 100%; padding-top: 4px;">
+            লোড হচ্ছে...
+          </marquee>
         </div>
+
       </div>
 
       <div class="page-pad">
@@ -2290,18 +2292,39 @@
       </div>
 
       <div class="page-pad">
-        <div class="bonus-card-wrap">
-          <i class="fa-solid fa-gift bonus-gift-anim"></i>
-          <h2 class="bonus-callout-text">বোনাস পেতে Admin-কে Message করুন।</h2>
-          <p class="bonus-desc-text">
-            আপনি কি আজকের স্পেশাল সারপ্রাইজ বোনাস পেতে চান? আমাদের অ্যাডমিন প্যানেলে সরাসরি আপনার ইউজার আইডি পাঠিয়ে ফ্রি এক্সট্রা বোনাস সংগ্রহ করুন!
-          </p>
-          <a href="https://t.me/Kdcariyan1" target="_blank" rel="noopener noreferrer" class="admin-msg-btn">
-            <i class="fa-brands fa-telegram"></i> Admin-কে Message করুন
-          </a>
-        </div>
+            <div class="bonus-card-wrap">
+      <i class="fa-solid fa-gift bonus-gift-anim"></i>
+      <h2 class="bonus-callout-text">বোনাস পেতে Admin-কে Message করুন।</h2>
+      
+      <!-- অ্যাডমিন প্যানেল থেকে বোনাস নোটিশ কন্ট্রোল করার ডাইনামিক বক্স -->
+      <div class="dynamic-notice-box" id="admin-bonus-notice">
+        <p class="loading-text">লোড হচ্ছে...</p> 
+      </div>
 
-        <!-- Bonus Details Card -->
+      <a href="https://t.me" target="_blank" rel="noopener noreferrer" class="admin-msg-btn">
+        <i class="fa-brands fa-telegram"></i> Admin-কে Message করুন
+      </a>
+    </div>
+
+<style>
+.dynamic-notice-box {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed var(--accent-purple, #8a2be2);
+  border-radius: 10px;
+  padding: 15px;
+  margin: 15px 0;
+  min-height: 60px;
+  color: #e0e0e0;
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.5;
+}
+.loading-text {
+  color: #777;
+  font-style: italic;
+}
+</style>
+ <!-- Bonus Details Card -->
         <div class="wallet-description-block">
           <div class="wallet-description-title">
             <i class="fa-solid fa-sparkles" style="color:var(--accent-gold)"></i> বোনাস সংক্রান্ত তথ্য
@@ -2902,13 +2925,33 @@
       // notun listener jomto, jeta memory leak ebong onclick re-set korto)
       syncTaskLinksFromFirebase();
 
-      // Listen for rolling notice updates from Firebase
-      db.ref('notices/rolling').on('value', (snap) => {
-        const val = snap.val();
+     // Listen for rolling notice updates from Firebase
+db.ref('notices/rolling').on('value', (snap) => {
+    const val = snap.val();
+    const noticeElement = document.getElementById('rollingNoticeText');
+    if (noticeElement) {
         if (val && typeof val === 'string' && val.trim() !== '') {
-          document.getElementById('rollingNoticeText').textContent = val;
+            // innerText ব্যবহার করলে ভেতরের marquee ট্যাগের নড়াচড়া নষ্ট হবে না
+            noticeElement.innerText = val;
+        } else {
+            // অ্যাডমিন প্যানেলে নোটিশ ফাঁকা থাকলে এটি দেখাবে
+            noticeElement.innerText = "নতুন কোনো নোটিশ নেই।";
         }
-      });
+    }
+});
+// Listen for bonus panel notice updates from Firebase
+db.ref('notices/bonus').on('value', (snap) => {
+    const val = snap.val();
+    const bonusElement = document.getElementById('admin-bonus-notice');
+    if (bonusElement) {
+        if (val && typeof val === 'string' && val.trim() !== '') {
+            bonusElement.innerHTML = `<p>${val}</p>`;
+        } else {
+            bonusElement.innerHTML = `<p>বোনাস পেতে সরাসরি অ্যাডমিনকে মেসেজ করুন।</p>`;
+        }
+    }
+});
+
 
       // Listen for withdrawal history
       bindWithdrawalHistoryListener();
@@ -3459,5 +3502,120 @@ function syncTaskLinksFromFirebase() {
       initializeUserAccount();
     });
   </script>
+  <!-- Floating Support Button Start -->
+<div class="floating-support-container">
+  <!-- পপ-আপ হওয়া লোগো সমূহ -->
+  <div class="support-options" id="supportOptions">
+    <!-- হোয়াটসঅ্যাপ (নাম্বার হাইড, সরাসরি চ্যাট লিংক) -->
+    <a href="https://wa.me/qr/JW6QP24HJU6MO1" target="_blank" class="support-icon whatsapp-icon" title="WhatsApp Support">
+      <img src="https://wikimedia.org" alt="WhatsApp">
+    </a>
+    <!-- টেলিগ্রাম সাপোর্ট লিংক -->
+    <a href="https://t.me" target="_blank" class="support-icon telegram-icon" title="Telegram Support">
+      <img src="https://wikimedia.org" alt="Telegram">
+    </a>
+  </div>
+
+  <!-- মূল মেইন বাটন (হেডফোন + ডাবল অ্যারো) -->
+  <div class="support-main-btn" onclick="toggleSupportMenu()">
+    <span class="headphone-icon">🎧</span>
+    <span class="arrow-icon" id="supportArrow">&gt;&gt;</span>
+  </div>
+</div>
+
+<!-- বাটন সচল করার জন্য ছোট জাভাস্ক্রিপ্ট লজিক -->
+<script>
+function toggleSupportMenu() {
+  const options = document.getElementById('supportOptions');
+  const arrow = document.getElementById('supportArrow');
+  
+  options.classList.toggle('active');
+  
+  if (options.classList.contains('active')) {
+    arrow.style.transform = 'rotate(-90deg)'; // ক্লিক করলে অ্যারো ঘুরবে
+  } else {
+    arrow.style.transform = 'rotate(0deg)';
+  }
+}
+</script>
+
+<!-- সাপোর্ট বাটনের জন্য প্রয়োজনীয় মডার্ন CSS স্টাইল -->
+<style>
+.floating-support-container {
+  position: fixed;
+  bottom: 80px; /* হোম নেভিগেশন বারের ঠিক উপরে রাখার জন্য */
+  left: 20px;   /* বাম দিকের নিচের কর্নারে */
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.support-main-btn {
+  background: linear-gradient(135deg, #8a2be2, #4b0082);
+  color: white;
+  padding: 10px 12px;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.headphone-icon {
+  font-size: 22px;
+  margin-bottom: 2px;
+}
+
+.arrow-icon {
+  font-size: 12px;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+/* পপ-আপ অপশনগুলোর স্টাইল */
+.support-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 15px;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.support-options.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.support-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease;
+}
+
+.support-icon:hover {
+  transform: scale(1.1);
+}
+
+.support-icon img {
+  width: 28px;
+  height: 28px;
+}
+</style>
+<!-- Floating Support Button End -->
 </body>
 </html>
