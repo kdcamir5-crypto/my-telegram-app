@@ -1889,7 +1889,7 @@
 
       <div class="header-balance-chip" onclick="switchView('wallet')">
         <i class="fa-solid fa-coins coin-icon"></i>
-        <span class="balance-amount"><span class="taka-symbol">৳</span> <span id="headerBalance">50.00</span></span>
+        <span class="balance-amount"><span class="taka-symbol">৳</span> <span id="headerBalance">30.00</span></span>
       </div>
     </header>
 
@@ -1966,7 +1966,7 @@
             </div>
             <div class="stat-mini-info">
               <span class="smi-label">দৈনিক অ্যাড সম্পন্ন</span>
-              <span class="smi-val"><span id="homeAdsDone">0</span> / 10</span>
+              <span class="smi-val"><span id="homeAdsDone">0</span> / 50</span>
             </div>
           </div>
           <div class="stat-mini-card">
@@ -1975,7 +1975,7 @@
             </div>
             <div class="stat-mini-info">
               <span class="smi-label">মোট ব্যালেন্স</span>
-              <span class="smi-val">৳ <span id="homeBalance">50.00</span></span>
+              <span class="smi-val">৳ <span id="homeBalance">30.00</span></span>
             </div>
           </div>
         </div>
@@ -2005,15 +2005,15 @@
             </div>
             <div class="notice-row">
               <span>💸</span>
-              <span class="notice-gold">প্রতিটি রেফারে পাবেন 100 টাকা।</span>
+              <span class="notice-gold">প্রতিটি রেফারে পাবেন 50 টাকা।</span>
             </div>
             <div class="notice-row">
               <span>📺</span>
-              <span class="notice-green">প্রতিটি বিজ্ঞাপন দেখলে পাবেন 10 টাকা।</span>
+              <span class="notice-green">প্রতিটি বিজ্ঞাপন দেখলে পাবেন 5 টাকা।</span>
             </div>
             <div class="notice-row">
               <span>🎁</span>
-              <span>একাউন্ট খুললেই সাথে সাথে 50 টাকা বোনাস।</span>
+              <span>একাউন্ট খুললেই সাথে সাথে 30 টাকা বোনাস।</span>
             </div>
             <div class="notice-row">
               <span>🏦</span>
@@ -2040,11 +2040,11 @@
         <!-- Daily Task Hero -->
         <div class="task-hero-card">
           <h2 class="task-hero-title">বিজ্ঞাপন দেখুন</h2>
-          <p class="task-hero-subtitle">প্রতিদিন সর্বোচ্চ ১০টি বিজ্ঞাপন দেখুন। প্রতিটি বিজ্ঞাপনে পাচ্ছেন ১০ টাকা। সর্বমোট দৈনিক ১০০ টাকা পর্যন্ত আয়ের সুযোগ!</p>
+          <p class="task-hero-subtitle">প্রতিদিন সর্বোচ্চ ৫০ টি বিজ্ঞাপন দেখুন। প্রতিটি বিজ্ঞাপনে পাচ্ছেন ৫ টাকা। সর্বমোট দৈনিক ২৫০ টাকা পর্যন্ত আয়ের সুযোগ!</p>
           <div class="task-stats-pill">
             <i class="fa-solid fa-bullseye" style="color:var(--primary)"></i>
-            <span id="adsRemainingBangla">আপনার বাকি আছে ১০ টি ad</span>
-            <span class="tsp-badge" id="adProgressBadge">0/10</span>
+            <span id="adsRemainingBangla">আপনার বাকি আছে ৫০ টি ad</span>
+            <span class="tsp-badge" id="adProgressBadge">0/50</span>
           </div>
         </div>
 
@@ -2054,14 +2054,14 @@
           আজকের সব বিজ্ঞাপন দেখা সম্পূর্ণ হয়েছে। আগামী কাল আবার চেষ্টা করুন।
         </div>
 
-        <!-- Sequential Ad Grid (1 to 10) -->
+        <!-- Sequential Ad Grid (1 to 50) -->
         <div class="ads-sequential-container">
           <div class="ad-grid-title">
             <span>বিজ্ঞাপনের তালিকা (সিরিয়াল অনুযায়ী)</span>
             <span style="font-size:12px; color:var(--text-muted);"><i class="fa-solid fa-clock"></i> ১৫ সেকেন্ড</span>
           </div>
           <div class="ad-slots-list" id="adSlotsContainer">
-            <!-- Dynamic 10 Ad items rendered by JavaScript -->
+            <!-- Dynamic 50 Ad items rendered by JavaScript -->
           </div>
         </div>
 
@@ -2154,7 +2154,7 @@
               </div>
               <div class="eic-text">
                 <span class="eic-title">আপনি বিজ্ঞাপন থেকে আয় করেছেন</span>
-                <span class="eic-sub">প্রতি বিজ্ঞাপনে ১০ টাকা</span>
+                <span class="eic-sub">প্রতি বিজ্ঞাপনে ৫ টাকা</span>
               </div>
             </div>
             <span class="eic-amount">৳ <span id="earnFromAds">0.00</span></span>
@@ -2168,7 +2168,7 @@
               </div>
               <div class="eic-text">
                 <span class="eic-title">আপনি রেফার করে আয় করেছেন</span>
-                <span class="eic-sub">প্রতি ভ্যালিড রেফারে ১০০ টাকা</span>
+                <span class="eic-sub">প্রতি ভ্যালিড রেফারে ৫০ টাকা</span>
               </div>
             </div>
             <span class="eic-amount">৳ <span id="earnFromReferral">0.00</span></span>
@@ -2185,7 +2185,7 @@
                 <span class="eic-sub">রেজিস্ট্রেশন বোনাস + অ্যাডমিন বোনাস</span>
               </div>
             </div>
-            <span class="eic-amount">৳ <span id="earnFromBonus">50.00</span></span>
+            <span class="eic-amount">৳ <span id="earnFromBonus">30.00</span></span>
           </div>
 
           <!-- Item 4: New Task Income -->
@@ -2223,7 +2223,7 @@
             <i class="fa-solid fa-users-rays"></i>
           </div>
           <h2 class="referral-tagline">রেফার করে আয় করুন, শেয়ার করুন 💚</h2>
-          <p class="referral-subtext">আপনার বন্ধুদের আপনার রেফারেল লিংক শেয়ার করুন। প্রতিটি সফল রেজিস্ট্রেশনে আপনি পাবেন নগদ <b style="color:var(--accent-gold)">১০০ টাকা</b> সরাসরি ব্যালেন্সে!</p>
+          <p class="referral-subtext">আপনার বন্ধুদের আপনার রেফারেল লিংক শেয়ার করুন। প্রতিটি সফল রেজিস্ট্রেশনে আপনি পাবেন নগদ <b style="color:var(--accent-gold)">৫০ টাকা</b> সরাসরি ব্যালেন্সে!</p>
 
           <!-- Referral Link Copy Box -->
           <div class="referral-link-container">
@@ -2272,7 +2272,7 @@
             <i class="fa-solid fa-shield-halved" style="color:var(--primary)"></i> রেফারেল পলিসি ও নিয়মাবলী
           </div>
           <ul style="padding-left:18px; display:flex; flex-direction:column; gap:6px;">
-            <li>প্রতিটি প্রকৃত বন্ধু একাউন্ট খুললেই সাথে সাথে আপনার একাউন্টে ১০০ টাকা যোগ হবে।</li>
+            <li>প্রতিটি প্রকৃত বন্ধু একাউন্ট খুললেই সাথে সাথে আপনার একাউন্টে ৫০ টাকা যোগ হবে।</li>
             <li>সেলফ-রেফার বা একই ডিভাইসে বারবার একাউন্ট খোলার চেষ্টা করলে একাউন্ট ব্যান হতে পারে।</li>
             <li>রেফারেল আয়ের কোনো নির্দিষ্ট সীমা নেই, যত খুশি রেফার করে আনলিমিটেড ইনকাম করুন!</li>
           </ul>
@@ -2326,7 +2326,7 @@
           <div class="wallet-description-title">
             <i class="fa-solid fa-sparkles" style="color:var(--accent-gold)"></i> বোনাস সংক্রান্ত তথ্য
           </div>
-          <p style="margin-bottom:8px;">🎁 <b>রেজিস্ট্রেশন বোনাস:</b> প্রতিটি নতুন মেম্বার একাউন্ট খোলার সাথে সাথেই পেয়ে যাচ্ছেন ৫০ টাকা বোনাস।</p>
+          <p style="margin-bottom:8px;">🎁 <b>রেজিস্ট্রেশন বোনাস:</b> প্রতিটি নতুন মেম্বার একাউন্ট খোলার সাথে সাথেই পেয়ে যাচ্ছেন ৩০ টাকা বোনাস।</p>
           <p style="margin-bottom:8px;">👑 <b>অ্যাডমিন স্পেশাল গিফট:</b> এক্টিভ ইউজারদের জন্য প্রতিদিন রয়েছে বিভিন্ন গিফট কোড ও সরাসরি ব্যালেন্স বোনাস।</p>
           <p>⚡ অ্যাডমিন থেকে দেওয়া যেকোনো বোনাস সাথে সাথে আপনার ব্যালেন্স ও ওয়ালেটে রিয়েল-টাইমে যুক্ত হয়ে যায়।</p>
         </div>
@@ -2348,7 +2348,7 @@
             <span class="wh-tag"><i class="fa-solid fa-circle-check"></i> এভেইলেবল উইথড্র ব্যালেন্স</span>
             <i class="fa-solid fa-building-columns" style="color:rgba(255,255,255,0.4); font-size:18px;"></i>
           </div>
-          <div class="wh-balance">৳ <span id="walletLiveBalance">50.00</span></div>
+          <div class="wh-balance">৳ <span id="walletLiveBalance">30.00</span></div>
           <button class="btn-open-withdraw" onclick="openWithdrawModal()">
             <i class="fa-solid fa-money-bill-transfer"></i> টাকা উত্তোলন (Withdraw করুন)
           </button>
@@ -2377,7 +2377,7 @@
               <div class="eic-icon" style="background:rgba(168,85,247,0.15); color:var(--accent-purple)"><i class="fa-solid fa-gift"></i></div>
               <span class="eic-title">বোনাস ইনকাম</span>
             </div>
-            <span class="eic-amount">৳ <span id="walletBonusIncome">50.00</span></span>
+            <span class="eic-amount">৳ <span id="walletBonusIncome">30.00</span></span>
           </div>
 
           <div class="earning-item-card">
@@ -2571,7 +2571,7 @@
           <div class="timer-text-display" id="timerCountdown">15s</div>
         </div>
         <div class="timer-status-text">
-          দয়া করে অপেক্ষা করুন, বিজ্ঞাপন ভেরিফিকেশন চলছে... ১৫ সেকেন্ড সম্পূর্ণ হলে ১০ টাকা রিওয়ার্ড ব্যালেন্সে যোগ হবে।
+          দয়া করে অপেক্ষা করুন, বিজ্ঞাপন ভেরিফিকেশন চলছে... ১৫ সেকেন্ড সম্পূর্ণ হলে ৫ টাকা রিওয়ার্ড ব্যালেন্সে যোগ হবে।
         </div>
       </div>
     </div>
@@ -2813,8 +2813,8 @@
             mobile: '',
             birthDate: '',
             profilePhoto: defaultPhoto,
-            balance: 50,                // One-time registration bonus
-            bonusEarning: 50,           // Included in bonus income
+            balance: 30,                // One-time registration bonus
+            bonusEarning: 30,           // Included in bonus income
             adEarning: 0,
             referralEarning: 0,
             newTaskEarning: 0,
@@ -2827,8 +2827,8 @@
 
           // Save to Firebase
           userRef.set(newAccountData).then(() => {
-            console.log("New user account created successfully with 50 TK bonus:", currentUserId);
-            showToast("অভিনন্দন! একাউন্ট খোলার সাথে সাথে ৫০ টাকা বোনাস পেয়েছেন।");
+            console.log("New user account created successfully with 30 TK bonus:", currentUserId);
+            showToast("অভিনন্দন! একাউন্ট খোলার সাথে সাথে ৩০ টাকা বোনাস পেয়েছেন।");
             
             // Process referral bonus for inviter if incoming referral code exists
             processIncomingReferral(referralCode);
@@ -2869,14 +2869,14 @@
               try {
                 const txResult = await db.ref('users/' + referrerId).transaction((data) => {
                   if (data) {
-                    data.balance = (Number(data.balance) || 0) + 100;
-                    data.referralEarning = (Number(data.referralEarning) || 0) + 100;
+                    data.balance = (Number(data.balance) || 0) + 50;
+                    data.referralEarning = (Number(data.referralEarning) || 0) + 50;
                     data.referrals = (Number(data.referrals) || 0) + 1;
                   }
                   return data;
                 });
                 if (txResult.committed) {
-                  console.log(`Referral reward of 100 TK credited to ${referrerId}`);
+                  console.log(`Referral reward of 50 TK credited to ${referrerId}`);
                 }
               } catch (txErr) {
                 console.error("Referral transaction error:", txErr);
@@ -2886,7 +2886,7 @@
               db.ref('users/' + referrerId + '/referralList/' + currentUserId).set({
                 referredUserId: currentUserId,
                 date: firebase.database.ServerValue.TIMESTAMP,
-                bonusAwarded: 100
+                bonusAwarded: 50
               });
             }
           }
@@ -2968,7 +2968,7 @@ db.ref('notices/bonus').on('value', (snap) => {
       const newTaskEarning = Number(currentUser.newTaskEarning || 0);
       const totalIncome = adEarning + referralEarning + bonusEarning + newTaskEarning;
       const dailyAdsDone = Number(currentUser.dailyAdsCompleted || 0);
-      const adsRemaining = Math.max(0, 10 - dailyAdsDone);
+      const adsRemaining = Math.max(0, 50 - dailyAdsDone);
 
       // Header Elements
       document.getElementById('headerUserName').textContent = currentUser.name || 'Ariyan User';
@@ -2985,10 +2985,10 @@ db.ref('notices/bonus').on('value', (snap) => {
 
       // Daily Task Page
       document.getElementById('adsRemainingBangla').textContent = `আপনার বাকি আছে ${adsRemaining} টি ad`;
-      document.getElementById('adProgressBadge').textContent = `${dailyAdsDone}/10`;
+      document.getElementById('adProgressBadge').textContent = `${dailyAdsDone}/50`;
       
       const adsDoneBanner = document.getElementById('adsDoneBanner');
-      if (dailyAdsDone >= 10) {
+      if (dailyAdsDone >= 50) {
         adsDoneBanner.style.display = 'block';
         document.getElementById('rollingNoticeText').textContent = "আজকের সব বিজ্ঞাপন দেখা সম্পূর্ণ হয়েছে। আগামী কাল আবার চেষ্টা করুন।";
       } else {
@@ -3043,7 +3043,7 @@ db.ref('notices/bonus').on('value', (snap) => {
       const container = document.getElementById('adSlotsContainer');
       container.innerHTML = '';
 
-      for (let i = 1; i <= 10; i++) {
+      for (let i = 1; i <= 50; i++) {
         const item = document.createElement('div');
         const isCompleted = i <= completedCount;
         const isActive = i === (completedCount + 1);
@@ -3065,7 +3065,7 @@ db.ref('notices/bonus').on('value', (snap) => {
             <div class="ad-number-badge">${i}</div>
             <div class="ad-slot-text">
               <span class="ad-slot-name">বিজ্ঞাপন #${i}</span>
-              <span class="ad-slot-reward">+১০ টাকা রিওয়ার্ড</span>
+              <span class="ad-slot-reward">+৫ টাকা রিওয়ার্ড</span>
             </div>
           </div>
           ${btnHtml}
@@ -3077,7 +3077,7 @@ db.ref('notices/bonus').on('value', (snap) => {
     function startWatchingAd(adNumber) {
       if (isWatchingAd) return;
       if (!currentUser) return;
-      if (currentUser.dailyAdsCompleted >= 10) {
+      if (currentUser.dailyAdsCompleted >= 50) {
         showToast("আজকের সব বিজ্ঞাপন দেখা সম্পূর্ণ হয়েছে।");
         return;
       }
@@ -3106,10 +3106,10 @@ function triggerMonetagAdCall() {
       userRef.transaction((data) => {
         if (data) {
           const currentAds = Number(data.dailyAdsCompleted || 0);
-          if (currentAds < 10) {
+          if (currentAds < 50) {
             data.dailyAdsCompleted = currentAds + 1;
-            data.adEarning = (Number(data.adEarning) || 0) + 10;
-            data.balance = (Number(data.balance) || 0) + 10;
+            data.adEarning = (Number(data.adEarning) || 0) + 5;
+            data.balance = (Number(data.balance) || 0) + 5;
             data.lastTaskDate = getTodayString();
           }
         }
@@ -3117,7 +3117,7 @@ function triggerMonetagAdCall() {
       }, (error, committed) => {
         isWatchingAd = false;
         if (committed) {
-          showToast("আপনি 10 টাকা reward পেয়েছেন।");
+          showToast("আপনি ৫ টাকা reward পেয়েছেন।");
         } else {
           showToast("অ্যাড রিওয়ার্ড যোগ করতে সমস্যা হয়েছে, পুনরায় চেষ্টা করুন।");
         }
@@ -3459,13 +3459,13 @@ function triggerMonetagAdCall() {
 
     function shareOnTelegram() {
       const link = document.getElementById('referralLinkInput').textContent;
-      const text = encodeURIComponent(`Freelancing with Ariyan এ একাউন্ট খুললেই পাচ্ছেন ৫০ টাকা ইনস্ট্যান্ট বোনাস! প্রতিদিন বিজ্ঞাপন দেখে ও বন্ধুদের রেফার করে আয় করুন:\n\n${link}`);
+      const text = encodeURIComponent(`Freelancing with Ariyan এ একাউন্ট খুললেই পাচ্ছেন ৩০ টাকা ইনস্ট্যান্ট বোনাস! প্রতিদিন বিজ্ঞাপন দেখে ও বন্ধুদের রেফার করে আয় করুন:\n\n${link}`);
       window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${text}`, '_blank');
     }
 
     function shareOnWhatsApp() {
       const link = document.getElementById('referralLinkInput').textContent;
-      const text = encodeURIComponent(`Freelancing with Ariyan এ একাউন্ট খুললেই পাচ্ছেন ৫০ টাকা ইনস্ট্যান্ট বোনাস! প্রতিদিন বিজ্ঞাপন দেখে ও বন্ধুদের রেফার করে আয় করুন:\n\n${link}`);
+      const text = encodeURIComponent(`Freelancing with Ariyan এ একাউন্ট খুললেই পাচ্ছেন ৩০ টাকা ইনস্ট্যান্ট বোনাস! প্রতিদিন বিজ্ঞাপন দেখে ও বন্ধুদের রেফার করে আয় করুন:\n\n${link}`);
       window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
     }
 
