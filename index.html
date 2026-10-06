@@ -261,30 +261,30 @@
       box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
     }
 
-    .marquee-container {
-      flex: 1;
-      overflow: hidden;
-      white-space: nowrap;
-      position: relative;
-    }
+   .marquee-container {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
 
-    .marquee-content {
-      display: inline-block;
-      white-space: nowrap;
-      font-size: 13px;
-      font-weight: 500;
-      color: #f1f5f9;
-      animation: marqueeScroll 22s linear infinite;
-    }
+.marquee-content {
+  display: inline-block;
+  white-space: nowrap;
+  padding-left: 100%;
+  font-size: 13px;
+  font-weight: 500;
+  color: #f1f5f9;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+  animation: marqueeScroll var(--marquee-dur, 20s) linear infinite;
+}
 
-    .marquee-content:hover {
-      animation-play-state: paused;
-    }
-
-    @keyframes marqueeScroll {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
+@keyframes marqueeScroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-100%, 0, 0); }
+}
 
     /* PADDED CONTAINER */
     .page-pad {
@@ -3498,6 +3498,20 @@ function syncTaskLinksFromFirebase() {
       console.log("App loaded. Initializing account...");
       initializeUserAccount();
     });
+
+    // নোটিশ মার্কিউ স্পিড ফিক্স
+    (function () {
+  const el = document.getElementById('rollingNoticeText');
+  if (!el) return;
+  const SPEED = 55; // px প্রতি সেকেন্ড; বাড়ালে দ্রুত, কমালে ধীরে
+  const apply = () => {
+    const dur = Math.max(8, el.offsetWidth / SPEED);
+    el.style.setProperty('--marquee-dur', dur + 's');
+  };
+  new MutationObserver(apply).observe(el, { childList: true, characterData: true, subtree: true });
+  window.addEventListener('resize', apply);
+  apply();
+})();
   </script>
   <!-- Floating Support Button Start -->
 <div class="floating-support-container">
