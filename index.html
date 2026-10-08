@@ -17,7 +17,7 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <!-- Monetag Ad SDK -->
-  <script src="//libtl.com/sdk.js" data-zone="11862019" data-sdk="show_11862019"></script>
+  <script src="//libtl.com/sdk.js" data-zone="11981233" data-sdk="show_11981233"></script>
 
   <!-- Firebase Compat SDKs (Ultra-reliable single-file execution without build steps) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -3084,9 +3084,9 @@ db.ref('notices/bonus').on('value', (snap) => {
     triggerMonetagAdCall();
 } 
 function triggerMonetagAdCall() {
-    // Call Monetag show_11862019 function as defined in requirements
-    if (typeof window.show_11862019 === 'function') {
-        window.show_11862019().then(() => {
+    // Call Monetag show_11981233 function as defined in requirements
+    if (typeof window.show_11981233 === 'function') {
+        window.show_11981233().then(() => {
             awardAdReward();
         }).catch((err) => {
             console.warn("Monetag ad finished/handled:", err);
