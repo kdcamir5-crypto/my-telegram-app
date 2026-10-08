@@ -3084,18 +3084,19 @@ db.ref('notices/bonus').on('value', (snap) => {
     triggerMonetagAdCall();
 } 
 function triggerMonetagAdCall() {
-    // Call Monetag show_11981233 function as defined in requirements
-    if (typeof window.show_11981233 === 'function') {
-        window.show_11981233().then(() => {
-            awardAdReward();
-        }).catch((err) => {
-            console.warn("Monetag ad finished/handled:", err);
-            awardAdReward();
-        });
-    } else {
-        awardAdReward();
-    }
-} 
+  if (typeof window.show_11981233 !== 'function') {
+    isWatchingAd = false;
+    showToast("বিজ্ঞাপন লোড হয়নি, কিছুক্ষণ পর আবার চেষ্টা করুন।");
+    return;
+  }
+  window.show_11981233().then(() => {
+    awardAdReward();
+  }).catch((err) => {
+    console.warn("Monetag ad error:", err);
+    isWatchingAd = false;
+    showToast("বিজ্ঞাপন দেখানো যায়নি, আবার চেষ্টা করুন।");
+  });
+}
 
     function awardAdReward() {
       if (!currentUser || !currentUserId) return;
