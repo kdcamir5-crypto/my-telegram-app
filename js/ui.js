@@ -13,7 +13,7 @@
       const newTaskEarning = Number(currentUser.newTaskEarning || 0);
       const totalIncome = adEarning + referralEarning + bonusEarning + newTaskEarning;
       const dailyAdsDone = Number(currentUser.dailyAdsCompleted || 0);
-      const adsRemaining = Math.max(0, 50 - dailyAdsDone);
+      const adsRemaining = Math.max(0, DAILY_AD_LIMIT - dailyAdsDone);
 
       // Header Elements
       document.getElementById('headerUserName').textContent = currentUser.name || 'Ariyan User';
@@ -29,17 +29,10 @@
       document.getElementById('homeBalance').textContent = balance.toFixed(2);
 
       // Daily Task Page
-      document.getElementById('adsRemainingBangla').textContent = `আপনার বাকি আছে ${adsRemaining} টি ad`;
-      document.getElementById('adProgressBadge').textContent = `${dailyAdsDone}/50`;
-      
-      const adsDoneBanner = document.getElementById('adsDoneBanner');
-      if (dailyAdsDone >= 50) {
-        adsDoneBanner.style.display = 'block';
+      if (dailyAdsDone >= DAILY_AD_LIMIT) {
         document.getElementById('rollingNoticeText').textContent = "আজকের সব বিজ্ঞাপন দেখা সম্পূর্ণ হয়েছে। আগামী কাল আবার চেষ্টা করুন।";
-      } else {
-        adsDoneBanner.style.display = 'none';
       }
-      renderAdSlots(dailyAdsDone);
+      renderAdHero();
       renderNewTaskStatus();
 
       // Earning Page

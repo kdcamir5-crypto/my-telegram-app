@@ -9,7 +9,7 @@
         if (currentUser.completedTasks[`task_${i}`]) {
           const btn = document.getElementById(`taskBtn-${i}`);
           if (btn) {
-            btn.className = 'task-complete-btn btn-task-done';
+            btn.className = 'tcard-btn tcard-btn-done';
             btn.innerHTML = '<i class="fa-solid fa-check"></i> সম্পন্ন হয়েছে ✅';
             btn.disabled = true;
           }
@@ -22,6 +22,13 @@
       if (currentUser.completedTasks && currentUser.completedTasks[`task_${taskId}`]) {
         showToast("এই টাস্কটি আপনি ইতিমধ্যে সম্পন্ন করেছেন।");
         return;
+      }
+
+      const taskBtn = document.getElementById(`taskBtn-${taskId}`);
+      if (taskBtn && taskBtn.disabled) return;
+      if (taskBtn) {
+        taskBtn.disabled = true;
+        taskBtn.innerHTML = '<i class="fa-solid fa-spinner"></i> যাচাই হচ্ছে...';
       }
 
       window.open(targetUrl, '_blank');
@@ -42,6 +49,9 @@
         }, (error, committed) => {
           if (committed) {
             showToast(`অভিনন্দন! "${taskTitle}" এর জন্য ১০ টাকা ব্যালেন্সে যোগ হয়েছে।`);
+          } else if (taskBtn) {
+            taskBtn.disabled = false;
+            taskBtn.innerHTML = 'শুরু করুন';
           }
         });
       }, 20000);

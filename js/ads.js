@@ -1,15 +1,18 @@
-/* Daily ad task + Monetag integration (section 6) — with 1-minute cooldown between ads */
+/* Daily ad task + Monetag integration (section 6) — hero card UI, 1-minute cooldown */
 
     /* -------------------------------------------------------------
        6. DAILY TASK & MONETAG AD INTEGRATION
        ------------------------------------------------------------- */
 
     // ====== সেটিংস (এখানে বদলালেই হবে) ======
-    const AD_COOLDOWN_MS = 60 * 1000;   // প্রতিটি বিজ্ঞাপনের পর কত সময় অপেক্ষা (এখন ১ মিনিট)
+    const DAILY_AD_LIMIT = 50;          // দৈনিক সর্বোচ্চ বিজ্ঞাপন সংখ্যা
+    const AD_REWARD = 5;                // প্রতিটি বিজ্ঞাপনের টাকা
+    const AD_COOLDOWN_MS = 60 * 1000;   // প্রতিটি বিজ্ঞাপনের পর অপেক্ষা (এখন ১ মিনিট)
     // =========================================
 
     let serverTimeOffset = 0;
     let adCooldownTimer = null;
+    let adWatchTimeout = null;
 
     // Firebase সার্ভারের সময় ব্যবহার করা হচ্ছে, যাতে ইউজার ফোনের ঘড়ি বদলে ফাঁকি দিতে না পারে
     db.ref('.info/serverTimeOffset').on('value', (snap) => {
@@ -18,10 +21,6 @@
 
     function serverNow() {
       return Date.now() + serverTimeOffset;
-    }
-
-    function toBnDigits(n) {
-      return String(n).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
     }
 
     // শেষ বিজ্ঞাপনের পর আর কত মিলিসেকেন্ড অপেক্ষা বাকি (০ মানে এখনই দেখা যাবে)
@@ -39,65 +38,78 @@
         if (left <= 0) {
           clearInterval(adCooldownTimer);
           adCooldownTimer = null;
-          renderAdSlots(Number(currentUser && currentUser.dailyAdsCompleted || 0));
+          renderAdHero();
           return;
         }
         const el = document.getElementById('adCooldownText');
-        if (el) el.textContent = toBnDigits(Math.ceil(left / 1000));
+        if (el) el.textContent = Math.ceil(left / 1000);
       }, 1000);
     }
 
-    function renderAdSlots(completedCount) {
-      const container = document.getElementById('adSlotsContainer');
-      container.innerHTML = '';
+    function setTextById(id, text) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = text;
+    }
+
+    // টাস্ক পেজের উপরের বড় বিজ্ঞাপন কার্ড (আয়, আজকের হিসাব, একটিমাত্র বাটন)
+    function renderAdHero() {
+      const btn = document.getElementById('adHeroBtn');
+      if (!btn) return;
 
       if (adCooldownTimer) {
         clearInterval(adCooldownTimer);
         adCooldownTimer = null;
       }
+
+      const done = Number(currentUser && currentUser.dailyAdsCompleted || 0);
+      const left = Math.max(0, DAILY_AD_LIMIT - done);
       const cooldownLeft = getAdCooldownLeftMs(currentUser);
 
-      for (let i = 1; i <= 50; i++) {
-        const item = document.createElement('div');
-        const isCompleted = i <= completedCount;
-        const isActive = i === (completedCount + 1);
+      setTextById('adHeroReward', '৳' + AD_REWARD.toFixed(2));
+      setTextById('adHeroDone', done + ' টি');
+      setTextById('adHeroEarn', '৳ ' + (done * AD_REWARD).toFixed(2));
 
-        let statusClass = 'locked';
-        let btnHtml = `<button class="ad-action-btn btn-locked" disabled><i class="fa-solid fa-lock"></i> লক করা</button>`;
+      btn.classList.remove('is-wait', 'is-done');
+      let hint = 'প্রতিটি বিজ্ঞাপন দেখা শেষ হলে ' + (AD_COOLDOWN_MS / 60000) + ' মিনিট পর পরেরটি দেখতে পারবেন';
 
-        if (isCompleted) {
-          statusClass = 'completed';
-          btnHtml = `<button class="ad-action-btn btn-completed"><i class="fa-solid fa-circle-check"></i> সম্পন্ন ✅</button>`;
-        } else if (isActive) {
-          statusClass = 'active';
-          if (cooldownLeft > 0) {
-            btnHtml = `<button class="ad-action-btn btn-locked" disabled><i class="fa-solid fa-hourglass-half"></i> <span id="adCooldownText">${toBnDigits(Math.ceil(cooldownLeft / 1000))}</span> সেকেন্ড অপেক্ষা</button>`;
-          } else {
-            btnHtml = `<button class="ad-action-btn btn-watch" onclick="startWatchingAd(${i})"><i class="fa-solid fa-play"></i> বিজ্ঞাপন দেখুন</button>`;
-          }
-        }
-
-        item.className = `ad-slot-item ${statusClass}`;
-        item.innerHTML = `
-          <div class="ad-slot-info">
-            <div class="ad-number-badge">${i}</div>
-            <div class="ad-slot-text">
-              <span class="ad-slot-name">বিজ্ঞাপন #${i}</span>
-              <span class="ad-slot-reward">+৫ টাকা রিওয়ার্ড</span>
-            </div>
-          </div>
-          ${btnHtml}
-        `;
-        container.appendChild(item);
+      if (!currentUser) {
+        btn.disabled = true;
+        btn.classList.add('is-wait');
+        btn.innerHTML = '<i class="fa-solid fa-spinner"></i> লোড হচ্ছে...';
+      } else if (done >= DAILY_AD_LIMIT) {
+        btn.disabled = true;
+        btn.classList.add('is-done');
+        btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> আজকের সব বিজ্ঞাপন সম্পন্ন';
+        hint = 'আগামীকাল আবার নতুন বিজ্ঞাপন পাবেন';
+      } else if (isWatchingAd) {
+        btn.disabled = true;
+        btn.classList.add('is-wait');
+        btn.innerHTML = '<i class="fa-solid fa-spinner"></i> বিজ্ঞাপন লোড হচ্ছে...';
+      } else if (cooldownLeft > 0) {
+        btn.disabled = true;
+        btn.classList.add('is-wait');
+        btn.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> পরের বিজ্ঞাপন <span id="adCooldownText">' + Math.ceil(cooldownLeft / 1000) + '</span> সেকেন্ড পর';
+        startAdCooldownTimer();
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-play"></i> বিজ্ঞাপন শুরু করুন (' + left + ' টি বাকি | আজ ' + done + '/' + DAILY_AD_LIMIT + ')';
       }
-
-      if (cooldownLeft > 0) startAdCooldownTimer();
+      setTextById('adHeroHint', hint);
     }
 
-    function startWatchingAd(adNumber) {
+    function finishWatching() {
+      isWatchingAd = false;
+      if (adWatchTimeout) {
+        clearTimeout(adWatchTimeout);
+        adWatchTimeout = null;
+      }
+      renderAdHero();
+    }
+
+    function startWatchingAd() {
       if (isWatchingAd) return;
       if (!currentUser) return;
-      if (currentUser.dailyAdsCompleted >= 50) {
+      if (Number(currentUser.dailyAdsCompleted || 0) >= DAILY_AD_LIMIT) {
         showToast("আজকের সব বিজ্ঞাপন দেখা সম্পূর্ণ হয়েছে।");
         return;
       }
@@ -105,17 +117,20 @@
       // বিজ্ঞাপন দেখানোর আগেই বিরতি চেক করা হয়, যাতে অপেক্ষা করতে হলে বিজ্ঞাপন চালুই না হয়
       const cooldownLeft = getAdCooldownLeftMs(currentUser);
       if (cooldownLeft > 0) {
-        showToast(`পরের বিজ্ঞাপনের জন্য আরও ${toBnDigits(Math.ceil(cooldownLeft / 1000))} সেকেন্ড অপেক্ষা করুন।`);
+        showToast('পরের বিজ্ঞাপনের জন্য আরও ' + Math.ceil(cooldownLeft / 1000) + ' সেকেন্ড অপেক্ষা করুন।');
         return;
       }
 
       isWatchingAd = true;
+      renderAdHero();
+      // বিজ্ঞাপন ২ মিনিটেও শেষ/ব্যর্থ না হলে বাটন আবার চালু করে দেওয়া হয়, যাতে আটকে না থাকে
+      adWatchTimeout = setTimeout(finishWatching, 120000);
       triggerMonetagAdCall();
     }
 
     function triggerMonetagAdCall() {
       if (typeof window.show_11981233 !== 'function') {
-        isWatchingAd = false;
+        finishWatching();
         showToast("বিজ্ঞাপন লোড হয়নি, কিছুক্ষণ পর আবার চেষ্টা করুন।");
         return;
       }
@@ -123,14 +138,14 @@
         awardAdReward();
       }).catch((err) => {
         console.warn("Monetag ad error:", err);
-        isWatchingAd = false;
+        finishWatching();
         showToast("বিজ্ঞাপন দেখানো যায়নি, আবার চেষ্টা করুন।");
       });
     }
 
     function awardAdReward() {
       if (!currentUser || !currentUserId) {
-        isWatchingAd = false;
+        finishWatching();
         return;
       }
 
@@ -149,23 +164,23 @@
             result = 'cooldown';
             return data;
           }
-          if (currentAds >= 50) {
+          if (currentAds >= DAILY_AD_LIMIT) {
             result = 'limit';
             return data;
           }
 
           data.dailyAdsCompleted = currentAds + 1;
-          data.adEarning = (Number(data.adEarning) || 0) + 5;
-          data.balance = (Number(data.balance) || 0) + 5;
+          data.adEarning = (Number(data.adEarning) || 0) + AD_REWARD;
+          data.balance = (Number(data.balance) || 0) + AD_REWARD;
           data.lastTaskDate = getTodayString();
           data.lastAdAt = nowTs;
           result = 'ok';
         }
         return data;
       }, (error, committed) => {
-        isWatchingAd = false;
+        finishWatching();
         if (committed && result === 'ok') {
-          showToast("আপনি ৫ টাকা reward পেয়েছেন।");
+          showToast('আপনি ' + AD_REWARD + ' টাকা reward পেয়েছেন।');
         } else if (committed && result === 'cooldown') {
           showToast("দুই বিজ্ঞাপনের মাঝে ১ মিনিট অপেক্ষা করতে হবে।");
         } else if (committed && result === 'limit') {
