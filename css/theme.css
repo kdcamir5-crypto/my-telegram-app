@@ -151,7 +151,15 @@
 .referral-link-container { background: #eaf1fb; border: 1px dashed #b9cde9; }
 .referral-link-text { color: var(--th-ink); }
 .btn-copy-ref { background: var(--th-blue); color: #fff; }
-.referral-hero-icon, .support-icon { background: linear-gradient(135deg, #4fa3d6, #2b72d2); color: #fff; }
+.referral-hero-icon, .support-card .support-icon { background: linear-gradient(135deg, #4fa3d6, #2b72d2); color: #fff; }
+
+/* ফ্লোটিং সাপোর্ট বাটনের টেলিগ্রাম ও হোয়াটসঅ্যাপ লোগো: সাদা গোল ব্যাকগ্রাউন্ড */
+.support-options .support-icon {
+  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+.support-options .support-icon svg { display: block; }
 .history-title span:last-child { color: var(--th-ink-soft); }
 
 /* টেলিগ্রাম চ্যানেল কার্ড */
