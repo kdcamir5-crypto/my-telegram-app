@@ -1,0 +1,242 @@
+/* =============================================================
+   DYNAMIC EFFECTS — মিটমিটে তারা, আলোর রশ্মি, ঝলক, ভাসমান আলো
+   সব অ্যানিমেশনে শুধু transform ও opacity ব্যবহার হয় (ফোনে হালকা)।
+   এই ফাইল ও js/effects.js না লাগালেই সব আগের মতো হয়ে যায়।
+   ============================================================= */
+
+/* অ্যাপের পেছনের ব্যাকগ্রাউন্ড এখন এফেক্ট লেয়ার থেকে আসে */
+#app-container { background: transparent; }
+
+#fx-layer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  max-width: 480px;
+  transform: translateX(-50%);
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 55% at 50% 0%, rgba(40, 90, 190, 0.55) 0%, rgba(40, 90, 190, 0) 70%),
+    radial-gradient(90% 40% at 100% 100%, rgba(0, 209, 143, 0.10) 0%, rgba(0, 209, 143, 0) 70%),
+    linear-gradient(180deg, #0f1f48 0%, #0b1432 45%, #070c1f 100%);
+}
+#fx-layer * { pointer-events: none; }
+
+/* ---------- মিটমিটে তারা ---------- */
+.fx-stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: transparent;
+  will-change: opacity;
+  animation: fx-twinkle 3.2s ease-in-out infinite alternate;
+}
+.fx-stars.s2 { width: 2.5px; height: 2.5px; animation-duration: 4.6s; animation-delay: -1.4s; }
+.fx-stars.s3 { width: 3px; height: 3px; animation-duration: 6s; animation-delay: -3s; }
+@keyframes fx-twinkle {
+  0%   { opacity: 0.15; }
+  100% { opacity: 1; }
+}
+
+/* ---------- ঝিকিমিকি তারা (+ আকৃতি) ---------- */
+.fx-spark {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: fx-spark 4.8s ease-in-out infinite;
+}
+.fx-spark::before,
+.fx-spark::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: #cfe6ff;
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
+}
+.fx-spark::before { width: 2px; height: 13px; }
+.fx-spark::after { width: 13px; height: 2px; }
+@keyframes fx-spark {
+  0%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+  45%      { opacity: 0.7; transform: scale(1) rotate(45deg); }
+  60%      { opacity: 0.4; transform: scale(0.8) rotate(60deg); }
+}
+
+/* ---------- আলোর রশ্মি (স্পটলাইট) ---------- */
+.fx-beam {
+  position: absolute;
+  top: -10%;
+  width: 42%;
+  height: 130%;
+  background: radial-gradient(ellipse at 50% 0%, rgba(120, 185, 255, 0.30) 0%, rgba(120, 185, 255, 0.10) 40%, rgba(120, 185, 255, 0) 72%);
+  transform-origin: 50% 0%;
+  will-change: transform, opacity;
+}
+.fx-beam.b1 { left: 4%;  transform: rotate(18deg);  animation: fx-beam-a 13s ease-in-out infinite alternate; }
+.fx-beam.b2 { right: 2%; transform: rotate(-20deg); animation: fx-beam-b 17s ease-in-out infinite alternate; }
+@keyframes fx-beam-a {
+  0%   { transform: translate3d(-8%, 0, 0) rotate(14deg); opacity: 0.45; }
+  100% { transform: translate3d(14%, 0, 0) rotate(24deg); opacity: 1; }
+}
+@keyframes fx-beam-b {
+  0%   { transform: translate3d(10%, 0, 0) rotate(-14deg); opacity: 1; }
+  100% { transform: translate3d(-12%, 0, 0) rotate(-24deg); opacity: 0.45; }
+}
+
+/* ---------- ভেসে ওঠা আলোর গোলক ---------- */
+.fx-orb {
+  position: absolute;
+  bottom: -140px;
+  border-radius: 50%;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: fx-float 24s linear infinite;
+}
+@keyframes fx-float {
+  0%   { transform: translate3d(0, 0, 0) scale(0.8); opacity: 0; }
+  12%  { opacity: 0.9; }
+  50%  { transform: translate3d(var(--fx-sway, 24px), -55vh, 0) scale(1); }
+  88%  { opacity: 0.7; }
+  100% { transform: translate3d(calc(var(--fx-sway, 24px) * -1), -118vh, 0) scale(1.15); opacity: 0; }
+}
+
+/* ---------- ঝলক (কার্ড/বাটনের ওপর দিয়ে আলো সরে যাওয়া) ---------- */
+.fx-shine {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+.fx-shine::before,
+.ahero-btn:not(:disabled)::after,
+.tcard-btn:not(:disabled):not(.tcard-btn-done)::after,
+.btn-primary::after,
+.btn-open-withdraw::after {
+  content: '';
+  position: absolute;
+  top: -25%;
+  bottom: -25%;
+  left: -60%;
+  width: 45%;
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.26) 50%, rgba(255, 255, 255, 0) 100%);
+  transform: translate3d(0, 0, 0) skewX(-18deg);
+  will-change: transform;
+  pointer-events: none;
+  animation: fx-sweep 5.6s ease-in-out infinite;
+  animation-delay: var(--fx-d, 0s);
+}
+.fx-shine.on-light::before {
+  background: linear-gradient(100deg, rgba(120, 170, 255, 0) 0%, rgba(120, 170, 255, 0.30) 50%, rgba(120, 170, 255, 0) 100%);
+}
+@keyframes fx-sweep {
+  0%        { transform: translate3d(0, 0, 0) skewX(-18deg); }
+  42%, 100% { transform: translate3d(360%, 0, 0) skewX(-18deg); }
+}
+.ahero-btn,
+.tcard-btn,
+.btn-primary,
+.btn-open-withdraw { position: relative; overflow: hidden; }
+.fx-host { position: relative; }
+
+/* ---------- নিচের নেভিগেশনে সক্রিয় আইকনের জ্বলজ্বলে আভা ---------- */
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin-left: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 209, 143, 0.38) 0%, rgba(0, 209, 143, 0) 70%);
+  animation: fx-glow 2.6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes fx-glow {
+  0%, 100% { transform: scale(0.8); opacity: 0.5; }
+  50%      { transform: scale(1.25); opacity: 1; }
+}
+
+/* ---------- হেডারের নিচে আলোর রেখা ---------- */
+.top-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 35%;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(0, 209, 143, 0), rgba(120, 200, 255, 0.95), rgba(0, 209, 143, 0));
+  will-change: transform;
+  animation: fx-line 4.2s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes fx-line {
+  0%   { transform: translate3d(-100%, 0, 0); }
+  100% { transform: translate3d(380%, 0, 0); }
+}
+
+/* ---------- আইকনগুলো হালকা দোলে ---------- */
+.tcard-icon,
+.tg-box-icon,
+.referral-hero-icon { animation: fx-bob 3.4s ease-in-out infinite alternate; }
+@keyframes fx-bob {
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(0, -3px, 0); }
+}
+
+/* =============================================================
+   লেভেল: lite (দুর্বল ফোন) ও off (বন্ধ)
+   ============================================================= */
+html.fx-lite .fx-beam,
+html.fx-lite .fx-orb,
+html.fx-lite .fx-spark,
+html.fx-lite .fx-stars.s3,
+html.fx-lite .tg-channel-box::after { display: none; animation: none; }
+html.fx-lite .fx-shine::before,
+html.fx-lite .ahero-btn::after,
+html.fx-lite .tcard-btn::after,
+html.fx-lite .btn-primary::after,
+html.fx-lite .btn-open-withdraw::after,
+html.fx-lite .tcard-icon,
+html.fx-lite .tg-box-icon,
+html.fx-lite .referral-hero-icon { animation: none; }
+
+html.fx-off #fx-layer .fx-stars,
+html.fx-off #fx-layer .fx-spark,
+html.fx-off #fx-layer .fx-beam,
+html.fx-off #fx-layer .fx-orb { display: none; }
+html.fx-off .fx-shine,
+html.fx-off .ahero-btn::after,
+html.fx-off .tcard-btn::after,
+html.fx-off .btn-primary::after,
+html.fx-off .btn-open-withdraw::after,
+html.fx-off .nav-item.active::before,
+html.fx-off .top-header::after,
+html.fx-off .tg-channel-box::after { display: none; animation: none; }
+html.fx-off .tcard-icon,
+html.fx-off .tg-box-icon,
+html.fx-off .referral-hero-icon { animation: none; }
+
+/* অ্যাপ ব্যাকগ্রাউন্ডে গেলে সব অ্যানিমেশন থামে (ব্যাটারি বাঁচে) */
+html.fx-paused #fx-layer *,
+html.fx-paused .fx-shine::before,
+html.fx-paused .nav-item.active::before,
+html.fx-paused .top-header::after { animation-play-state: paused !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  #fx-layer *, .fx-shine::before, .nav-item.active::before, .top-header::after,
+  .tcard-icon, .tg-box-icon, .referral-hero-icon { animation: none !important; }
+}
