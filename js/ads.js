@@ -67,6 +67,7 @@
       const cooldownLeft = getAdCooldownLeftMs(currentUser);
 
       setTextById('adHeroReward', '৳' + AD_REWARD.toFixed(2));
+      setTextById('homeAdReward', '৳' + AD_REWARD.toFixed(2));
       setTextById('adHeroDone', done + ' টি');
       setTextById('adHeroEarn', '৳ ' + (done * AD_REWARD).toFixed(2));
 

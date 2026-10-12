@@ -25,6 +25,7 @@
 
   <link rel="stylesheet" href="css/style.css?v=4">
   <link rel="stylesheet" href="css/effects.css?v=1">
+  <link rel="stylesheet" href="css/theme.css?v=2">
 </head>
 <body>
 
@@ -70,8 +71,14 @@
       </div>
 
       <div class="page-pad">
-        <!-- 4 Main Feature Cards (Circular Icon-Based) -->
-        <section class="features-grid">
+      <div class="home-sec-title"><i class="fa-solid fa-tv"></i> বিজ্ঞাপন দেখুন</div>
+      <div class="ahero-card ahero-compact">
+        <div class="ahero-label">প্রতি বিজ্ঞাপনে নিশ্চিত আয়</div>
+        <div class="ahero-amount" id="homeAdReward">৳5.00</div>
+        <button class="ahero-btn ghost" onclick="switchView('daily-task')"><i class="fa-solid fa-play"></i> বিজ্ঞাপন শুরু করুন <i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+
+    <section class="features-grid">
           <!-- Card 1: Daily Task -->
           <div class="feature-card fc-task" onclick="switchView('daily-task')">
             <div class="feature-icon-circle">
@@ -659,16 +666,16 @@
         <span>হোম</span>
       </div>
       <div class="nav-item" id="nav-daily-task" onclick="switchView('daily-task')">
-        <i class="fa-solid fa-calendar-check"></i>
-        <span>টাস্ক</span>
+        <i class="fa-solid fa-rectangle-list"></i>
+        <span>আয় করুন</span>
       </div>
       <div class="nav-item" id="nav-earning" onclick="switchView('earning')">
         <i class="fa-solid fa-chart-pie"></i>
         <span>ইনকাম</span>
       </div>
       <div class="nav-item" id="nav-wallet" onclick="switchView('wallet')">
-        <i class="fa-solid fa-wallet"></i>
-        <span>ওয়ালেট</span>
+        <i class="fa-solid fa-credit-card"></i>
+        <span>উইথড্র</span>
       </div>
       <div class="nav-item" id="nav-profile" onclick="switchView('profile')">
         <i class="fa-solid fa-user"></i>
@@ -706,7 +713,7 @@
     <div class="modal-card">
       <button class="modal-close-btn" onclick="closeWithdrawModal()"><i class="fa-solid fa-xmark"></i></button>
       <h3 class="modal-title">
-        <i class="fa-solid fa-money-bill-transfer" style="color:var(--primary)"></i> টাকা উত্তোলন (Withdraw)
+        <i class="fa-solid fa-money-bill-transfer" style="color:#fff"></i> টাকা উত্তোলন (Withdraw)
       </h3>
 
       <!-- Step 1: Withdrawal Form Fields -->
@@ -715,11 +722,11 @@
         <div class="method-selector-grid">
           <div class="method-card bkash selected" id="methodBkash" onclick="selectPaymentMethod('bKash')">
             <span class="method-badge-bkash">bKash</span>
-            <span style="font-size:12px; font-weight:600; color:#fff;">বিকাশ পার্সোনাল</span>
+            <span style="font-size:12px; font-weight:600; color:#5a6b88;">বিকাশ পার্সোনাল</span>
           </div>
           <div class="method-card nagad" id="methodNagad" onclick="selectPaymentMethod('Nagad')">
             <span class="method-badge-nagad">Nagad</span>
-            <span style="font-size:12px; font-weight:600; color:#fff;">নগদ পার্সোনাল</span>
+            <span style="font-size:12px; font-weight:600; color:#5a6b88;">নগদ পার্সোনাল</span>
           </div>
         </div>
 
@@ -731,7 +738,7 @@
         <div class="form-group" style="margin-bottom:16px;">
           <label class="form-label">উত্তোলনের পরিমাণ (টাকা)</label>
           <input type="number" class="form-input" id="withdrawAmountInput" placeholder="ন্যূনতম 1000 টাকা" min="1000">
-          <span style="font-size:11px; color:var(--text-muted); margin-top:2px;">
+          <span style="font-size:11px; color:#5a6b88; margin-top:2px;">
             * সর্বনিম্ন উইথড্র পরিমাণ ১০০০ টাকা। আপনার বর্তমান ব্যালেন্স: ৳ <span id="withdrawModalBalance">0.00</span>
           </span>
         </div>
@@ -748,10 +755,10 @@
           <b>সতর্কবার্তা:</b> withdraw করতে হলে অবশ্যই প্রথমে আপনার অ্যাকাউন্ট সক্রিয় করে নিতে হবে।
         </div>
 
-        <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:var(--radius-md); padding:12px; margin-bottom:14px; font-size:13px; color:#cbd5e1; line-height:1.5;">
+        <div style="background:#f3f7fc; border:1px solid #d6e2f2; border-radius:var(--radius-md); padding:12px; margin-bottom:14px; font-size:13px; color:#26324d; line-height:1.5;">
           <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
             <span>অ্যাকাউন্ট ভেরিফিকেশন ফি:</span>
-            <b style="color:var(--accent-gold); font-size:14px;">১৫০ টাকা (150 TK)</b>
+            <b style="color:#b45309; font-size:14px;">১৫০ টাকা (150 TK)</b>
           </div>
           নিচের নম্বরে ১৫০ টাকা সেন্ড মানি করুন এবং ট্রানজেকশন আইডি (TrxID) নিচে প্রদান করুন:
         </div>
@@ -773,7 +780,7 @@
         </div>
 
         <div style="display:flex; gap:10px;">
-          <button class="btn-primary" style="background:rgba(255,255,255,0.08); color:#fff; flex:1;" onclick="backToWithdrawStep1()">
+          <button class="btn-primary" style="background:#e7eef8; color:#2b4a7a; box-shadow:none; flex:1;" onclick="backToWithdrawStep1()">
             পিছনে যান
           </button>
           <button class="btn-primary" style="flex:2;" onclick="submitFinalWithdrawal()">
@@ -796,7 +803,7 @@
   <script src="js/state.js?v=2"></script>
   <script src="js/user.js?v=2"></script>
   <script src="js/ui.js?v=3"></script>
-  <script src="js/ads.js?v=5"></script>
+  <script src="js/ads.js?v=6"></script>
   <script src="js/tasks.js?v=3"></script>
   <script src="js/withdraw.js?v=2"></script>
   <script src="js/profile.js?v=2"></script>

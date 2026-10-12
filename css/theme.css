@@ -1,0 +1,244 @@
+/* =============================================================
+   THEME — "Community Work" স্টাইল: নীল গ্লাস ব্যাকগ্রাউন্ড, নীল হিরো কার্ড,
+   সাদা তথ্য কার্ড, সবুজ/লাল/টেলিগ্রাম-নীল বাটন, জ্বলজ্বলে নিচের বার।
+   এই ফাইল সরালে পুরনো ডার্ক ডিজাইন ফিরে আসবে। (style.css ও effects.css এর পরে লোড হয়)
+   ============================================================= */
+:root {
+  --th-ink: #17233f;          /* সাদা কার্ডের লেখা */
+  --th-ink-soft: #5a6b88;     /* ছোট/ধূসর লেখা */
+  --th-blue: #2b72d2;
+  --th-blue-2: #3563dd;
+  --th-sky: #4fa3d6;
+  --th-green: #27895c;
+  --th-green-2: #1f7450;
+  --th-red: #cc0a3f;
+  --th-tg: #268abf;
+  --th-card: rgba(241, 246, 251, 0.96);
+  --th-line: rgba(255, 255, 255, 0.55);
+}
+
+/* ---------- ব্যাকগ্রাউন্ড (এফেক্ট লেয়ার) ---------- */
+#fx-layer {
+  background:
+    radial-gradient(110% 38% at 50% 0%, rgba(70, 150, 220, 0.50) 0%, rgba(70, 150, 220, 0) 72%),
+    radial-gradient(80% 30% at 0% 55%, rgba(40, 110, 190, 0.28) 0%, rgba(40, 110, 190, 0) 70%),
+    linear-gradient(180deg, #14406f 0%, #102f58 34%, #0b1c3b 68%, #080e22 100%);
+}
+
+/* ---------- হেডার ---------- */
+.top-header {
+  background: linear-gradient(180deg, rgba(20, 56, 98, 0.97) 0%, rgba(17, 46, 84, 0.97) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+.user-name-title {
+  font-style: italic;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: #fff;
+}
+.user-avatar { border: 2px solid rgba(255, 255, 255, 0.75); box-shadow: 0 0 0 2px rgba(80, 160, 240, 0.45); }
+.header-balance-chip {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+.header-balance-chip .balance-amount { color: #fff; }
+
+/* ---------- রোলিং নোটিশ বার ---------- */
+.rolling-notice-bar {
+  background: rgba(10, 28, 58, 0.55);
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+}
+
+/* ---------- সাব-পেজের শিরোনাম বার ---------- */
+.page-nav-header {
+  background: rgba(16, 44, 82, 0.96);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.nav-back-btn { background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.35); }
+.nav-page-title { color: #fff; }
+
+/* ---------- নীল গ্লাস হিরো কার্ড ---------- */
+.ahero-card,
+.wallet-hero,
+.earning-summary-hero,
+.profile-card {
+  background: linear-gradient(135deg, #4fa3d6 0%, #2b72d2 46%, #3563dd 100%);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 24px;
+  color: #fff;
+  box-shadow: 0 10px 26px rgba(15, 55, 150, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.ahero-stat { background: rgba(255, 255, 255, 0.20); border: 1px solid rgba(255, 255, 255, 0.22); }
+.ahero-btn { background: #f2f7fb; color: var(--th-blue); }
+.ahero-btn.ghost {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: none;
+}
+.home-sec-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  margin: 2px 2px 10px;
+}
+.home-sec-title i { color: #8fd0ff; }
+.ahero-compact { padding: 18px 16px 16px; margin-bottom: 14px; }
+.ahero-compact .ahero-amount { font-size: 44px; margin: 4px 0 14px; }
+.ahero-compact .ahero-btn { padding: 13px 10px; font-size: 15px; }
+
+/* ওয়ালেট হিরো */
+.wh-tag { background: rgba(255, 255, 255, 0.22); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); }
+.wh-balance { color: #fff; }
+.btn-open-withdraw {
+  background: #f2f7fb;
+  color: var(--th-blue);
+  border: none;
+  border-radius: 16px;
+  font-weight: 800;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+/* আর্নিং হিরো */
+.esh-label { color: rgba(255, 255, 255, 0.92); }
+.esh-total, .esh-total-symbol { color: #fff; }
+
+/* ---------- সাদা তথ্য কার্ড ---------- */
+.official-notice-card,
+.history-card,
+.wallet-description-block,
+.support-card,
+.support-notice-box,
+.referral-box-card,
+.earning-item-card,
+.stat-mini-card,
+.feature-card,
+.sync-account-box,
+.tg-channel-box {
+  background: var(--th-card);
+  border: 1px solid var(--th-line);
+  border-radius: 20px;
+  color: var(--th-ink);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+}
+.official-notice-card .notice-main-title,
+.notice-header-bar span:first-child { color: var(--th-ink); }
+.notice-tag { background: #fff4d6; color: #8a5a00; border: 1px solid #f3d58a; }
+.notice-row, .notice-row span { color: #26324d; }
+.notice-highlight { color: #0b6fb3 !important; }
+.notice-gold { color: #b45309 !important; }
+.notice-green { color: #0f8a5f !important; }
+.notice-header-bar { border-bottom: 1px solid #dfe7f2; }
+
+.feature-title, .smi-label, .eic-title, .history-title, .wallet-description-title,
+.referral-tagline, .support-card h2, .sync-title { color: var(--th-ink); }
+.eic-sub, .referral-subtext, .support-card p, .wallet-description-block ul,
+.wallet-description-block li, .wallet-description-block p, .sync-account-box p,
+.support-notice-box, .support-notice-box div, .support-notice-box a { color: var(--th-ink-soft); }
+.smi-val, .eic-amount { color: var(--th-blue); font-weight: 800; }
+.eic-icon, .stat-mini-icon { background: #e5eefb; color: var(--th-blue); }
+.feature-icon-circle { background: #e5eefb; border: none; }
+.fc-task .feature-icon-circle i { color: #19a974; }
+.fc-earning .feature-icon-circle i { color: #f59e0b; }
+.fc-referral .feature-icon-circle i { color: #2b72d2; }
+.fc-bonus .feature-icon-circle i { color: #a855f7; }
+.referral-link-container { background: #eaf1fb; border: 1px dashed #b9cde9; }
+.referral-link-text { color: var(--th-ink); }
+.btn-copy-ref { background: var(--th-blue); color: #fff; }
+.referral-hero-icon, .support-icon { background: linear-gradient(135deg, #4fa3d6, #2b72d2); color: #fff; }
+.history-title span:last-child { color: var(--th-ink-soft); }
+
+/* টেলিগ্রাম চ্যানেল কার্ড */
+.tg-channel-box { background: linear-gradient(135deg, #3a9bd0 0%, var(--th-tg) 100%); color: #fff; border: 1px solid rgba(255, 255, 255, 0.45); }
+.tg-box-text { color: #fff; }
+.tg-box-arrow { background: rgba(255, 255, 255, 0.25); color: #fff; }
+
+/* ---------- বাটন ---------- */
+.btn-primary {
+  background: linear-gradient(135deg, #2f9e6a 0%, var(--th-green) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(20, 110, 70, 0.35);
+}
+.support-btn { background: linear-gradient(135deg, #3a9bd0, var(--th-tg)); color: #fff; border-radius: 14px; }
+.tcard-btn { background: linear-gradient(135deg, #2f9e6a 0%, var(--th-green) 100%); }
+.tcard-icon.tc-red { background: var(--th-red); }
+.tcard { border: 1px solid rgba(255, 255, 255, 0.7); }
+.share-btn.sb-tg { background: var(--th-tg); color: #fff; }
+.share-btn.sb-wa { background: #1fa855; color: #fff; }
+
+/* ---------- ফর্ম ---------- */
+.form-label { color: var(--th-ink); font-weight: 700; }
+.profile-card .form-label { color: #fff; }
+.form-input {
+  background: #f4f8fd;
+  border: 1.5px solid #d6e2f2;
+  color: var(--th-ink);
+}
+.form-input::placeholder { color: #8a98b2; }
+.form-input:focus { border-color: var(--th-blue); box-shadow: 0 0 0 3px rgba(43, 114, 210, 0.18); }
+.perm-id-box { background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.35); }
+.pib-label { color: rgba(255, 255, 255, 0.85); }
+.pib-val { color: #fff; }
+.profile-big-avatar { border: 3px solid rgba(255, 255, 255, 0.85); box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.18); }
+
+/* ---------- মডাল (সাদা কার্ড + নীল শিরোনাম) ---------- */
+.modal-overlay { background: rgba(4, 12, 30, 0.78); backdrop-filter: none; -webkit-backdrop-filter: none; }
+.modal-card { background: #fff; color: var(--th-ink); border: none; border-radius: 22px; padding: 0 18px 20px; overflow-x: hidden; }
+.modal-title {
+  margin: 0 -18px 16px;
+  padding: 16px 48px 14px 18px;
+  color: #fff;
+  background: linear-gradient(135deg, #2a82bf 0%, #1f6fb2 100%);
+}
+.modal-close-btn { z-index: 3; }
+.method-card { background: #fff; border: 2px solid #e1e9f4; color: var(--th-ink); }
+.method-card.selected.bkash { border-color: #d0114e; background: #fff0f5; }
+.method-card.selected.nagad { border-color: var(--nagad); background: #fff6ea; }
+.verification-notice-banner { background: #fff1f3; color: #8a1230; border: 1px solid #f6c2cd; }
+.pay-dest-box { background: #f1f6fc; border: 1px solid #d6e2f2; color: var(--th-ink); }
+.pdb-number { color: var(--th-ink); }
+.btn-copy-num { background: var(--th-blue); color: #fff; }
+.modal-card label, .modal-card span { color: inherit; }
+
+/* ---------- নিচের নেভিগেশন বার ---------- */
+.bottom-navbar {
+  background: rgba(22, 28, 52, 0.94);
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.nav-item { color: #a9b4c9; }
+.nav-item.active { color: #74bcff; }
+.nav-item.active i { color: #74bcff; filter: none; }
+.nav-item.active::before { background: radial-gradient(circle, rgba(116, 188, 255, 0.45) 0%, rgba(116, 188, 255, 0) 70%); }
+
+/* হেডারের আলোর রেখা নীল */
+.top-header::after { background: linear-gradient(90deg, rgba(80, 160, 240, 0), rgba(160, 215, 255, 0.95), rgba(80, 160, 240, 0)); }
+
+/* ---------- সূক্ষ্ম সংশোধন ---------- */
+.support-card h2,
+.support-card h2 * {
+  color: var(--th-ink);
+  -webkit-text-fill-color: var(--th-ink);
+  background: none;
+}
+.support-notice-box, .support-notice-box div, .support-notice-box b, .support-notice-box span {
+  color: var(--th-ink-soft);
+  -webkit-text-fill-color: currentColor;
+}
+.support-notice-box > div:first-child, .support-notice-box > div:first-child * { color: var(--th-ink); font-weight: 800; }
+.support-notice-box a { color: #0b6fb3; }
+.support-notice-box i { color: var(--th-blue); }
+.method-card > span:not([class^="method-badge"]) { color: var(--th-ink-soft); font-size: 12.5px; }
+.wh-tag { border-radius: 999px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 6px; }
+.earning-summary-hero > span:last-child { color: #d9ffe9; }
+.history-card .history-list, .history-card .history-list div { color: var(--th-ink-soft); }
+.wallet-description-block, .wallet-description-block * { -webkit-text-fill-color: currentColor; }
