@@ -7,7 +7,8 @@
     // ====== সেটিংস (এখানে বদলালেই হবে) ======
     const DAILY_AD_LIMIT = 50;          // দৈনিক সর্বোচ্চ বিজ্ঞাপন সংখ্যা
     const AD_REWARD = 5;                // প্রতিটি বিজ্ঞাপনের টাকা
-    const AD_COOLDOWN_MS = 60 * 1000;   // প্রতিটি বিজ্ঞাপনের পর অপেক্ষা (এখন ১ মিনিট)
+    const AD_COOLDOWN_SECONDS = 0;      // প্রতিটি বিজ্ঞাপনের পর অপেক্ষা (সেকেন্ডে; ০ মানে কোনো অপেক্ষা নেই)
+    const AD_COOLDOWN_MS = AD_COOLDOWN_SECONDS * 1000;
     // =========================================
 
     let serverTimeOffset = 0;
@@ -70,7 +71,11 @@
       setTextById('adHeroEarn', '৳ ' + (done * AD_REWARD).toFixed(2));
 
       btn.classList.remove('is-wait', 'is-done');
-      let hint = 'প্রতিটি বিজ্ঞাপন দেখা শেষ হলে ' + (AD_COOLDOWN_MS / 60000) + ' মিনিট পর পরেরটি দেখতে পারবেন';
+      let hint = '';
+      if (AD_COOLDOWN_SECONDS > 0) {
+        const waitText = AD_COOLDOWN_SECONDS >= 60 ? (AD_COOLDOWN_SECONDS / 60) + ' মিনিট' : AD_COOLDOWN_SECONDS + ' সেকেন্ড';
+        hint = 'প্রতিটি বিজ্ঞাপন দেখা শেষ হলে ' + waitText + ' পর পরেরটি দেখতে পারবেন';
+      }
 
       if (!currentUser) {
         btn.disabled = true;
@@ -160,7 +165,7 @@
           const nowTs = serverNow();
 
           // দুই বিজ্ঞাপনের মাঝে বিরতি পূরণ না হলে রিওয়ার্ড দেওয়া হবে না (৩ সেকেন্ড সময়ের গরমিল সহ্য করা হয়)
-          if (lastAdAt && (nowTs - lastAdAt) < (AD_COOLDOWN_MS - 3000)) {
+          if (AD_COOLDOWN_MS > 0 && lastAdAt && (nowTs - lastAdAt) < (AD_COOLDOWN_MS - 3000)) {
             result = 'cooldown';
             return data;
           }
@@ -182,7 +187,7 @@
         if (committed && result === 'ok') {
           showToast('আপনি ' + AD_REWARD + ' টাকা reward পেয়েছেন।');
         } else if (committed && result === 'cooldown') {
-          showToast("দুই বিজ্ঞাপনের মাঝে ১ মিনিট অপেক্ষা করতে হবে।");
+          showToast("পরের বিজ্ঞাপনের জন্য কিছুক্ষণ অপেক্ষা করতে হবে।");
         } else if (committed && result === 'limit') {
           showToast("আজকের সব বিজ্ঞাপন দেখা সম্পূর্ণ হয়েছে।");
         } else {

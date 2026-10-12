@@ -2000,6 +2000,7 @@
 .ahero-btn i { margin-right: 6px; }
 
 .ahero-hint { margin-top: 10px; font-size: 12px; opacity: 0.85; }
+.ahero-hint:empty { display: none; }
 
 .tcard-heading {
   display: flex;
