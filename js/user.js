@@ -123,10 +123,10 @@
           // Check daily ad completion reset on date change
           const today = getTodayString();
           if (currentUser.lastTaskDate !== today) {
+            // শুধু আজকের বিজ্ঞাপন গণনা রিসেট হয়। নিউ টাস্ক (completedTasks) একবার সম্পন্ন হলে আর কখনো রিসেট হয় না।
             userRef.update({
               dailyAdsCompleted: 0,
-              lastTaskDate: today,
-              completedTasks: null
+              lastTaskDate: today
             });
             return;
           }
