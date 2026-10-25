@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="css/style.css?v=4">
   <link rel="stylesheet" href="css/effects.css?v=1">
   <link rel="stylesheet" href="css/theme.css?v=3">
+<link rel="stylesheet" href="css/wheel.css?v=2">
 </head>
 <body>
 
@@ -222,6 +223,23 @@
       </div>
 
       <!-- নতুন টাস্ক -->
+      <!-- লাকি হুইল: স্পিনের আগে বিজ্ঞাপন, ২৪ ঘণ্টায় ২টি স্পিন -->
+      <div class="wheel-card" id="wheelCard">
+        <div class="wheel-head">
+          <span class="wheel-title"><i class="fa-solid fa-gift"></i> লাকি হুইল</span>
+          <span class="wheel-note">২৪ ঘণ্টায় ২টি স্পিন • ৳২ থেকে ৳১০</span>
+        </div>
+        <div class="wheel-stage">
+          <div class="wheel-pointer"></div>
+          <div class="wheel-disc" id="wheelDisc"></div>
+          <div class="wheel-hub"><i class="fa-solid fa-star"></i></div>
+        </div>
+        <div class="wheel-stats">বাকি স্পিন: <b id="wheelLeft">২/২</b> • মোট জিতেছেন: ৳<b id="wheelTotal">০</b></div>
+        <div class="wheel-result" id="wheelResult"></div>
+        <button class="wheel-btn is-wait" id="wheelBtn" onclick="startWheelSpin()" disabled>লোড হচ্ছে...</button>
+        <div class="wheel-hint">প্রতিটি স্পিনের আগে একটি বিজ্ঞাপন দেখতে হবে</div>
+      </div>
+
       <div class="tcard-heading">
         <span><i class="fa-solid fa-fire" style="color:#fbbf24"></i> New Task (নতুন টাস্ক)</span>
         <span class="tcard-heading-note">প্রতি টাস্কে ৫ টাকা • একবারই</span>
@@ -331,7 +349,7 @@
               </div>
               <div class="eic-text">
                 <span class="eic-title">আপনি bonus পেয়েছেন</span>
-                <span class="eic-sub">রেজিস্ট্রেশন বোনাস + অ্যাডমিন বোনাস</span>
+                <span class="eic-sub">রেজিস্ট্রেশন বোনাস + অ্যাডমিন বোনাস + লাকি হুইল</span>
               </div>
             </div>
             <span class="eic-amount">৳ <span id="earnFromBonus">30.00</span></span>
@@ -801,10 +819,11 @@
   <!-- ==================== JAVASCRIPT LOGIC ==================== -->
   <script src="js/config.js?v=2"></script>
   <script src="js/state.js?v=2"></script>
-  <script src="js/user.js?v=3"></script>
-  <script src="js/ui.js?v=3"></script>
-  <script src="js/ads.js?v=6"></script>
-  <script src="js/tasks.js?v=3"></script>
+  <script src="js/user.js?v=4"></script>
+  <script src="js/ui.js?v=4"></script>
+  <script src="js/ads.js?v=7"></script>
+<script src="js/wheel.js?v=2"></script>
+  <script src="js/tasks.js?v=4"></script>
   <script src="js/withdraw.js?v=2"></script>
   <script src="js/profile.js?v=2"></script>
   <script src="js/utils.js?v=2"></script>
