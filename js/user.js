@@ -16,7 +16,7 @@
           console.log("Existing user account loaded:", currentUserId);
           bindRealtimeUserListener();
         } else {
-          // Account does not exist -> Create new account with 50 TK registration bonus
+          // Account does not exist -> Create new account with 30 TK registration bonus
           const tgUser = tg?.initDataUnsafe?.user;
           const defaultName = tgUser ? ((tgUser.first_name || '') + ' ' + (tgUser.last_name || '')).trim() : 'Ariyan User';
           const defaultPhoto = tgUser?.photo_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${currentUserId}`;
@@ -86,14 +86,14 @@
               try {
                 const txResult = await db.ref('users/' + referrerId).transaction((data) => {
                   if (data) {
-                    data.balance = (Number(data.balance) || 0) + 50;
-                    data.referralEarning = (Number(data.referralEarning) || 0) + 50;
+                    data.balance = (Number(data.balance) || 0) + 30;
+                    data.referralEarning = (Number(data.referralEarning) || 0) + 30;
                     data.referrals = (Number(data.referrals) || 0) + 1;
                   }
                   return data;
                 });
                 if (txResult.committed) {
-                  console.log(`Referral reward of 50 TK credited to ${referrerId}`);
+                  console.log(`Referral reward of 30 TK credited to ${referrerId}`);
                 }
               } catch (txErr) {
                 console.error("Referral transaction error:", txErr);
@@ -103,7 +103,7 @@
               db.ref('users/' + referrerId + '/referralList/' + currentUserId).set({
                 referredUserId: currentUserId,
                 date: firebase.database.ServerValue.TIMESTAMP,
-                bonusAwarded: 50
+                bonusAwarded: 30
               });
             }
           }
