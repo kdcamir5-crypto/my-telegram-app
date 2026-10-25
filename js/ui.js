@@ -34,6 +34,7 @@
       }
       renderAdHero();
       renderNewTaskStatus();
+      if (typeof renderWheel === 'function') renderWheel();
 
       // Earning Page
       document.getElementById('earningTotalDisplay').textContent = totalIncome.toFixed(2);
