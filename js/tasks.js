@@ -41,14 +41,14 @@
             if (!data.completedTasks) data.completedTasks = {};
             if (!data.completedTasks[`task_${taskId}`]) {
               data.completedTasks[`task_${taskId}`] = true;
-              data.newTaskEarning = (Number(data.newTaskEarning) || 0) + 10;
-              data.balance = (Number(data.balance) || 0) + 10;
+              data.newTaskEarning = (Number(data.newTaskEarning) || 0) + 5;
+              data.balance = (Number(data.balance) || 0) + 5;
             }
           }
           return data;
         }, (error, committed) => {
           if (committed) {
-            showToast(`অভিনন্দন! "${taskTitle}" এর জন্য ১০ টাকা ব্যালেন্সে যোগ হয়েছে।`);
+            showToast(`অভিনন্দন! "${taskTitle}" এর জন্য ৫ টাকা ব্যালেন্সে যোগ হয়েছে।`);
           } else if (taskBtn) {
             taskBtn.disabled = false;
             taskBtn.innerHTML = 'শুরু করুন';
