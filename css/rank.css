@@ -1,0 +1,40 @@
+/* Rank / Leaderboard page */
+.rank-me{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px;margin-bottom:14px;border-radius:22px;background:linear-gradient(135deg,#0b1c3b,#14406f);border:2px solid #3aa0e8;color:#fff}
+.rank-me-left{display:flex;align-items:center;gap:10px;min-width:0}
+.rank-me img{width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid #3aa0e8;background:#fff}
+.rank-me-name{font-size:17px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank-me-sub{font-size:12px;color:#a9c7e8}
+.rank-me-right{text-align:right}
+.rank-me-right small{display:block;font-size:10px;letter-spacing:1px;color:#a9c7e8;font-weight:700}
+.rank-me-badge{display:inline-block;margin-top:2px;padding:6px 14px;border-radius:999px;background:#1ea5f0;font-weight:800;font-size:17px}
+.rank-podium{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-bottom:14px}
+.pod{flex:1;text-align:center;padding:12px 6px;border-radius:20px;background:#fff;border:2px solid #e3e9f2;color:#17233f}
+.pod.p1{flex:1.25;padding:16px 6px;border-color:#f5b82e;background:linear-gradient(#fff8e1,#fff);box-shadow:0 8px 22px rgba(245,184,46,.35)}
+.pod.p3{border-color:#f7c9a8;background:#fff6ee}
+.pod-tag{display:inline-block;font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;background:#eef2f7;margin-bottom:6px}
+.pod.p1 .pod-tag{background:#b4690e;color:#fff}
+.pod.p3 .pod-tag{background:#ffe6d5;color:#b4400e}
+.pod img{width:58px;height:58px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 0 0 2px #dfe6f1;background:#fff}
+.pod.p1 img{width:76px;height:76px;box-shadow:0 0 0 3px #f5b82e}
+.pod-crown{color:#f5b82e;font-size:22px;display:block;margin-bottom:2px}
+.pod-name{font-size:14px;font-weight:800;margin-top:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pod-id{font-size:11px;color:#6b7a93;margin-bottom:6px}
+.pod-pill,.rank-pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:800;background:#e6f6ee;color:#157a4b;border:1px solid #bfe6d1}
+.pod.p1 .pod-pill{background:#fff1cc;color:#a85d00;border-color:#f5b82e}
+.rank-tools{display:flex;gap:8px;margin-bottom:12px}
+.rank-search{flex:1;display:flex;align-items:center;gap:8px;padding:0 12px;background:#fff;border:1px solid #dbe3ef;border-radius:999px}
+.rank-search i{color:#6b7a93}
+.rank-search input{flex:1;border:0;outline:0;background:transparent;padding:12px 0;font-size:14px;color:#17233f}
+.rank-refresh{width:46px;border-radius:50%;border:1px solid #dbe3ef;background:#fff;color:#17233f;font-size:16px}
+.rank-table{background:#fff;border-radius:20px;border:1px solid #dbe3ef;overflow:hidden;color:#17233f}
+.rank-table-head{display:flex;justify-content:space-between;padding:12px 14px;font-size:12px;font-weight:800;letter-spacing:.5px;color:#5a6b88;background:#f6f8fc;border-bottom:1px solid #e3e9f2}
+.rank-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #eef2f7}
+.rank-row.me{background:#eaf4ff}
+.rank-row.top1{background:#fffbea;border-left:4px solid #f5b82e}
+.rank-no{min-width:38px;text-align:center;padding:6px 0;border-radius:10px;font-weight:800;font-size:14px;background:#e6f1fb;color:#1f7bc4}
+.rank-row.top1 .rank-no{background:#f5b82e;color:#fff}
+.rank-row.top2 .rank-no{background:#a9b4c4;color:#fff}
+.rank-row.top3 .rank-no{background:#f26a1b;color:#fff}
+.rank-row img{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#fff;border:1px solid #dbe3ef}
+.rank-row-name{flex:1;min-width:0;font-weight:800;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank-empty{padding:26px;text-align:center;color:#6b7a93;font-size:13px}
