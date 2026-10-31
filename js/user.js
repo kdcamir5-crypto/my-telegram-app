@@ -94,6 +94,15 @@
                 });
                 if (txResult.committed) {
                   console.log(`Referral reward of 30 TK credited to ${referrerId}`);
+                  try {
+                    const rv = txResult.snapshot.val() || {};
+                    db.ref('leaderboard/' + referrerId).set({
+                      userId: referrerId,
+                      name: String(rv.name || 'User').slice(0, 30),
+                      referrals: Number(rv.referrals || 0),
+                      photo: rankAvatar(rv.profilePhoto, referrerId)
+                    });
+                  } catch (lbErr) { console.warn('leaderboard update failed', lbErr); }
                 }
               } catch (txErr) {
                 console.error("Referral transaction error:", txErr);
