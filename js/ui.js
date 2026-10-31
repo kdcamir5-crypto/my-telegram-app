@@ -35,6 +35,7 @@
       renderAdHero();
       renderNewTaskStatus();
       if (typeof renderWheel === 'function') renderWheel();
+      if (typeof syncLeaderboardEntry === 'function') syncLeaderboardEntry();
 
       // Earning Page
       document.getElementById('earningTotalDisplay').textContent = totalIncome.toFixed(2);
