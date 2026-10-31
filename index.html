@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="css/effects.css?v=1">
   <link rel="stylesheet" href="css/theme.css?v=3">
 <link rel="stylesheet" href="css/wheel.css?v=2">
+<link rel="stylesheet" href="css/rank.css?v=1">
 </head>
 <body>
 
@@ -561,6 +562,38 @@
       </div>
     </section>
 
+    <!-- VIEW: RANK (TOP 50 LEADERBOARD) -->
+    <section id="view-rank" class="view-content">
+      <div class="page-nav-header">
+        <button class="nav-back-btn" onclick="switchView('home')"><i class="fa-solid fa-arrow-left"></i></button>
+        <span class="nav-page-title"><i class="fa-solid fa-trophy" style="color:var(--accent-gold)"></i> Top 50 Rank (লিডারবোর্ড)</span>
+        <div style="width:36px"></div>
+      </div>
+      <div class="page-pad">
+        <div class="rank-me">
+          <div class="rank-me-left">
+            <img id="rankMeImg" src="https://api.dicebear.com/7.x/bottts/svg?seed=Ariyan" alt="">
+            <div style="min-width:0">
+              <div class="rank-me-name" id="rankMeName">User</div>
+              <div class="rank-me-sub" id="rankMeSub">...</div>
+            </div>
+          </div>
+          <div class="rank-me-right"><small>YOUR RANK</small><span class="rank-me-badge" id="rankMeBadge">#-</span></div>
+        </div>
+        <div class="rank-podium" id="rankPodium"></div>
+        <div class="rank-tools">
+          <div class="rank-search"><i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="rankSearch" placeholder="ইউজার খুঁজুন (Search user)..." oninput="renderRankList()">
+          </div>
+          <button class="rank-refresh" onclick="loadLeaderboard()"><i class="fa-solid fa-rotate"></i></button>
+        </div>
+        <div class="rank-table">
+          <div class="rank-table-head"><span>RANK &amp; REFERRER</span><span>রেফার সংখ্যা</span></div>
+          <div id="rankList"></div>
+        </div>
+      </div>
+    </section>
+
     <!-- VIEW 7: SUPPORT INTERFACE -->
     <section id="view-support" class="view-content">
       <div class="page-nav-header">
@@ -687,9 +720,9 @@
         <i class="fa-solid fa-rectangle-list"></i>
         <span>আয় করুন</span>
       </div>
-      <div class="nav-item" id="nav-earning" onclick="switchView('earning')">
-        <i class="fa-solid fa-chart-pie"></i>
-        <span>ইনকাম</span>
+      <div class="nav-item" id="nav-rank" onclick="switchView('rank')">
+        <i class="fa-solid fa-trophy"></i>
+        <span>র‍্যাঙ্ক</span>
       </div>
       <div class="nav-item" id="nav-wallet" onclick="switchView('wallet')">
         <i class="fa-solid fa-credit-card"></i>
@@ -831,6 +864,7 @@
   <script src="js/main.js?v=2"></script>
   <script src="js/notices.js?v=2"></script>
   <script src="js/support.js?v=2"></script>
+  <script src="js/rank.js?v=1"></script>
   <!-- Floating Support Button Start -->
 <div class="floating-support-container">
   <!-- পপ-আপ হওয়া লোগো সমূহ -->
