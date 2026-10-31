@@ -42,7 +42,7 @@ function loadLeaderboard() {
 
   db.ref('leaderboard').orderByChild('referrals').limitToLast(RANK_LIMIT).once('value').then((snap) => {
     const arr = [];
-    snap.forEach((c) => { const v = c.val(); if (v && Number(v.referrals) > 0) arr.push(v); });
+    snap.forEach((c) => { const v = c.val(); if (v) arr.push(v); });
     arr.sort((a, b) => Number(b.referrals) - Number(a.referrals));
     rankCache = arr;
     renderPodium();
@@ -93,7 +93,7 @@ function renderRankList() {
   });
   list.replaceChildren();
   if (!rows.length) {
-    list.appendChild(rkEl('div', 'rank-empty', q ? 'কাউকে খুঁজে পাওয়া যায়নি।' : 'এখনো কেউ রেফার করেনি।'));
+    list.appendChild(rkEl('div', 'rank-empty', q ? 'কাউকে খুঁজে পাওয়া যায়নি।' : 'লিডারবোর্ডে এখনো কেউ নেই।'));
     return;
   }
   rows.forEach(([u, pos]) => {
@@ -105,6 +105,37 @@ function renderRankList() {
     row.appendChild(rkEl('span', 'rank-pill', u.referrals + ' রেফার'));
     list.appendChild(row);
   });
+}
+
+// একবারের কাজ: সব পুরনো ইউজারকে leaderboard-এ তুলে দেয়
+// ব্যবহার: অ্যাপের লিংকের শেষে ?backfill=1 দিয়ে ব্রাউজারে খুলুন (অথবা console-এ backfillLeaderboard())
+function backfillLeaderboard() {
+  return db.ref('users').once('value').then((snap) => {
+    const all = {};
+    snap.forEach((c) => {
+      const u = c.val() || {};
+      all[c.key] = {
+        userId: c.key,
+        name: String(u.name || 'User').slice(0, 30),
+        referrals: Number(u.referrals || 0),
+        photo: rankAvatar(u.profilePhoto, c.key)
+      };
+    });
+    const keys = Object.keys(all);
+    let chain = Promise.resolve();
+    for (let i = 0; i < keys.length; i += 300) {
+      const part = {};
+      keys.slice(i, i + 300).forEach((k) => { part[k] = all[k]; });
+      chain = chain.then(() => db.ref('leaderboard').update(part));
+    }
+    return chain.then(() => {
+      showToast('Backfill সম্পন্ন: ' + keys.length + ' জন ইউজার leaderboard-এ যোগ হয়েছে।');
+      return keys.length;
+    });
+  }).catch((e) => { console.error(e); showToast('Backfill ব্যর্থ হয়েছে।'); });
+}
+if (new URLSearchParams(location.search).get('backfill') === '1') {
+  window.addEventListener('load', () => setTimeout(backfillLeaderboard, 2500));
 }
 
 // র‍্যাঙ্ক পেজ খুললেই লিডারবোর্ড লোড হবে
