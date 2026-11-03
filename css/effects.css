@@ -34,7 +34,6 @@
   height: 2px;
   border-radius: 50%;
   background: transparent;
-  will-change: opacity;
   animation: fx-twinkle 3.2s ease-in-out infinite alternate;
 }
 .fx-stars.s2 { width: 2.5px; height: 2.5px; animation-duration: 4.6s; animation-delay: -1.4s; }
@@ -50,7 +49,6 @@
   width: 13px;
   height: 13px;
   opacity: 0;
-  will-change: transform, opacity;
   animation: fx-spark 4.8s ease-in-out infinite;
 }
 .fx-spark::before,
@@ -79,7 +77,6 @@
   height: 130%;
   background: radial-gradient(ellipse at 50% 0%, rgba(120, 185, 255, 0.30) 0%, rgba(120, 185, 255, 0.10) 40%, rgba(120, 185, 255, 0) 72%);
   transform-origin: 50% 0%;
-  will-change: transform, opacity;
 }
 .fx-beam.b1 { left: 4%;  transform: rotate(18deg);  animation: fx-beam-a 13s ease-in-out infinite alternate; }
 .fx-beam.b2 { right: 2%; transform: rotate(-20deg); animation: fx-beam-b 17s ease-in-out infinite alternate; }
@@ -98,7 +95,6 @@
   bottom: -140px;
   border-radius: 50%;
   opacity: 0;
-  will-change: transform, opacity;
   animation: fx-float 24s linear infinite;
 }
 @keyframes fx-float {
@@ -133,7 +129,6 @@
   width: 45%;
   background: linear-gradient(100deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.26) 50%, rgba(255, 255, 255, 0) 100%);
   transform: translate3d(0, 0, 0) skewX(-18deg);
-  will-change: transform;
   pointer-events: none;
   animation: fx-sweep 5.6s ease-in-out infinite;
   animation-delay: var(--fx-d, 0s);
@@ -179,7 +174,6 @@
   width: 35%;
   height: 2px;
   background: linear-gradient(90deg, rgba(0, 209, 143, 0), rgba(120, 200, 255, 0.95), rgba(0, 209, 143, 0));
-  will-change: transform;
   animation: fx-line 4.2s ease-in-out infinite;
   pointer-events: none;
 }
@@ -240,3 +234,22 @@ html.fx-paused .top-header::after { animation-play-state: paused !important; }
   #fx-layer *, .fx-shine::before, .nav-item.active::before, .top-header::after,
   .tcard-icon, .tg-box-icon, .referral-hero-icon { animation: none !important; }
 }
+
+/* =============================================================
+   মাঝারি স্তর (mid): সাধারণ অ্যান্ড্রয়েডের জন্য — কম এফেক্ট, ভাইব একই
+   ============================================================= */
+html.fx-mid .tcard-btn::after,
+html.fx-mid .btn-primary::after,
+html.fx-mid .btn-open-withdraw::after { display: none; animation: none; }
+html.fx-mid .tcard-icon { animation: none; }
+
+/* পপআপ (উইথড্র ইত্যাদি) খোলা থাকলে পেছনের সব অ্যানিমেশন থামে */
+html.fx-modal #fx-layer *,
+html.fx-modal .fx-shine::before,
+html.fx-modal .ahero-btn::after,
+html.fx-modal .tcard-btn::after,
+html.fx-modal .btn-primary::after,
+html.fx-modal .btn-open-withdraw::after,
+html.fx-modal .nav-item.active::before,
+html.fx-modal .top-header::after,
+html.fx-modal .marquee-content { animation-play-state: paused !important; }
