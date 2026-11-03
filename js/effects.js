@@ -1,8 +1,8 @@
 /* Dynamic effects: তারা, রশ্মি, ঝলক, ভাসমান আলো — ফোন ধীর হলে নিজে থেকে হালকা/বন্ধ হয়ে যায় */
 (function () {
   // ====== সেটিংস ======
-  // 'auto' = ফোন বুঝে নিজে ঠিক করবে (সুপারিশ), 'full' = সব এফেক্ট, 'lite' = হালকা, 'off' = বন্ধ
-  var FX_LEVEL = 'auto';
+  // 'auto' = ফোন বুঝে নিজে ঠিক করবে, 'full' = সব এফেক্ট (সব ফোনে), 'lite' = হালকা, 'off' = বন্ধ
+  var FX_LEVEL = 'full';
   // =====================
 
   var root = document.documentElement;
@@ -22,11 +22,9 @@
     if (FX_LEVEL !== 'auto') return FX_LEVEL;
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduce) return 'off';
-    var saved = store.get('fxLevel');          // আগের বার ফোন যতটা টানতে পেরেছিল
-    if (saved === 'off' || saved === 'lite') return saved;
     var mem = navigator.deviceMemory || 4;
     var cores = navigator.hardwareConcurrency || 4;
-    if (mem <= 2 || cores <= 4) return 'lite';
+    if (mem <= 2 || cores <= 2) return 'lite';
     return 'full';
   }
 
@@ -113,7 +111,7 @@
     });
   }
 
-  // ফোন কতটা টানতে পারছে মাপা: ধীর হলে এফেক্ট কমানো
+  // ফোন কতটা টানতে পারছে মাপা: খুব ধীর হলে এফেক্ট কমানো (শুধু 'auto' মোডে)
   function watchPerformance(level) {
     if (FX_LEVEL !== 'auto' || level === 'off') return;
     function measure(ms, done) {
@@ -130,11 +128,10 @@
       if (document.hidden) { setTimeout(function () { check(current, attempt); }, 3000); return; }
       measure(2000, function (fps) {
         var next = current;
-        if (current === 'full' && fps < 38) next = 'lite';
-        else if (current === 'lite' && fps < 26) next = 'off';
+        if (current === 'full' && fps < 24) next = 'lite';
+        else if (current === 'lite' && fps < 15) next = 'off';
         if (next !== current) {
           applyLevel(next);
-          store.set('fxLevel', next);
           current = next;
         }
         if (attempt < 2 && current !== 'off') setTimeout(function () { check(current, attempt + 1); }, 2500);
