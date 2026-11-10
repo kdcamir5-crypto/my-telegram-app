@@ -1,4 +1,4 @@
-/* Lucky Wheel — স্পিনের আগে বিজ্ঞাপন, ২৪ ঘণ্টায় ২টি স্পিন (section 6b) */
+/* Lucky Wheel — কোনো বিজ্ঞাপন ছাড়াই স্পিন, ২৪ ঘণ্টায় ২টি স্পিন (section 6b) */
 
     // ====== সেটিংস ======
     const WHEEL_SLICES = [2, 4, 2, 6, 4, 2, 8, 4, 6, 10];   // চাকার ১০টি ঘর (পাশাপাশি একই অঙ্ক নেই)
@@ -16,7 +16,7 @@
     // =====================
 
     let wheelRotation = 0;
-    let isWheelBusy = false;       // বিজ্ঞাপন চলছে বা রিওয়ার্ড লেখা হচ্ছে
+    let isWheelBusy = false;       // রিওয়ার্ড লেখা হচ্ছে
     let isWheelSpinning = false;   // চাকা ঘুরছে
     let wheelBuilt = false;
     let wheelCountdownTimer = null;
@@ -111,13 +111,13 @@
       wheelSetText('wheelTotal', wheelBn(Number(currentUser.wheelEarning || 0)));
       btn.classList.remove('is-wait');
 
-      if (isWheelBusy || isWatchingAd) {
+      if (isWheelBusy) {
         btn.disabled = true;
         btn.classList.add('is-wait');
-        btn.innerHTML = '<i class="fa-solid fa-spinner"></i> বিজ্ঞাপন চলছে...';
+        btn.innerHTML = '<i class="fa-solid fa-spinner"></i> স্পিন হচ্ছে...';
       } else if (st.left > 0) {
         btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-play"></i> বিজ্ঞাপন দেখে স্পিন করুন (' + wheelBn(st.left) + 'টি বাকি)';
+        btn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> স্পিন করুন (' + wheelBn(st.left) + 'টি বাকি)';
       } else {
         btn.disabled = true;
         btn.classList.add('is-wait');
@@ -143,12 +143,11 @@
       }
       isWheelBusy = false;
       isWheelSpinning = false;
-      finishWatching();   // ads.js: isWatchingAd = false এবং বিজ্ঞাপন বাটন রিফ্রেশ
       renderWheel();
     }
 
     function startWheelSpin() {
-      if (isWheelBusy || isWheelSpinning || isWatchingAd) return;
+      if (isWheelBusy || isWheelSpinning) return;
       if (!currentUser || !currentUserId) return;
 
       const st = getWheelState();
@@ -156,25 +155,11 @@
         showToast('আজকের স্পিন শেষ। পরের স্পিনের জন্য অপেক্ষা করুন।');
         return;
       }
-      if (typeof window.show_11981233 !== 'function') {
-        showToast('বিজ্ঞাপন লোড হয়নি, কিছুক্ষণ পর আবার চেষ্টা করুন।');
-        return;
-      }
 
       wheelSetText('wheelResult', '');
       isWheelBusy = true;
-      isWatchingAd = true;   // একসঙ্গে দুটো বিজ্ঞাপন যেন না চলে
       renderWheel();
-      renderAdHero();
-      wheelWatchdog = setTimeout(endWheelAttempt, 120000);
-
-      window.show_11981233().then(() => {
-        awardWheelSpin();
-      }).catch((err) => {
-        console.warn('Wheel ad error:', err);
-        endWheelAttempt();
-        showToast('বিজ্ঞাপন দেখানো যায়নি, আবার চেষ্টা করুন।');
-      });
+      awardWheelSpin();
     }
 
     function awardWheelSpin() {
