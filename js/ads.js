@@ -6,7 +6,7 @@
 
     // ====== সেটিংস (এখানে বদলালেই হবে) ======
     const DAILY_AD_LIMIT = 15;          // দৈনিক সর্বোচ্চ বিজ্ঞাপন সংখ্যা
-    const AD_REWARD = 5;                // প্রতিটি বিজ্ঞাপনের টাকা
+    const AD_REWARD = 10;                // প্রতিটি বিজ্ঞাপনের টাকা
     const AD_BREAK_AFTER = 7;           // এতগুলো বিজ্ঞাপন দেখার পর একবার বিরতি
     const AD_BREAK_SECONDS = 300;       // বিরতির সময় (সেকেন্ডে) = ৫ মিনিট
     const AD_BREAK_MS = AD_BREAK_SECONDS * 1000;
