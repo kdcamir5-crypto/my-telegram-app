@@ -1,14 +1,15 @@
-/* Daily ad task + Monetag integration (section 6) — hero card UI, 1-minute cooldown */
+/* Daily ad task + Monetag integration (section 6) — hero card UI, ৭টি বিজ্ঞাপনের পর ৫ মিনিট বিরতি, শুধু Monetag 'valued' হলে রিওয়ার্ড */
 
     /* -------------------------------------------------------------
        6. DAILY TASK & MONETAG AD INTEGRATION
        ------------------------------------------------------------- */
 
     // ====== সেটিংস (এখানে বদলালেই হবে) ======
-    const DAILY_AD_LIMIT = 40;          // দৈনিক সর্বোচ্চ বিজ্ঞাপন সংখ্যা
+    const DAILY_AD_LIMIT = 15;          // দৈনিক সর্বোচ্চ বিজ্ঞাপন সংখ্যা
     const AD_REWARD = 5;                // প্রতিটি বিজ্ঞাপনের টাকা
-    const AD_COOLDOWN_SECONDS = 0;      // প্রতিটি বিজ্ঞাপনের পর অপেক্ষা (সেকেন্ডে; ০ মানে কোনো অপেক্ষা নেই)
-    const AD_COOLDOWN_MS = AD_COOLDOWN_SECONDS * 1000;
+    const AD_BREAK_AFTER = 7;           // এতগুলো বিজ্ঞাপন দেখার পর একবার বিরতি
+    const AD_BREAK_SECONDS = 300;       // বিরতির সময় (সেকেন্ডে) = ৫ মিনিট
+    const AD_BREAK_MS = AD_BREAK_SECONDS * 1000;
     // =========================================
 
     let serverTimeOffset = 0;
@@ -26,10 +27,18 @@
 
     // শেষ বিজ্ঞাপনের পর আর কত মিলিসেকেন্ড অপেক্ষা বাকি (০ মানে এখনই দেখা যাবে)
     function getAdCooldownLeftMs(userData) {
+      const done = Number(userData && userData.dailyAdsCompleted || 0);
+      if (done !== AD_BREAK_AFTER) return 0;   // বিরতি শুধু ৭টি দেখার পর
       const last = Number(userData && userData.lastAdAt || 0);
       if (!last) return 0;
-      const left = AD_COOLDOWN_MS - (serverNow() - last);
-      return Math.min(AD_COOLDOWN_MS, Math.max(0, left));
+      const left = AD_BREAK_MS - (serverNow() - last);
+      return Math.min(AD_BREAK_MS, Math.max(0, left));
+    }
+
+    // মিলিসেকেন্ড থেকে m:ss
+    function formatBreakTime(ms) {
+      const total = Math.max(0, Math.ceil(ms / 1000));
+      return Math.floor(total / 60) + ':' + String(total % 60).padStart(2, '0');
     }
 
     function startAdCooldownTimer() {
@@ -43,7 +52,7 @@
           return;
         }
         const el = document.getElementById('adCooldownText');
-        if (el) el.textContent = Math.ceil(left / 1000);
+        if (el) el.textContent = formatBreakTime(left);
       }, 1000);
     }
 
@@ -73,10 +82,7 @@
 
       btn.classList.remove('is-wait', 'is-done');
       let hint = '';
-      if (AD_COOLDOWN_SECONDS > 0) {
-        const waitText = AD_COOLDOWN_SECONDS >= 60 ? (AD_COOLDOWN_SECONDS / 60) + ' মিনিট' : AD_COOLDOWN_SECONDS + ' সেকেন্ড';
-        hint = 'প্রতিটি বিজ্ঞাপন দেখা শেষ হলে ' + waitText + ' পর পরেরটি দেখতে পারবেন';
-      }
+      hint = 'প্রথম ' + AD_BREAK_AFTER + 'টি বিজ্ঞাপনের পর ' + (AD_BREAK_SECONDS / 60) + ' মিনিট বিরতি, তারপর বাকি ' + (DAILY_AD_LIMIT - AD_BREAK_AFTER) + 'টি';
 
       if (!currentUser) {
         btn.disabled = true;
@@ -94,7 +100,7 @@
       } else if (cooldownLeft > 0) {
         btn.disabled = true;
         btn.classList.add('is-wait');
-        btn.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> পরের বিজ্ঞাপন <span id="adCooldownText">' + Math.ceil(cooldownLeft / 1000) + '</span> সেকেন্ড পর';
+        btn.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> পরের বিজ্ঞাপন <span id="adCooldownText">' + formatBreakTime(cooldownLeft) + '</span> পর';
         startAdCooldownTimer();
       } else {
         btn.disabled = false;
@@ -140,8 +146,15 @@
         showToast("বিজ্ঞাপন লোড হয়নি, কিছুক্ষণ পর আবার চেষ্টা করুন।");
         return;
       }
-      window.show_11981233().then(() => {
-        awardAdReward();
+      window.show_11981233({ ymid: String(currentUserId) + '_' + Date.now() }).then((result) => {
+        console.log("Monetag result:", result);
+        // শুধু Monetag যে বিজ্ঞাপনের টাকা দেবে (valued) সেটার জন্যই ইউজার রিওয়ার্ড পাবে
+        if (result && result.reward_event_type === 'valued') {
+          awardAdReward();
+        } else {
+          finishWatching();
+          showToast("এই বিজ্ঞাপনের জন্য রিওয়ার্ড প্রযোজ্য নয়, তাই টাকা যোগ হয়নি। আবার চেষ্টা করুন।");
+        }
       }).catch((err) => {
         console.warn("Monetag ad error:", err);
         finishWatching();
@@ -165,8 +178,8 @@
           const lastAdAt = Number(data.lastAdAt || 0);
           const nowTs = serverNow();
 
-          // দুই বিজ্ঞাপনের মাঝে বিরতি পূরণ না হলে রিওয়ার্ড দেওয়া হবে না (৩ সেকেন্ড সময়ের গরমিল সহ্য করা হয়)
-          if (AD_COOLDOWN_MS > 0 && lastAdAt && (nowTs - lastAdAt) < (AD_COOLDOWN_MS - 3000)) {
+          // ৭টি দেখার পর ৫ মিনিটের বিরতি পূরণ না হলে রিওয়ার্ড দেওয়া হবে না (৩ সেকেন্ড সময়ের গরমিল সহ্য করা হয়)
+          if (currentAds === AD_BREAK_AFTER && lastAdAt && (nowTs - lastAdAt) < (AD_BREAK_MS - 3000)) {
             result = 'cooldown';
             return data;
           }
