@@ -142,6 +142,7 @@
         });
 
         countEl.textContent = `${items.length} টি অনুরোধ`;
+        if (typeof checkVerifiedFromWithdrawals === 'function') checkVerifiedFromWithdrawals(items);
         historyListEl.innerHTML = '';
 
         items.forEach((item) => {

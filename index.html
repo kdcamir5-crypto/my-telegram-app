@@ -24,7 +24,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
   <link rel="stylesheet" href="css/style.css?v=6">
-  <link rel="stylesheet" href="css/theme.css?v=4">
+  <link rel="stylesheet" href="css/theme.css?v=5">
 <link rel="stylesheet" href="css/wheel.css?v=2">
 <link rel="stylesheet" href="css/rank.css?v=1">
 </head>
@@ -40,7 +40,11 @@
           <img id="headerUserAvatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=Ariyan" alt="User Avatar" class="user-avatar">
         </div>
         <div class="user-info-text">
-          <span class="user-name-title" id="headerUserName">Ariyan User</span>
+          <div class="user-name-row">
+            <span class="user-name-title" id="headerUserName">Ariyan User</span>
+            <img id="headerVerifiedBadge" class="verified-badge" alt="Verified" style="display:none;">
+          </div>
+          <span class="user-verify-status" id="headerVerifyStatus">Non verified member</span>
           <span class="user-id-badge" id="headerUserIdBadge" title="Click to copy User ID">
             <i class="fa-solid fa-id-card"></i> <span id="headerUserId">USR-......</span>
           </span>
@@ -852,17 +856,18 @@
   <script src="js/config.js?v=2"></script>
   <script src="js/state.js?v=2"></script>
   <script src="js/user.js?v=4"></script>
-  <script src="js/ui.js?v=4"></script>
+  <script src="js/ui.js?v=5"></script>
   <script src="js/ads.js?v=8"></script>
 <script src="js/wheel.js?v=2"></script>
   <script src="js/tasks.js?v=4"></script>
-  <script src="js/withdraw.js?v=2"></script>
+  <script src="js/withdraw.js?v=3"></script>
   <script src="js/profile.js?v=2"></script>
   <script src="js/utils.js?v=2"></script>
   <script src="js/main.js?v=2"></script>
   <script src="js/notices.js?v=2"></script>
   <script src="js/support.js?v=2"></script>
   <script src="js/rank.js?v=1"></script>
+  <script src="js/verified.js?v=1"></script>
   <!-- Floating Support Button Start -->
 <div class="floating-support-container">
   <!-- পপ-আপ হওয়া লোগো সমূহ -->

@@ -18,6 +18,7 @@
       // Header Elements
       document.getElementById('headerUserName').textContent = currentUser.name || 'Ariyan User';
       document.getElementById('headerUserId').textContent = currentUser.userId || currentUserId;
+      if (typeof renderVerifyStatus === 'function') renderVerifyStatus();
       document.getElementById('headerBalance').textContent = balance.toFixed(2);
       if (currentUser.profilePhoto) {
         document.getElementById('headerUserAvatar').src = currentUser.profilePhoto;

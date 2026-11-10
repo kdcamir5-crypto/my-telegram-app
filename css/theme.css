@@ -261,3 +261,18 @@ body::before {
 .earning-summary-hero > span:last-child { color: #d9ffe9; }
 .history-card .history-list, .history-card .history-list div { color: var(--th-ink-soft); }
 .wallet-description-block, .wallet-description-block * { -webkit-text-fill-color: currentColor; }
+
+
+/* ---------- Verified Member সিস্টেম ---------- */
+.user-name-row { display: flex; align-items: center; gap: 4px; }
+.verified-badge { width: 15px; height: 15px; flex-shrink: 0; display: inline-block; }
+.user-verify-status {
+  font-style: italic;
+  font-weight: 700;
+  font-size: 10.5px;
+  letter-spacing: 0.4px;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.62);
+  font-family: 'Outfit', 'Hind Siliguri', sans-serif;
+}
+.user-verify-status.is-verified { color: #ff9a3c; }
