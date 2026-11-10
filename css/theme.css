@@ -276,4 +276,5 @@ body::before {
   color: rgba(255, 255, 255, 0.62);
   font-family: 'Outfit', 'Hind Siliguri', sans-serif;
 }
-.user-verify-status.is-verified { color: #ff9a3c; }
+.user-verify-status.is-verified { color: #fff; }
+.user-verify-status i { color: #1d9bf0; font-size: 10px; margin-left: 3px; font-style: normal; font-variant: normal; }
