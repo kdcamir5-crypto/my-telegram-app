@@ -18,7 +18,18 @@
 }
 
 /* ---------- ব্যাকগ্রাউন্ড (এফেক্ট লেয়ার) ---------- */
-#fx-layer {
+#app-container { background: transparent; }
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  max-width: 480px;
+  transform: translateX(-50%);
+  z-index: -1;
+  pointer-events: none;
   background:
     radial-gradient(110% 38% at 50% 0%, rgba(70, 150, 220, 0.50) 0%, rgba(70, 150, 220, 0) 72%),
     radial-gradient(80% 30% at 0% 55%, rgba(40, 110, 190, 0.28) 0%, rgba(40, 110, 190, 0) 70%),
