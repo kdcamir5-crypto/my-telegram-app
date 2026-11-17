@@ -1,0 +1,20 @@
+/* Gate — অ্যাপের theme.css এর রঙের সাথে মেলানো (নেভি ব্যাকগ্রাউন্ড, নীল কার্ড, টেলিগ্রাম-নীল/সবুজ বাটন) */
+#gate-overlay{position:fixed;inset:0;z-index:99999;display:none;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;
+  background:radial-gradient(110% 38% at 50% 0%,rgba(70,150,220,.5) 0%,rgba(70,150,220,0) 72%),linear-gradient(180deg,#14406f 0%,#102f58 34%,#0b1c3b 68%,#080e22 100%)}
+.gate-card{width:100%;max-width:420px;margin:auto;padding:16px;border-radius:20px;color:#fff;
+  background:linear-gradient(160deg,var(--th-blue,#2b72d2),var(--th-blue-2,#3563dd));
+  border:1px solid var(--th-line,rgba(255,255,255,.55));box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.gate-banner{width:100%;border-radius:12px;display:block;margin-bottom:12px}
+.gate-title{font-size:22px;font-weight:800;text-align:center;margin-bottom:8px}
+.gate-text{font-size:14px;line-height:1.5;margin:0 0 8px}
+.gate-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px;margin-top:8px;border:1px solid rgba(255,255,255,.35);
+  border-radius:12px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
+.gate-join{background:linear-gradient(90deg,var(--th-tg,#268abf),var(--th-sky,#4fa3d6))}
+.gate-join.joined{background:linear-gradient(90deg,var(--th-green,#27895c),var(--th-green-2,#1f7450))}
+.gate-tick{display:none;margin-left:auto}
+.gate-join.joined .gate-tick{display:inline}
+.gate-verify{background:linear-gradient(90deg,var(--th-green,#27895c),var(--th-green-2,#1f7450));margin-top:14px}
+.gate-btn:disabled{opacity:.6}
+.gate-err{display:none;margin-top:6px;padding:8px;border-radius:8px;background:rgba(241,246,251,.96);color:var(--th-red,#cc0a3f);font-size:13px;text-align:center}
+.gate-msg{min-height:18px;margin-top:10px;font-size:13px;text-align:center;color:#fde68a}
+.gate-note{margin:8px 0 0;font-size:12px;text-align:center;opacity:.9}
