@@ -1,87 +1,117 @@
-/* Simulated recharge activity notifications — presentation only.
-   No Firebase, wallet, balance, or transaction data is read or changed. */
+/* Compact sequential notifications from real, approved withdrawals only. */
 (function () {
   'use strict';
-  if (window.__activityNotificationsStarted) return;
+  if (window.__activityNotificationsStarted || !window.db) return;
   window.__activityNotificationsStarted = true;
 
-  const operators = [
-    { name: 'Grameenphone', short: 'GP', className: 'gp' },
-    { name: 'Banglalink', short: 'BL', className: 'banglalink' },
-    { name: 'Robi', short: 'robi', className: 'robi' },
-    { name: 'Airtel', short: 'airtel', className: 'airtel' },
-    { name: 'Teletalk', short: 'TT', className: 'teletalk' }
-  ];
-  const prefixes = ['013', '014', '015', '016', '017', '018', '019'];
-  const amounts = [50, 100, 150, 200, 250, 300, 500, 700, 1000];
   const host = document.createElement('div');
-  host.id = 'sim-activity-host';
+  host.id = 'activity-notification-host';
   host.setAttribute('aria-live', 'polite');
-  host.setAttribute('aria-label', 'নমুনা রিচার্জ কার্যকলাপ');
+  host.setAttribute('aria-label', 'সফল উত্তোলনের বিজ্ঞপ্তি');
   document.body.appendChild(host);
 
-  const pick = list => list[Math.floor(Math.random() * list.length)];
-  function maskedNumber() {
-    const prefix = pick(prefixes);
-    const middle = String(Math.floor(10000 + Math.random() * 90000));
-    return prefix + middle.slice(0, 2) + '****' + middle.slice(-1) + String(Math.floor(Math.random() * 10));
+  let approved = [];
+  let active = false;
+  let timer = null;
+  let lastId = '';
+
+  const numberFormat = new Intl.NumberFormat('bn-BD', { maximumFractionDigits: 0 });
+  function maskPhone(value) {
+    const digits = String(value || '').replace(/\D/g, '');
+    if (digits.length < 7) return '';
+    return digits.slice(0, 5) + '****' + digits.slice(-2);
   }
 
-  function showActivity() {
-    const op = pick(operators);
-    const amount = pick(amounts);
-    const card = document.createElement('article');
-    card.className = 'sim-activity-card';
+  function scheduleNext(delay) {
+    if (timer) clearTimeout(timer);
+    if (active || !approved.length) return;
+    timer = setTimeout(showNext, delay);
+  }
+
+  function showNext() {
+    if (active || !approved.length) return;
+    const choices = approved.filter(item => item.id !== lastId);
+    const item = choices[Math.floor(Math.random() * (choices.length || approved.length))] || approved[0];
+    if (!item) return;
+
+    const card = document.createElement('div');
+    card.className = 'activity-notification';
     card.setAttribute('role', 'status');
 
-    const brand = document.createElement('div');
-    brand.className = 'sim-activity-brand ' + op.className;
-    brand.textContent = op.short;
+    const mark = document.createElement('span');
+    mark.className = 'activity-notification-mark';
+    mark.textContent = '✓';
 
-    const copy = document.createElement('div');
-    copy.className = 'sim-activity-copy';
-    const title = document.createElement('div');
-    title.className = 'sim-activity-title';
-    title.textContent = 'রিচার্জ সম্পন্ন';
-    const detail = document.createElement('div');
-    detail.className = 'sim-activity-detail';
-    detail.textContent = maskedNumber() + ' · ' + op.name;
-    const amountLine = document.createElement('div');
-    amountLine.className = 'sim-activity-amount';
-    amountLine.textContent = '৳' + amount + ' রিচার্জ';
-    const demo = document.createElement('span');
-    demo.className = 'sim-activity-demo';
-    demo.textContent = 'নমুনা কার্যকলাপ';
+    const content = document.createElement('span');
+    content.className = 'activity-notification-content';
+
+    const title = document.createElement('span');
+    title.className = 'activity-notification-title';
+    title.textContent = 'উত্তোলন সফল';
+
+    const amount = document.createElement('strong');
+    amount.className = 'activity-notification-amount';
+    amount.textContent = '৳' + numberFormat.format(Number(item.amount));
+
+    const detail = document.createElement('span');
+    detail.className = 'activity-notification-detail';
+    const phone = maskPhone(item.phone);
+    const method = item.method ? ' · ' + String(item.method) : '';
+    detail.textContent = (phone ? phone : 'সফল উত্তোলন') + method;
 
     const close = document.createElement('button');
-    close.className = 'sim-activity-close';
+    close.className = 'activity-notification-close';
     close.type = 'button';
     close.setAttribute('aria-label', 'বন্ধ করুন');
     close.textContent = '×';
 
-    copy.append(title, detail, amountLine, demo);
-    card.append(brand, copy, close);
-    host.appendChild(card);
+    content.append(title, amount, detail);
+    card.append(mark, content, close);
+    host.replaceChildren(card);
+    active = true;
+    lastId = item.id;
     requestAnimationFrame(() => card.classList.add('is-visible'));
 
-    let removed = false;
+    let dismissed = false;
     function dismiss() {
-      if (removed) return;
-      removed = true;
+      if (dismissed) return;
+      dismissed = true;
       card.classList.remove('is-visible');
       card.classList.add('is-leaving');
-      setTimeout(() => card.remove(), 420);
+      setTimeout(() => {
+        card.remove();
+        active = false;
+        scheduleNext(3000);
+      }, 260);
     }
     close.addEventListener('click', dismiss);
-    setTimeout(dismiss, 5700);
-
-    // Keep the stack compact on small screens and slower devices.
-    while (host.children.length > 2) host.firstElementChild.remove();
+    timer = setTimeout(dismiss, 4200);
   }
 
-  // First popup appears after a short pause; then one arrives every 3 seconds.
-  setTimeout(() => {
-    showActivity();
-    window.setInterval(showActivity, 3000);
-  }, 1800);
+  // Read only completed withdrawals; pending or denied requests are never shown.
+  window.db.ref('withdrawRequests')
+    .orderByChild('status')
+    .equalTo('approved')
+    .limitToLast(100)
+    .on('value', snapshot => {
+      const records = [];
+      snapshot.forEach(child => {
+        const item = child.val() || {};
+        const amount = Number(item.amount);
+        if (item.status === 'approved' && amount >= 1000 && Number.isFinite(amount)) {
+          records.push({
+            id: child.key,
+            amount,
+            phone: item.phone || '',
+            method: item.method || ''
+          });
+        }
+      });
+      approved = records;
+      if (!active && approved.length) scheduleNext(1800);
+      if (!approved.length && timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+    });
 })();
