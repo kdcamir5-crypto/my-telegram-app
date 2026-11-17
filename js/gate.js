@@ -2,12 +2,13 @@
 
 const GATE_CONFIG = {
   workerUrl: 'https://freelancing-gate.kdcamir5.workers.dev/',
-  bannerUrl: 'https://i.ibb.co.com/WWtRtxzt/image-77692b74.jpg',
+  appName: 'FREELANCING WITH MINI APP',
+  logoUrl: '',   // চাইলে লোগোর ছবির লিংক এখানে দাও; ফাঁকা থাকলে একটা আইকন দেখাবে
   items: [
-    { key: 'c1', icon: 'fa-bullhorn',        title: 'Official Channel',          label: 'Join Our Official Channel',        url: 'https://t.me/bechelor_point_season' },
-    { key: 'c2', icon: 'fa-money-check-dollar', title: 'Payment Proof Channel',  label: 'Join Our Payment Proof Channel',   url: 'https://t.me/ALLSEASONBC' },
-    { key: 'c3', icon: 'fa-users',           title: 'Big Community',             label: 'Join Our Big Community',           url: 'https://t.me/community_freelancing' },
-    { key: 'c4', icon: 'fa-receipt',         title: 'Community Payment Proof',   label: 'Join Our Community Payment Proof', url: 'https://t.me/communitytask_payment' }
+    { key: 'c1', color: 'teal',   icon: 'fa-bullhorn',           title: 'Official Channel',        label: 'Official Channel',        url: 'https://t.me/bechelor_point_season' },
+    { key: 'c2', color: 'purple', icon: 'fa-money-check-dollar', title: 'Payment Channel',         label: 'Payment Channel',         url: 'https://t.me/ALLSEASONBC' },
+    { key: 'c3', color: 'orange', icon: 'fa-users',              title: 'Community Channel',       label: 'Community Channel',       url: 'https://t.me/community_freelancing' },
+    { key: 'c4', color: 'pink',   icon: 'fa-receipt',            title: 'Community Payment Proof', label: 'Community Payment Proof', url: 'https://t.me/communitytask_payment' }
   ]
 };
 
@@ -16,8 +17,11 @@ let gateLastCheck = 0;
 
 function gateBuild() {
   if (document.getElementById('gate-overlay')) return;
+  const logo = GATE_CONFIG.logoUrl
+    ? `<img class="gate-logo" src="${GATE_CONFIG.logoUrl}" alt="">`
+    : `<div class="gate-logo gate-logo-icon"><i class="fa-solid fa-sack-dollar"></i></div>`;
   const rows = GATE_CONFIG.items.map(it => `
-      <button class="gate-btn gate-join" id="gate-join-${it.key}">
+      <button class="gate-btn gate-join gate-${it.color}" id="gate-join-${it.key}">
         <i class="fa-solid ${it.icon}"></i><span>${it.label}</span><i class="fa-solid fa-circle-check gate-tick"></i>
       </button>
       <div class="gate-err" id="gate-err-${it.key}">You have not joined the ${it.title}</div>`).join('');
@@ -26,14 +30,14 @@ function gateBuild() {
   el.id = 'gate-overlay';
   el.innerHTML = `
     <div class="gate-card">
-      <img class="gate-banner" src="${GATE_CONFIG.bannerUrl}" alt="">
-      <div class="gate-title">Welcome!</div>
-      <p class="gate-text">Earn money by completing small tasks in this app — easy, fast, real income.</p>
-      <p class="gate-text">▶ Join all 4 channels below to get started, then tap <b>Verify</b>.</p>
+      ${logo}
+      <div class="gate-title">${GATE_CONFIG.appName}</div>
+      <p class="gate-text">🤝 <b>Welcome!</b> Earn money by completing small tasks in this app — easy, fast, real income 😎</p>
+      <p class="gate-text">▶ Join the channels below to get started, then tap <b>Verify</b>.</p>
       ${rows}
       <button class="gate-btn gate-verify" id="gate-verify"><i class="fa-solid fa-check"></i><span>Verify</span></button>
       <div class="gate-msg" id="gate-msg"></div>
-      <p class="gate-note">Verify will not work unless you join all 4. If you leave any of them, this notice will appear again.</p>
+      <p class="gate-note">Verify will not work unless you join. If you leave, this notice will appear again.</p>
     </div>`;
   document.body.appendChild(el);
 
@@ -88,7 +92,7 @@ async function gateVerify(manual) {
       if (!gatePassed) { gatePassed = true; initializeUserAccount(); }
     } else {
       gateShow(true);
-      gateSetMsg(manual ? 'Please join all 4 first, then tap Verify.' : '');
+      gateSetMsg(manual ? 'Please join all channels first, then tap Verify.' : '');
     }
   } catch (e) {
     gateShow(true);
