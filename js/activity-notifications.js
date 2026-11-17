@@ -63,10 +63,6 @@
     details.className = 'activity-notification-detail';
     details.textContent = operator.name + ' · ' + randomPhone(operator);
 
-    const upcoming = document.createElement('span');
-    upcoming.className = 'activity-notification-upcoming';
-    upcoming.textContent = 'Upcoming';
-
     const close = document.createElement('button');
     close.className = 'activity-notification-close';
     close.type = 'button';
