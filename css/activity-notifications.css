@@ -1,78 +1,76 @@
-/* Isolated styling for simulated recharge activity popups */
-#sim-activity-host {
+/* Slim, single-item toast; does not cover the app's main work area. */
+#activity-notification-host {
   position: fixed;
   z-index: 1000000;
-  left: max(12px, env(safe-area-inset-left));
-  bottom: calc(88px + env(safe-area-inset-bottom));
-  width: min(340px, calc(100vw - 24px));
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 9px;
+  left: max(10px, env(safe-area-inset-left));
+  bottom: calc(78px + env(safe-area-inset-bottom));
+  width: min(290px, calc(100vw - 20px));
   pointer-events: none;
   font-family: 'Hind Siliguri', sans-serif;
 }
-.sim-activity-card {
-  position: relative;
+.activity-notification {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 43px;
   display: flex;
   align-items: center;
-  gap: 11px;
-  min-height: 76px;
-  box-sizing: border-box;
-  padding: 11px 34px 10px 11px;
-  border: 1px solid rgba(255,255,255,.72);
-  border-radius: 15px;
-  background: linear-gradient(135deg, rgba(255,255,255,.98), rgba(235,243,252,.98));
-  color: #17233f;
-  box-shadow: 0 9px 26px rgba(0,0,0,.28);
+  gap: 8px;
+  padding: 5px 28px 5px 8px;
+  position: relative;
+  border: 1px solid rgba(120, 140, 160, .16);
+  border-radius: 8px;
+  background: rgba(248, 250, 252, .96);
+  color: #263449;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, .12);
   opacity: 0;
-  transform: translateX(-115%);
-  transition: transform .38s cubic-bezier(.2,.8,.2,1), opacity .32s ease;
+  transform: translateY(12px);
+  transition: opacity .24s ease, transform .24s ease;
   pointer-events: auto;
 }
-.sim-activity-card.is-visible { opacity: 1; transform: translateX(0); }
-.sim-activity-card.is-leaving { opacity: 0; transform: translateX(-115%); }
-.sim-activity-brand {
-  width: 43px;
-  height: 43px;
-  flex: 0 0 43px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  color: #fff;
-  font: 800 13px 'Outfit', sans-serif;
-  letter-spacing: -.3px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.28);
+.activity-notification.is-visible { opacity: 1; transform: translateY(0); }
+.activity-notification.is-leaving { opacity: 0; transform: translateY(8px); }
+.activity-notification-mark {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #e7f5ed;
+  color: #16834b;
+  font: 700 13px Arial, sans-serif;
 }
-.sim-activity-brand.gp { background: linear-gradient(135deg,#159447,#08763a); }
-.sim-activity-brand.banglalink { background: linear-gradient(135deg,#ff8b19,#e85a00); }
-.sim-activity-brand.robi { background: linear-gradient(135deg,#ed1c24,#a90018); }
-.sim-activity-brand.airtel { background: linear-gradient(135deg,#ed1b24,#b60019); }
-.sim-activity-brand.teletalk { background: linear-gradient(135deg,#087c50,#005b3b); }
-.sim-activity-copy { min-width: 0; flex: 1; line-height: 1.28; }
-.sim-activity-title { font-size: 13px; font-weight: 800; color: #14213a; }
-.sim-activity-detail { margin-top: 2px; font-size: 11.5px; font-weight: 600; color: #596780; overflow-wrap: anywhere; }
-.sim-activity-amount { margin-top: 3px; font: 800 14px 'Outfit','Hind Siliguri',sans-serif; color: #087c50; }
-.sim-activity-demo { display: inline-block; margin-top: 3px; padding: 1px 6px; border-radius: 20px; background: #e8edf5; color: #66738a; font-size: 9px; font-weight: 700; }
-.sim-activity-close {
+.activity-notification-content {
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: 5px;
+  line-height: 1.2;
+}
+.activity-notification-title { font-size: 11px; font-weight: 700; white-space: nowrap; }
+.activity-notification-amount { color: #16834b; font: 700 12px 'Outfit', 'Hind Siliguri', sans-serif; white-space: nowrap; }
+.activity-notification-detail { color: #788496; font-size: 9px; white-space: nowrap; }
+.activity-notification-close {
   position: absolute;
-  top: 5px;
-  right: 7px;
-  width: 25px;
-  height: 25px;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  width: 19px;
+  height: 19px;
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background: rgba(25,40,65,.08);
-  color: #526078;
-  font: 20px/1 Arial,sans-serif;
+  background: transparent;
+  color: #8290a1;
+  font: 17px/19px Arial, sans-serif;
   cursor: pointer;
 }
-.sim-activity-close:focus-visible { outline: 2px solid #2b72d2; outline-offset: 2px; }
+.activity-notification-close:focus-visible { outline: 2px solid #3685d8; outline-offset: 1px; }
 @media (max-width: 380px) {
-  #sim-activity-host { left: 9px; width: min(320px, calc(100vw - 18px)); }
-  .sim-activity-card { min-height: 70px; padding-left: 9px; gap: 9px; }
+  #activity-notification-host { width: min(270px, calc(100vw - 20px)); }
+  .activity-notification { min-height: 41px; gap: 6px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .sim-activity-card { transition: none; }
+  .activity-notification { transition: none; }
 }
