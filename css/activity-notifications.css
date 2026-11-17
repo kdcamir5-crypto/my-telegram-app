@@ -1,34 +1,34 @@
-/* Slim, single-item toast; does not cover the app's main work area. */
+/* Slim, single notification preview. Keep border at exactly 1px. */
 #activity-notification-host {
   position: fixed;
   z-index: 1000000;
-  left: max(10px, env(safe-area-inset-left));
+  left: max(7px, env(safe-area-inset-left));
   bottom: calc(78px + env(safe-area-inset-bottom));
-  width: min(290px, calc(100vw - 20px));
+  width: min(358px, calc(100vw - 14px));
   pointer-events: none;
   font-family: 'Hind Siliguri', sans-serif;
 }
 .activity-notification {
   box-sizing: border-box;
   width: 100%;
-  min-height: 43px;
+  min-height: 48px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 5px 28px 5px 8px;
+  gap: 7px;
+  padding: 4px 25px 4px 7px;
   position: relative;
-  border: 1px solid rgba(120, 140, 160, .16);
-  border-radius: 8px;
-  background: rgba(248, 250, 252, .96);
-  color: #263449;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, .12);
+  border: 1px solid #16c784;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, .98);
+  color: #253247;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, .08);
   opacity: 0;
-  transform: translateY(12px);
-  transition: opacity .24s ease, transform .24s ease;
+  transform: translateY(7px);
+  transition: opacity .2s ease, transform .2s ease;
   pointer-events: auto;
 }
 .activity-notification.is-visible { opacity: 1; transform: translateY(0); }
-.activity-notification.is-leaving { opacity: 0; transform: translateY(8px); }
+.activity-notification.is-leaving { opacity: 0; transform: translateY(5px); }
 .activity-notification-mark {
   width: 22px;
   height: 22px;
@@ -36,9 +36,9 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: #e7f5ed;
-  color: #16834b;
-  font: 700 13px Arial, sans-serif;
+  background: #fff0e7;
+  color: #e87532;
+  font: 700 12px 'Outfit', sans-serif;
 }
 .activity-notification-content {
   min-width: 0;
@@ -46,30 +46,38 @@
   align-items: baseline;
   flex-wrap: wrap;
   column-gap: 5px;
-  line-height: 1.2;
+  row-gap: 0;
+  line-height: 1.12;
 }
-.activity-notification-title { font-size: 11px; font-weight: 700; white-space: nowrap; }
-.activity-notification-amount { color: #16834b; font: 700 12px 'Outfit', 'Hind Siliguri', sans-serif; white-space: nowrap; }
-.activity-notification-detail { color: #788496; font-size: 9px; white-space: nowrap; }
+.activity-notification-title { font-size: 10px; font-weight: 700; white-space: nowrap; color: #18845a; }
+.activity-notification-amount { color: #18845a; font: 700 11px 'Hind Siliguri', sans-serif; white-space: nowrap; }
+.activity-notification-detail { color: #263449; font-size: 9px; white-space: nowrap; }
+.activity-notification-upcoming {
+  flex-basis: 100%;
+  color: #9aa3af;
+  font: 500 7px/1 'Outfit', sans-serif;
+  letter-spacing: .35px;
+  margin-top: 1px;
+}
 .activity-notification-close {
   position: absolute;
   top: 50%;
-  right: 5px;
+  right: 4px;
   transform: translateY(-50%);
-  width: 19px;
-  height: 19px;
+  width: 17px;
+  height: 17px;
   padding: 0;
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: #8290a1;
-  font: 17px/19px Arial, sans-serif;
+  color: #9aa3af;
+  font: 15px/17px Arial, sans-serif;
   cursor: pointer;
 }
-.activity-notification-close:focus-visible { outline: 2px solid #3685d8; outline-offset: 1px; }
+.activity-notification-close:focus-visible { outline: 1px solid #3685d8; outline-offset: 1px; }
 @media (max-width: 380px) {
-  #activity-notification-host { width: min(270px, calc(100vw - 20px)); }
-  .activity-notification { min-height: 41px; gap: 6px; }
+  #activity-notification-host { width: calc(100vw - 14px); }
+  .activity-notification { min-height: 48px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .activity-notification { transition: none; }
