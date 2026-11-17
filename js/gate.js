@@ -3,7 +3,7 @@
 const GATE_CONFIG = {
   workerUrl: 'https://freelancing-gate.kdcamir5.workers.dev/',
   appName: 'FREELANCING WITH MINI APP',
-  logoUrl: '',   // চাইলে লোগোর ছবির লিংক এখানে দাও; ফাঁকা থাকলে একটা আইকন দেখাবে
+  logoUrl: 'img/logo.png',
   items: [
     { key: 'c1', color: 'teal',   icon: 'fa-bullhorn',           title: 'Official Channel',        label: 'Official Channel',        url: 'https://t.me/bechelor_point_season' },
     { key: 'c2', color: 'purple', icon: 'fa-money-check-dollar', title: 'Payment Channel',         label: 'Payment Channel',         url: 'https://t.me/ALLSEASONBC' },
