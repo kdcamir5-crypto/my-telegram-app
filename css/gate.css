@@ -21,3 +21,9 @@
 .gate-err{display:none;margin-top:4px;padding:5px 8px;border-radius:7px;background:#fdecee;color:#b00020;font-size:12px;text-align:center}
 .gate-msg{min-height:14px;margin-top:6px;font-size:12px;text-align:center;color:#fde68a}
 .gate-note{margin:4px 0 0;font-size:11px;line-height:1.35;text-align:center;opacity:.85}
+
+/* চেক চলার সময়: কার্ড লুকানো, শুধু ছোট স্পিনার */
+.gate-spin{display:none;width:34px;height:34px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;animation:gatespin .8s linear infinite}
+#gate-overlay.gate-checking .gate-card{display:none}
+#gate-overlay.gate-checking .gate-spin{display:block}
+@keyframes gatespin{to{transform:rotate(360deg)}}

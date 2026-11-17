@@ -4,6 +4,8 @@ const GATE_CONFIG = {
   workerUrl: 'https://freelancing-gate.kdcamir5.workers.dev/',
   appName: 'FREELANCING WITH MINI APP',
   logoUrl: 'img/logo.png',
+  trustMinutes: 10,      // সফল চেকের পর এত মিনিট অ্যাপ সঙ্গে সঙ্গে খুলবে, চেক ব্যাকগ্রাউন্ডে হবে
+  timeoutMs: 8000,       // Worker এর উত্তরের জন্য সর্বোচ্চ অপেক্ষা (এরপর আবার চেষ্টা)
   items: [
     { key: 'c1', color: 'teal',   icon: 'fa-bullhorn',           title: 'Official Channel',        label: 'Official Channel',        url: 'https://t.me/bechelor_point_season' },
     { key: 'c2', color: 'purple', icon: 'fa-money-check-dollar', title: 'Payment Channel',         label: 'Payment Channel',         url: 'https://t.me/ALLSEASONBC' },
@@ -14,12 +16,10 @@ const GATE_CONFIG = {
 
 let gatePassed = false;
 let gateLastCheck = 0;
+const GATE_LS_KEY = 'gate_ok_at';
 
 function gateBuild() {
   if (document.getElementById('gate-overlay')) return;
-  const logo = GATE_CONFIG.logoUrl
-    ? `<img class="gate-logo" src="${GATE_CONFIG.logoUrl}" alt="">`
-    : `<div class="gate-logo gate-logo-icon"><i class="fa-solid fa-sack-dollar"></i></div>`;
   const rows = GATE_CONFIG.items.map(it => `
       <button class="gate-btn gate-join gate-${it.color}" id="gate-join-${it.key}">
         <i class="fa-solid ${it.icon}"></i><span>${it.label}</span><i class="fa-solid fa-circle-check gate-tick"></i>
@@ -28,9 +28,11 @@ function gateBuild() {
 
   const el = document.createElement('div');
   el.id = 'gate-overlay';
+  el.className = 'gate-checking';
   el.innerHTML = `
+    <div class="gate-spin"></div>
     <div class="gate-card">
-      ${logo}
+      <img class="gate-logo" src="${GATE_CONFIG.logoUrl}" alt="">
       <div class="gate-title">${GATE_CONFIG.appName}</div>
       <p class="gate-text">🤝 <b>Welcome!</b> Earn money by completing small tasks in this app — easy, fast, real income 😎</p>
       <p class="gate-text">▶ Join the channels below to get started, then tap <b>Verify</b>.</p>
@@ -51,10 +53,10 @@ function gateBuild() {
   document.getElementById('gate-verify').onclick = () => gateVerify(true);
 }
 
-function gateShow(show) {
-  const el = document.getElementById('gate-overlay');
-  if (el) el.style.display = show ? 'flex' : 'none';
-}
+/* তিনটা অবস্থা: ঢাকা (শুধু লোডিং স্পিনার) → কার্ড দেখানো → পুরো লুকানো */
+function gateCover()    { const e = document.getElementById('gate-overlay'); if (e) { e.style.display = 'flex'; e.classList.add('gate-checking'); } }
+function gateShowCard() { const e = document.getElementById('gate-overlay'); if (e) { e.style.display = 'flex'; e.classList.remove('gate-checking'); } }
+function gateHide()     { const e = document.getElementById('gate-overlay'); if (e) { e.style.display = 'none'; } }
 
 function gateSetMsg(text) {
   const m = document.getElementById('gate-msg');
@@ -69,13 +71,37 @@ function gateSetStatus(res) {
   });
 }
 
+function gateTrusted() {
+  try {
+    const t = Number(localStorage.getItem(GATE_LS_KEY) || 0);
+    return t && (Date.now() - t) < GATE_CONFIG.trustMinutes * 60000;
+  } catch (e) { return false; }
+}
+function gateRemember(ok) {
+  try { ok ? localStorage.setItem(GATE_LS_KEY, String(Date.now())) : localStorage.removeItem(GATE_LS_KEY); } catch (e) {}
+}
+
+/* preflight ছাড়া (text/plain) + টাইমআউট + ১ বার আবার চেষ্টা */
 async function gateCheck() {
-  const r = await fetch(GATE_CONFIG.workerUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ initData: tg.initData })
-  });
-  return r.json();
+  let lastErr;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), GATE_CONFIG.timeoutMs);
+    try {
+      const r = await fetch(GATE_CONFIG.workerUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ initData: tg.initData }),
+        signal: ctrl.signal
+      });
+      return await r.json();
+    } catch (e) {
+      lastErr = e;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+  throw lastErr;
 }
 
 async function gateVerify(manual) {
@@ -84,19 +110,21 @@ async function gateVerify(manual) {
   try {
     const res = await gateCheck();
     gateLastCheck = Date.now();
-    if (res.error) { gateShow(true); gateSetMsg('Could not verify. Please try again.'); return; }
+    if (res.error) { gateShowCard(); gateSetMsg('Could not verify. Please try again.'); return; }
     gateSetStatus(res);
     if (res.ok) {
+      gateRemember(true);
       gateSetMsg('');
-      gateShow(false);
+      gateHide();
       if (!gatePassed) { gatePassed = true; initializeUserAccount(); }
     } else {
-      gateShow(true);
+      gateRemember(false);
+      gateShowCard();
       gateSetMsg(manual ? 'Please join all channels first, then tap Verify.' : '');
     }
   } catch (e) {
-    gateShow(true);
-    gateSetMsg('Network problem. Please try again.');
+    gateShowCard();
+    gateSetMsg('Network problem. Please tap Verify to try again.');
   } finally {
     btn.disabled = false;
   }
@@ -104,14 +132,26 @@ async function gateVerify(manual) {
 
 function startGate() {
   gateBuild();
-  gateShow(true);
   if (!tg || !tg.initData) {
+    gateShowCard();
     gateSetMsg('Please open this app from Telegram.');
     document.getElementById('gate-verify').style.display = 'none';
     return;
   }
-  gateSetMsg('Checking...');
-  gateVerify(false);
+
+  // Firebase কানেকশন আগেভাগে গরম করে রাখা (চেকের সময়ই কানেক্ট হতে থাকবে)
+  try { db.ref('.info/connected').once('value'); } catch (e) {}
+
+  if (gateTrusted()) {
+    // সম্প্রতি চেক পাস করেছে: অ্যাপ সঙ্গে সঙ্গে খুলবে, চেক চলবে ব্যাকগ্রাউন্ডে
+    gateHide();
+    gatePassed = true;
+    initializeUserAccount();
+    gateVerify(false);
+  } else {
+    gateCover();          // শুধু স্পিনার, কার্ড নয় (ঝিলিক বন্ধ)
+    gateVerify(false);
+  }
 
   // ইউজার চ্যানেল ছেড়ে অ্যাপে ফিরে এলে আবার চেক (১৫ সেকেন্ডে একবার)
   document.addEventListener('visibilitychange', () => {
