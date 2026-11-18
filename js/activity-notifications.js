@@ -69,6 +69,13 @@
     close.setAttribute('aria-label', 'বন্ধ করুন');
     close.textContent = '×';
 
+    content.append(title, value, details);
+    card.append(symbol, content, close);
+    host.appendChild(card);
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { card.classList.add('is-visible'); });
+    });
+
     let dismissed = false;
     function dismiss() {
       if (dismissed) return;
