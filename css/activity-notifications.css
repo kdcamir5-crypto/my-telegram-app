@@ -1,95 +1,115 @@
-/* Slim, single notification preview. Keep border at exactly 1px. */
+/* Activity notification: slide in from left, slim 1px border */
 #activity-notification-host {
   position: fixed;
   z-index: 1000000;
-  left: max(7px, env(safe-area-inset-left));
-  bottom: calc(78px + env(safe-area-inset-bottom));
-  width: min(358px, calc(100vw - 14px));
+  left: 0;
+  right: 0;
+  /* সাপোর্ট বাটনের ওপরে রাখার জন্য। দরকার হলে 175px বাড়ান/কমান */
+  bottom: calc(175px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 10px;
+  box-sizing: border-box;
+  overflow: hidden;
   pointer-events: none;
   font-family: 'Hind Siliguri', sans-serif;
 }
 .activity-notification {
   box-sizing: border-box;
   width: 100%;
-  min-height: 48px;
+  max-width: 400px;
   display: flex;
   align-items: center;
-  gap: 7px;
-  padding: 4px 25px 4px 7px;
-  position: relative;
-  border: 1px solid #16c784;
-  border-radius: 11px;
-  background: rgba(255, 255, 255, .98);
-  color: #253247;
-  box-shadow: 0 2px 7px rgba(0, 0, 0, .08);
+  gap: 10px;
+  padding: 8px 10px;
+  background: #f0fdf8;
+  border: 1px solid #6ee7b7;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(16, 185, 129, .22);
   opacity: 0;
-  transform: translateX(-110%);
-  transition: opacity .22s ease, transform .22s ease;
+  transform: translateX(-120%);
+  transition: transform .4s cubic-bezier(.22, .9, .3, 1), opacity .4s ease;
   pointer-events: auto;
 }
 .activity-notification.is-visible { opacity: 1; transform: translateX(0); }
-.activity-notification.is-leaving { opacity: 0; transform: translateX(110%); }
-.activity-notification-logo {
-  width: 25px;
-  height: 25px;
-  flex: 0 0 25px;
-  object-fit: contain;
-}
-.activity-notification-content {
-  min-width: 0;
+.activity-notification.is-leaving { opacity: 0; transform: translateX(120%); }
+
+.activity-notification-side {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 1px;
-  line-height: 1.08;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  min-width: 90px;
+}
+.activity-notification-logo {
+  display: block;
+  width: auto;
+  height: 28px;
+  max-width: 72px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 6px;
+  padding: 2px 5px;
+  box-sizing: content-box;
 }
 .activity-notification-number-row {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 2px;
 }
 .activity-notification-number {
-  color: #263449;
-  font-size: 10px;
+  color: #1f2937;
+  font-size: 12px;
   font-weight: 700;
+  letter-spacing: .2px;
+  line-height: 1.1;
   white-space: nowrap;
 }
 .activity-notification-demo {
-  color: #8b929d;
-  font: 500 6px/1 'Outfit', sans-serif;
-  letter-spacing: .3px;
+  color: #6b7280;
+  background: #e5e7eb;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font: 700 8px/1.3 'Outfit', sans-serif;
+  letter-spacing: .4px;
+}
+.activity-notification-content {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
 }
 .activity-notification-message {
-  color: #18845a;
-  font-size: 9px;
-  font-weight: 600;
-  white-space: nowrap;
+  color: #1e293b;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.35;
 }
 .activity-notification-amount {
-  color: #18845a;
-  font: 700 11px 'Hind Siliguri', sans-serif;
+  color: #059669;
+  font: 800 17px/1.25 'Hind Siliguri', sans-serif;
   white-space: nowrap;
 }
 .activity-notification-close {
-  position: absolute;
-  top: 50%;
-  right: 4px;
-  transform: translateY(-50%);
-  width: 17px;
-  height: 17px;
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background: transparent;
-  color: #9aa3af;
-  font: 15px/17px Arial, sans-serif;
+  background: #dcf3ea;
+  color: #059669;
+  font: 16px/24px Arial, sans-serif;
+  text-align: center;
   cursor: pointer;
 }
 .activity-notification-close:focus-visible { outline: 1px solid #3685d8; outline-offset: 1px; }
-@media (max-width: 380px) {
-  #activity-notification-host { width: calc(100vw - 14px); }
-  .activity-notification { min-height: 48px; }
-}
+
 @media (prefers-reduced-motion: reduce) {
   .activity-notification { transition: none; }
 }
