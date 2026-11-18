@@ -23,41 +23,52 @@
   color: #253247;
   box-shadow: 0 2px 7px rgba(0, 0, 0, .08);
   opacity: 0;
-  transform: translateY(7px);
-  transition: opacity .2s ease, transform .2s ease;
+  transform: translateX(-110%);
+  transition: opacity .22s ease, transform .22s ease;
   pointer-events: auto;
 }
-.activity-notification.is-visible { opacity: 1; transform: translateY(0); }
-.activity-notification.is-leaving { opacity: 0; transform: translateY(5px); }
-.activity-notification-mark {
-  width: 22px;
-  height: 22px;
-  flex: 0 0 22px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: #fff0e7;
-  color: #e87532;
-  font: 700 12px 'Outfit', sans-serif;
+.activity-notification.is-visible { opacity: 1; transform: translateX(0); }
+.activity-notification.is-leaving { opacity: 0; transform: translateX(110%); }
+.activity-notification-logo {
+  width: 25px;
+  height: 25px;
+  flex: 0 0 25px;
+  object-fit: contain;
 }
 .activity-notification-content {
   min-width: 0;
   display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  column-gap: 5px;
-  row-gap: 0;
-  line-height: 1.12;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  line-height: 1.08;
 }
-.activity-notification-title { font-size: 10px; font-weight: 700; white-space: nowrap; color: #18845a; }
-.activity-notification-amount { color: #18845a; font: 700 11px 'Hind Siliguri', sans-serif; white-space: nowrap; }
-.activity-notification-detail { color: #263449; font-size: 9px; white-space: nowrap; }
-.activity-notification-upcoming {
-  flex-basis: 100%;
-  color: #9aa3af;
-  font: 500 7px/1 'Outfit', sans-serif;
-  letter-spacing: .35px;
-  margin-top: 1px;
+.activity-notification-number-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.activity-notification-number {
+  color: #263449;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.activity-notification-demo {
+  color: #8b929d;
+  font: 500 6px/1 'Outfit', sans-serif;
+  letter-spacing: .3px;
+}
+.activity-notification-message {
+  color: #18845a;
+  font-size: 9px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.activity-notification-amount {
+  color: #18845a;
+  font: 700 11px 'Hind Siliguri', sans-serif;
+  white-space: nowrap;
 }
 .activity-notification-close {
   position: absolute;
