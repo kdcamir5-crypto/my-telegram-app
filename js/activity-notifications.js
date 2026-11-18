@@ -56,7 +56,7 @@
   function randomPhone(operator) {
     const prefix = randomItem(operator.prefixes);
     let digits = '';
-    for (let i = 0; i < 4; i++) digits += Math.floor(Math.random() * 10);
+    for (let i = 0; i < 2; i++) digits += Math.floor(Math.random() * 10);
     let tail = '';
     for (let i = 0; i < 2; i++) tail += Math.floor(Math.random() * 10);
     return prefix + digits + '****' + tail;
