@@ -106,13 +106,6 @@
     number.className = 'activity-notification-number';
     number.textContent = randomPhone(operator);
 
-    const demo = document.createElement('span');
-    demo.className = 'activity-notification-demo';
-    demo.textContent = 'DEMO';
-
-    numberRow.append(number, demo);
-    side.append(logo, numberRow);
-
     /* ডান পাশ: মেসেজ + টাকা */
     const content = document.createElement('span');
     content.className = 'activity-notification-content';
