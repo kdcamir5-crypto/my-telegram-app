@@ -105,7 +105,8 @@
     const number = document.createElement('span');
     number.className = 'activity-notification-number';
     number.textContent = randomPhone(operator);
-
+    numberRow.append(number);
+    side.append(logo, numberRow);
     /* ডান পাশ: মেসেজ + টাকা */
     const content = document.createElement('span');
     content.className = 'activity-notification-content';
