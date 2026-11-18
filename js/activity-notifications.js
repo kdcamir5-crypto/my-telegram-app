@@ -9,14 +9,18 @@
   style.textContent = `
   #activity-notification-host {
     position: fixed !important;
-    left: 10px !important;
-    right: 10px !important;
-    bottom: 78px !important;
+    left: 0 !important;
+    right: 0 !important;
+    /* সাপোর্ট বাটনের ওপরে রাখার জন্য। দরকার হলে এই মান বাড়ান/কমান */
+    bottom: calc(175px + env(safe-area-inset-bottom, 0px)) !important;
     top: auto !important;
     z-index: 99999 !important;
     display: flex !important;
     flex-direction: column !important;
-    align-items: stretch !important;
+    align-items: flex-start !important;
+    padding: 0 10px !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
     pointer-events: none !important;
   }
   #activity-notification-host .activity-notification {
@@ -25,44 +29,43 @@
     align-items: center !important;
     gap: 10px !important;
     width: 100% !important;
-    max-width: 420px !important;
-    margin: 0 auto !important;
+    max-width: 400px !important;
     box-sizing: border-box !important;
     padding: 8px 10px !important;
     background: #f0fdf8 !important;
-    border: 1.5px solid #34d399 !important;
+    border: 1px solid #6ee7b7 !important;
     border-radius: 14px !important;
     box-shadow: 0 6px 18px rgba(16, 185, 129, 0.22) !important;
     opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.22s ease, transform 0.22s ease;
+    transform: translateX(-120%);
+    transition: transform 0.4s cubic-bezier(0.22, 0.9, 0.3, 1), opacity 0.4s ease;
   }
   #activity-notification-host .activity-notification.is-visible {
     opacity: 1 !important;
-    transform: translateY(0) !important;
+    transform: translateX(0) !important;
   }
   #activity-notification-host .activity-notification.is-leaving {
     opacity: 0 !important;
-    transform: translateY(16px) !important;
+    transform: translateX(120%) !important;
   }
   #activity-notification-host .activity-notification-side {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
+    gap: 4px;
     flex: 0 0 auto;
-    min-width: 84px;
+    min-width: 90px;
   }
   #activity-notification-host .activity-notification-logo {
     display: block !important;
     width: auto !important;
-    height: 24px !important;
-    max-width: 64px !important;
+    height: 28px !important;
+    max-width: 72px !important;
     object-fit: contain !important;
     background: #ffffff;
     border-radius: 6px;
-    padding: 2px 4px;
+    padding: 2px 5px;
     box-sizing: content-box;
   }
   #activity-notification-host .activity-notification-number-row {
@@ -158,14 +161,14 @@
     }
   ];
 
-  const batchPauses = [60000, 300000, 300000];
+  /* ৫টা নোটিফিকেশন (৫ সেকেন্ড পর পর), তারপর ১ মিনিট বন্ধ, এভাবেই চলবে */
   const batchSize = 5;
-  const interval = 5000;
-  const displayTime = 4780;
-  const exitTime = 220;
+  const interval = 5000;       // এক নোটিফিকেশন শুরু থেকে পরেরটা শুরু
+  const pauseAfterBatch = 60000; // ১ মিনিট বিরতি
+  const exitTime = 400;        // বেরিয়ে যাওয়ার অ্যানিমেশন
+  const displayTime = interval - exitTime; // স্ক্রিনে থাকার সময়
   const digits = new Intl.NumberFormat('bn-BD', { maximumFractionDigits: 0 });
 
-  let batchIndex = 0;
   let notificationsInBatch = 0;
   let active = false;
   let timer = null;
@@ -190,14 +193,11 @@
 
   function scheduleNext() {
     if (notificationsInBatch < batchSize) {
-      schedule(interval, showNotification);
+      schedule(0, showNotification);
       return;
     }
-
     notificationsInBatch = 0;
-    const pause = batchPauses[batchIndex];
-    batchIndex = (batchIndex + 1) % batchPauses.length;
-    schedule(pause, showNotification);
+    schedule(pauseAfterBatch, showNotification);
   }
 
   function showNotification() {
@@ -211,7 +211,7 @@
     card.setAttribute('role', 'status');
     card.setAttribute('aria-label', 'Demo notification');
 
-    /* left column: logo + number */
+    /* বাঁ পাশ: লোগো + নম্বর */
     const side = document.createElement('span');
     side.className = 'activity-notification-side';
 
@@ -237,7 +237,7 @@
     numberRow.append(number, demo);
     side.append(logo, numberRow);
 
-    /* right column: message + amount */
+    /* ডান পাশ: মেসেজ + টাকা */
     const content = document.createElement('span');
     content.className = 'activity-notification-content';
 
