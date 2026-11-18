@@ -38,11 +38,10 @@
   ];
 
   /* ৫টা নোটিফিকেশন (৫ সেকেন্ড পর পর), তারপর ১ মিনিট বন্ধ, এভাবেই চলবে */
-  const batchSize = 5;
-  const interval = 5000;       // এক নোটিফিকেশন শুরু থেকে পরেরটা শুরু
-  const pauseAfterBatch = 60000; // ১ মিনিট বিরতি
-  const exitTime = 400;        // বেরিয়ে যাওয়ার অ্যানিমেশন
-  const displayTime = interval - exitTime; // স্ক্রিনে থাকার সময়
+  const batchSize = 6;          // প্রতি মিনিটে কয়টা
+const windowTime = 60000;     // ১ মিনিট
+const exitTime = 400;
+const displayTime = 4000;     // স্ক্রিনে কতক্ষণ থাকবে
   const digits = new Intl.NumberFormat('bn-BD', { maximumFractionDigits: 0 });
 
   let notificationsInBatch = 0;
@@ -67,15 +66,15 @@
     timer = setTimeout(callback, delay);
   }
 
-  function scheduleNext() {
-    if (notificationsInBatch < batchSize) {
-      schedule(0, showNotification);
-      return;
-    }
-    notificationsInBatch = 0;
-    schedule(pauseAfterBatch, showNotification);
-  }
+  function scheduleNext() {}
 
+function startMinute() {
+  const slot = windowTime / batchSize;
+  const maxStart = slot - displayTime - exitTime;
+  for (let i = 0; i < batchSize; i++) {
+    setTimeout(showNotification, i * slot + Math.random() * maxStart);
+  }
+}
   function showNotification() {
     if (active) return;
     active = true;
@@ -156,5 +155,6 @@
     timer = setTimeout(dismiss, displayTime);
   }
 
-  schedule(5000, showNotification);
+  startMinute();
+setInterval(startMinute, windowTime);
 })();
