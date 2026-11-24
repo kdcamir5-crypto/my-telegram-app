@@ -33,6 +33,7 @@
 <link rel="stylesheet" href="css/rank.css?v=1">
 <link rel="stylesheet" href="css/gate.css?v=5">
   <link rel="stylesheet" href="css/activity-notifications.css?v=4">
+  <link rel="stylesheet" href="css/sponsor.css?v=1">
 </head>
 <body>
 
@@ -250,55 +251,12 @@
       </div>
 
       <div class="tcard-heading">
-        <span><i class="fa-solid fa-fire" style="color:#fbbf24"></i> New Task (নতুন টাস্ক)</span>
-        <span class="tcard-heading-note">প্রতি টাস্কে ৫ টাকা • একবারই</span>
+        <span><i class="fa-solid fa-handshake" style="color:#fbbf24"></i> Sponsorship</span>
+        <span class="tcard-heading-note">প্রতিটি টাস্ক একবারই • Join → Verify → Claim</span>
       </div>
 
-      <div id="newTaskList" class="tcard-list">
-        <div class="tcard" id="taskCard-1">
-          <div class="tcard-icon tc-red"><i class="fa-brands fa-youtube"></i></div>
-          <div class="tcard-info">
-            <span class="tcard-name">YouTube Subscribe</span>
-            <span class="tcard-reward">৳5.00</span>
-          </div>
-          <button class="tcard-btn" id="taskBtn-1" onclick="performNewTask(1, 'https://youtube.com', 'YouTube Subscribe')">শুরু করুন</button>
-        </div>
-
-        <div class="tcard" id="taskCard-2">
-          <div class="tcard-icon tc-sky"><i class="fa-brands fa-telegram"></i></div>
-          <div class="tcard-info">
-            <span class="tcard-name">Telegram Channel Join</span>
-            <span class="tcard-reward">৳5.00</span>
-          </div>
-          <button class="tcard-btn" id="taskBtn-2" onclick="performNewTask(2, 'https://t.me/bechelor_point_season', 'Telegram Channel Join')">শুরু করুন</button>
-        </div>
-
-        <div class="tcard" id="taskCard-3">
-          <div class="tcard-icon tc-blue"><i class="fa-brands fa-facebook"></i></div>
-          <div class="tcard-info">
-            <span class="tcard-name">Facebook Page Follow</span>
-            <span class="tcard-reward">৳5.00</span>
-          </div>
-          <button class="tcard-btn" id="taskBtn-3" onclick="performNewTask(3, 'https://facebook.com', 'Facebook Page Follow')">শুরু করুন</button>
-        </div>
-
-        <div class="tcard" id="taskCard-4">
-          <div class="tcard-icon tc-purple"><i class="fa-solid fa-play"></i></div>
-          <div class="tcard-info">
-            <span class="tcard-name">Video দেখুন (২ মিনিট)</span>
-            <span class="tcard-reward">৳5.00</span>
-          </div>
-          <button class="tcard-btn" id="taskBtn-4" onclick="performNewTask(4, 'https://youtube.com', 'Video দেখুন (২ মিনিট)')">শুরু করুন</button>
-        </div>
-
-        <div class="tcard" id="taskCard-5">
-          <div class="tcard-icon tc-amber"><i class="fa-solid fa-share-nodes"></i></div>
-          <div class="tcard-info">
-            <span class="tcard-name">Like, Share &amp; Follow</span>
-            <span class="tcard-reward">৳5.00</span>
-          </div>
-          <button class="tcard-btn" id="taskBtn-5" onclick="performNewTask(5, 'https://t.me/bechelor_point_season', 'Like, Share &amp; Follow')">শুরু করুন</button>
-        </div>
+      <div id="sponsorList" class="tcard-list">
+        <div class="sp-empty">লোড হচ্ছে...</div>
       </div>
       </div>
     </section>
@@ -864,7 +822,7 @@
   <script src="js/ui.js?v=5"></script>
   <script src="js/ads.js?v=9"></script>
 <script src="js/wheel.js?v=3"></script>
-  <script src="js/tasks.js?v=4"></script>
+  <script src="js/sponsor.js?v=1"></script>
   <script src="js/withdraw.js?v=3"></script>
   <script src="js/profile.js?v=2"></script>
   <script src="js/utils.js?v=2"></script>
