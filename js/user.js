@@ -144,9 +144,8 @@
         }
       });
 
-      // Task link listener ekhon just 1 bar bind kora hocche (age proti user-update-e
-      // notun listener jomto, jeta memory leak ebong onclick re-set korto)
-      syncTaskLinksFromFirebase();
+      // Sponsorship টাস্ক (অ্যাডমিন প্যানেল থেকে যোগ হয়) — ডুপ্লিকেট listener জমে না
+      initSponsorships();
 
      // Listen for rolling notice updates from Firebase
 db.ref('notices/rolling').on('value', (snap) => {

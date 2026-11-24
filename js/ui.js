@@ -34,7 +34,6 @@
         document.getElementById('rollingNoticeText').textContent = "আজকের সব বিজ্ঞাপন দেখা সম্পূর্ণ হয়েছে। আগামী কাল আবার চেষ্টা করুন।";
       }
       renderAdHero();
-      renderNewTaskStatus();
       if (typeof renderWheel === 'function') renderWheel();
       if (typeof syncLeaderboardEntry === 'function') syncLeaderboardEntry();
 
