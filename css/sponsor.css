@@ -1,11 +1,249 @@
-/* Sponsorship টাস্ক কার্ড (বেস স্টাইল style.css-এর tcard-*) */
-.sp-count { font-size: 12.5px; font-weight: 800; color: #64748b; }
-.sp-bar { height: 6px; border-radius: 99px; background: #e5eaf0; overflow: hidden; margin-top: 5px; }
-.sp-bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #229ed9, #2f9e6a); transition: width 0.4s ease; }
+/* =====================================================================
+   হেডারের ডানদিক: উপরে ট্রফি (র‍্যাঙ্ক), নিচে ব্যালেন্স
+   ===================================================================== */
+.top-header .user-chip { min-width: 0; flex: 1 1 auto; margin-right: 10px; }
+.top-header .user-info-text { min-width: 0; }
+.top-header .user-name-row { min-width: 0; }
+.top-header .user-name-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex: 0 0 auto; }
+.header-rank-btn {
+  width: 36px; height: 36px; padding: 0; border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; color: #7a4a00;
+  background: linear-gradient(135deg, #fde68a, #f59e0b);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.28), 0 3px 10px rgba(0, 0, 0, 0.35);
+}
+.header-rank-btn:active { transform: scale(0.92); }
+.top-header .header-balance-chip { padding: 4px 11px; gap: 6px; }
+.top-header .header-balance-chip .balance-amount { font-size: 14px; }
+
+/* পেজের উপরের স্টিকি বার হেডারের ঠিক নিচে আটকাবে (উচ্চতা JS মাপে) */
+.page-nav-header { top: var(--hdr-h, 65px); }
+
+
+/* =====================================================================
+   SPONSORSHIP পেজ (নিওন ডার্ক থিম)
+   ===================================================================== */
+#view-sponsor {
+  background: radial-gradient(120% 55% at 50% 0%, #15246f 0%, #0a1236 48%, #070c24 100%);
+  min-height: calc(100vh - 90px);
+  color: #e8eeff;
+}
+#view-sponsor .page-nav-header { background: rgba(9, 14, 40, 0.94); border-bottom: 1px solid rgba(110, 140, 255, 0.2); }
+
+.sp-page { padding: 14px 14px 28px; display: flex; flex-direction: column; gap: 14px; }
+
+/* ট্যাব */
+.sp-tabs {
+  display: flex; gap: 4px; padding: 4px;
+  background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(110, 140, 255, 0.22); border-radius: 14px;
+}
+.sp-tab {
+  flex: 1; border: 0; background: transparent; color: #9fb0e6; cursor: pointer;
+  font: inherit; font-weight: 700; font-size: 13px; line-height: 1.2;
+  padding: 10px 4px; border-radius: 11px; white-space: nowrap;
+}
+.sp-tab.active { background: linear-gradient(135deg, #7a45ff, #4a2bd6); color: #fff; box-shadow: 0 4px 14px rgba(99, 61, 240, 0.5); }
+
+.sp-pane { display: none; flex-direction: column; gap: 14px; }
+.sp-pane.active { display: flex; }
+
+/* ব্যানার */
+.sp-hero {
+  position: relative; overflow: hidden; display: flex; align-items: center; gap: 14px;
+  padding: 18px 16px; border-radius: 18px;
+  background: linear-gradient(120deg, #0f2a86, #1a1160 62%, #2a1070);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+}
+.sp-hero::after {
+  content: ''; position: absolute; left: -20%; right: -20%; bottom: -45%; height: 75%;
+  background: radial-gradient(60% 100% at 50% 100%, rgba(251, 191, 36, 0.38), transparent 70%); pointer-events: none;
+}
+.sp-hero-ic { font-size: 46px; color: #fbbf24; filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.65)); position: relative; z-index: 1; }
+.sp-hero > div:last-child { position: relative; z-index: 1; }
+.sp-hero h2 {
+  margin: 0; font-size: 25px; font-weight: 800; line-height: 1.15;
+  background: linear-gradient(90deg, #ffe08a, #ffb300); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.sp-hero p { margin: 3px 0 0; font-size: 13px; color: #cfd9ff; font-weight: 600; }
+
+/* তিন সংখ্যা */
+.sp-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr); padding: 12px 4px;
+  background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(110, 140, 255, 0.22); border-radius: 16px;
+}
+.sp-stat { position: relative; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.sp-stat + .sp-stat::before { content: ''; position: absolute; left: 0; top: 8%; height: 84%; width: 1px; background: rgba(110, 140, 255, 0.22); }
+.sp-stat i { font-size: 20px; }
+.sp-stat b { font-size: 24px; font-weight: 800; color: #fff; line-height: 1.2; }
+.sp-stat span { font-size: 12px; color: #9fb0e6; font-weight: 600; }
+
+/* সেকশন হেডিং */
+.sp-sec-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.sp-sec-title { font-size: 16.5px; font-weight: 800; color: #fff; padding-left: 10px; border-left: 4px solid #3b82f6; line-height: 1.2; }
+.sp-chip {
+  font-size: 12px; font-weight: 700; color: #5ee7ff; white-space: nowrap;
+  border: 1px solid rgba(94, 231, 255, 0.5); background: rgba(94, 231, 255, 0.08); padding: 4px 11px; border-radius: 99px;
+}
+
+/* টাস্ক কার্ড */
+.sp-list { display: flex; flex-direction: column; gap: 10px; }
+.sp-card {
+  display: flex; align-items: center; gap: 11px; padding: 12px; border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(110, 140, 255, 0.22);
+}
+.sp-card.is-claim { border-color: rgba(251, 191, 36, 0.6); box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.14), 0 6px 18px rgba(251, 191, 36, 0.12); }
+.sp-card.is-done { opacity: 0.62; }
+.sp-ic {
+  width: 46px; height: 46px; flex: 0 0 auto; border-radius: 50%; color: #fff; font-size: 25px;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #38bdf8, #1d7be8); box-shadow: 0 4px 12px rgba(29, 123, 232, 0.5);
+}
+.sp-info { flex: 1; min-width: 0; }
+.sp-name { display: block; font-size: 14.5px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sp-reward { display: block; margin-top: 1px; font-size: 13.5px; font-weight: 800; color: #34f08b; }
+.sp-prog { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.sp-track { flex: 1; height: 6px; border-radius: 99px; background: rgba(255, 255, 255, 0.12); overflow: hidden; }
+.sp-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #22d3ee, #34f08b); transition: width 0.4s ease; }
+.sp-num { font-size: 11.5px; font-weight: 700; color: #9fb0e6; white-space: nowrap; }
+
 .sp-actions { flex: 0 0 auto; display: flex; flex-direction: column; gap: 6px; }
-.sp-actions .tcard-btn { font-size: 13px; padding: 9px 12px; min-width: 88px; }
-.tcard-btn.sp-btn-join { background: linear-gradient(135deg, #3a9bd0, #229ed9); }
-.tcard-btn.sp-btn-claim { background: linear-gradient(135deg, #f59e0b, #d97706); font-size: 14px; padding: 12px 14px; }
-.sp-actions .tcard-btn:disabled { background: #7b8a95; }
-.sp-actions .tcard-btn-done:disabled { background: #d8f3e7; }
-.sp-empty { background: #fff; color: #475569; border-radius: 16px; padding: 18px; text-align: center; font-size: 14px; font-weight: 700; }
+.sp-btn {
+  border: 0; border-radius: 11px; font: inherit; font-weight: 800; font-size: 13.5px; line-height: 1.2;
+  padding: 10px 14px; min-width: 88px; color: #fff; cursor: pointer;
+}
+.sp-btn.join { background: linear-gradient(135deg, #2f8bff, #1456e8); box-shadow: 0 4px 14px rgba(47, 139, 255, 0.42); }
+.sp-btn.verify { background: transparent; border: 1px solid rgba(130, 160, 255, 0.55); color: #c4d4ff; padding: 7px 12px; font-size: 12px; }
+.sp-btn.claim { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #3b2a00; box-shadow: 0 4px 14px rgba(251, 191, 36, 0.45); }
+.sp-btn.done { background: rgba(52, 240, 139, 0.12); color: #34f08b; border: 1px solid rgba(52, 240, 139, 0.32); }
+.sp-btn:disabled { opacity: 0.65; cursor: default; }
+
+.sp-empty {
+  padding: 22px 14px; text-align: center; font-size: 14px; font-weight: 700; color: #9fb0e6; line-height: 1.5;
+  background: rgba(255, 255, 255, 0.04); border: 1px dashed rgba(110, 140, 255, 0.3); border-radius: 16px;
+}
+.sp-empty .sp-btn { margin-top: 12px; }
+.sp-note { margin: 0; font-size: 12.5px; line-height: 1.5; color: #9fb0e6; font-weight: 600; }
+.sp-note i { color: #5ee7ff; margin-right: 4px; }
+
+/* প্রমোট ব্যানার + প্ল্যান */
+.sp-promo {
+  display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 18px;
+  background: linear-gradient(120deg, #11307f, #2a1275); border: 1px solid rgba(251, 191, 36, 0.4);
+}
+.sp-promo-ic { font-size: 46px; color: #fbbf24; filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.6)); }
+.sp-promo h2 { margin: 0; font-size: 19px; font-weight: 800; color: #fff; line-height: 1.25; }
+.sp-promo p { margin: 3px 0 0; font-size: 12.5px; color: #cfd9ff; font-weight: 600; }
+
+.sp-plans { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.sp-plan {
+  position: relative; text-align: center; padding: 16px 10px 12px; border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(110, 140, 255, 0.28);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.sp-plan.growth { border: 2px solid #22c55e; box-shadow: 0 0 20px rgba(34, 197, 94, 0.3); }
+.sp-plan.pro { border-color: rgba(168, 85, 247, 0.65); background: linear-gradient(180deg, rgba(124, 58, 237, 0.2), rgba(255, 255, 255, 0.03)); }
+.sp-plan.vip { border-color: rgba(251, 191, 36, 0.75); background: linear-gradient(180deg, rgba(251, 191, 36, 0.16), rgba(255, 255, 255, 0.03)); }
+.sp-pop {
+  position: absolute; top: -1px; right: -1px; padding: 3px 9px; font-size: 10.5px; font-weight: 800; color: #fff;
+  background: linear-gradient(135deg, #fb923c, #f97316); border-radius: 0 14px 0 10px;
+}
+.sp-plan h3 { margin: 0; font-size: 17px; font-weight: 800; color: #fff; }
+.sp-plan.vip h3 i { color: #fbbf24; margin-right: 4px; }
+.sp-price { font-size: 27px; font-weight: 800; color: #ffd24a; line-height: 1.1; }
+.sp-feat { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #d6e0ff; line-height: 1.3; text-align: left; }
+.sp-feat i { color: #34f08b; font-size: 12px; }
+.sp-feat.big { font-size: 15px; font-weight: 800; color: #fff; }
+.sp-plan .sp-btn { width: 100%; margin-top: 4px; min-width: 0; padding: 11px 8px; }
+.sp-btn.buy-blue { background: linear-gradient(135deg, #2f8bff, #1456e8); }
+.sp-btn.buy-green { background: linear-gradient(135deg, #34d878, #16a34a); }
+.sp-btn.buy-purple { background: linear-gradient(135deg, #a855f7, #6d28d9); }
+.sp-btn.buy-gold { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #3b2a00; }
+
+/* আমার স্পনসরশিপ */
+.sp-order {
+  display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 16px; margin-bottom: 10px;
+  background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(110, 140, 255, 0.24);
+}
+.sp-order.is-active { border-color: rgba(52, 240, 139, 0.55); background: linear-gradient(135deg, rgba(34, 197, 94, 0.22), rgba(255, 255, 255, 0.04)); }
+.sp-order.is-rejected { border-color: rgba(244, 63, 94, 0.45); }
+.sp-order-top { display: flex; align-items: center; gap: 10px; }
+.sp-order-crown { font-size: 27px; color: #fbbf24; }
+.sp-order-title { flex: 1; min-width: 0; font-size: 16px; font-weight: 800; color: #fff; }
+.sp-order-title small { display: block; font-size: 12px; font-weight: 600; color: #9fb0e6; }
+.sp-status { font-size: 11.5px; font-weight: 800; padding: 3px 11px; border-radius: 99px; border: 1px solid; white-space: nowrap; }
+.sp-status.pending { color: #fbbf24; border-color: rgba(251, 191, 36, 0.6); background: rgba(251, 191, 36, 0.1); }
+.sp-status.active { color: #34f08b; border-color: rgba(52, 240, 139, 0.6); background: rgba(52, 240, 139, 0.1); }
+.sp-status.done { color: #7aa7ff; border-color: rgba(122, 167, 255, 0.6); background: rgba(122, 167, 255, 0.1); }
+.sp-status.paused, .sp-status.rejected { color: #fb7185; border-color: rgba(251, 113, 133, 0.6); background: rgba(251, 113, 133, 0.1); }
+.sp-order-meta { font-size: 12px; color: #9fb0e6; font-weight: 600; word-break: break-all; line-height: 1.5; }
+.sp-order-note { font-size: 12.5px; color: #fecdd3; font-weight: 600; line-height: 1.5; background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 10px; padding: 8px 10px; }
+.sp-order .sp-btn { width: 100%; }
+
+/* কেনার শিট */
+.sp-sheet-overlay { position: fixed; inset: 0; z-index: 1200; display: none; align-items: flex-end; justify-content: center; background: rgba(3, 6, 20, 0.74); }
+.sp-sheet-overlay.open { display: flex; }
+.sp-sheet {
+  width: 100%; max-width: 480px; max-height: 92vh; overflow-y: auto; color: #e8eeff;
+  padding: 18px 16px calc(22px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(180deg, #121c52, #0a1236); border: 1px solid rgba(110, 140, 255, 0.32); border-bottom: 0;
+  border-radius: 22px 22px 0 0; animation: spUp 0.22s ease-out;
+}
+@keyframes spUp { from { transform: translateY(36px); opacity: 0; } to { transform: none; opacity: 1; } }
+.sp-sheet-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.sp-sheet-head .crown { font-size: 30px; color: #fbbf24; }
+.sp-sheet-head h3 { margin: 0; font-size: 19px; font-weight: 800; color: #fff; line-height: 1.2; }
+.sp-sheet-head h3 small { display: block; font-size: 12.5px; font-weight: 600; color: #9fb0e6; }
+.sp-sheet-head .price { margin-left: auto; font-size: 25px; font-weight: 800; color: #ffd24a; }
+.sp-x { border: 0; background: rgba(255, 255, 255, 0.08); color: #cfd9ff; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 14px; flex: 0 0 auto; }
+
+.sp-warn {
+  display: flex; gap: 9px; align-items: flex-start; padding: 10px 12px; margin-bottom: 12px; border-radius: 12px;
+  background: rgba(244, 63, 94, 0.14); border: 1px solid rgba(244, 63, 94, 0.55); color: #ffd3da; font-size: 13px; font-weight: 700; line-height: 1.45;
+}
+.sp-warn i { color: #fb7185; margin-top: 2px; }
+.sp-warn b { color: #fff; }
+
+.sp-pay { display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin-bottom: 8px; border-radius: 13px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(110, 140, 255, 0.25); }
+.sp-pay-badge { flex: 0 0 auto; min-width: 58px; text-align: center; padding: 7px 9px; border-radius: 10px; font-size: 13px; font-weight: 800; color: #fff; letter-spacing: 0.2px; }
+.sp-pay-badge.bkash { background: #e2136e; }
+.sp-pay-badge.nagad { background: linear-gradient(135deg, #f7941d, #ed1c24); }
+.sp-pay-num { flex: 1; font-size: 17px; font-weight: 800; color: #fff; letter-spacing: 0.5px; font-variant-numeric: tabular-nums; }
+.sp-pay-type { display: block; font-size: 11px; font-weight: 600; color: #9fb0e6; letter-spacing: 0; }
+.sp-copy { border: 1px solid rgba(130, 160, 255, 0.5); background: transparent; color: #c4d4ff; font: inherit; font-size: 12px; font-weight: 700; padding: 7px 11px; border-radius: 9px; cursor: pointer; }
+.sp-amount { margin: 4px 0 14px; text-align: center; font-size: 13.5px; font-weight: 700; color: #cfd9ff; }
+.sp-amount b { color: #ffd24a; font-size: 18px; }
+
+.sp-field { margin-bottom: 11px; }
+.sp-field label { display: block; margin-bottom: 5px; font-size: 12.5px; font-weight: 700; color: #bcd0ff; }
+.sp-field input {
+  width: 100%; box-sizing: border-box; padding: 12px 13px; font: inherit; font-size: 14.5px; font-weight: 600; color: #fff;
+  background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(110, 140, 255, 0.35); border-radius: 12px; outline: none;
+}
+.sp-field input:focus { border-color: #4f8bff; box-shadow: 0 0 0 3px rgba(79, 139, 255, 0.25); }
+.sp-field input::placeholder { color: #6f80b4; font-weight: 500; }
+.sp-hint { margin: 3px 0 0; font-size: 11.5px; color: #8d9bc4; font-weight: 600; line-height: 1.45; }
+.sp-botnote { display: flex; gap: 9px; padding: 10px 12px; margin: 4px 0 14px; border-radius: 12px; background: rgba(94, 231, 255, 0.08); border: 1px solid rgba(94, 231, 255, 0.35); color: #cdf6ff; font-size: 12.5px; font-weight: 600; line-height: 1.5; }
+.sp-botnote i { color: #5ee7ff; margin-top: 2px; }
+.sp-submit {
+  width: 100%; border: 0; border-radius: 14px; padding: 14px; font: inherit; font-size: 15.5px; font-weight: 800; color: #fff; cursor: pointer;
+  background: linear-gradient(135deg, #34d878, #16a34a); box-shadow: 0 6px 18px rgba(34, 197, 94, 0.4);
+}
+.sp-submit:disabled { opacity: 0.6; cursor: default; }
+
+.sp-success { text-align: center; padding: 8px 4px 2px; }
+.sp-success .ic { width: 78px; height: 78px; margin: 4px auto 12px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 34px; color: #3b2a00; background: linear-gradient(135deg, #fde68a, #f59e0b); box-shadow: 0 0 26px rgba(251, 191, 36, 0.5); }
+.sp-success h3 { margin: 0 0 6px; font-size: 20px; font-weight: 800; color: #fff; }
+.sp-success p { margin: 0 0 14px; font-size: 13.5px; line-height: 1.55; color: #cfd9ff; font-weight: 600; }
+.sp-success .box { text-align: left; margin-bottom: 16px; padding: 11px 13px; border-radius: 12px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(110, 140, 255, 0.25); font-size: 12.5px; color: #bcd0ff; font-weight: 600; line-height: 1.7; word-break: break-all; }
+
+/* পেমেন্ট মাধ্যম বাছাই (bKash / Nagad) */
+.sp-seg { display: flex; gap: 8px; }
+.sp-seg-btn {
+  flex: 1; padding: 10px 8px; border-radius: 11px; cursor: pointer; font: inherit; font-size: 14px; font-weight: 800;
+  background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(110, 140, 255, 0.35); color: #bcd0ff;
+}
+.sp-seg-btn.on { background: linear-gradient(135deg, #7a45ff, #4a2bd6); border-color: transparent; color: #fff; box-shadow: 0 4px 14px rgba(99, 61, 240, 0.45); }

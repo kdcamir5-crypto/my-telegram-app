@@ -33,7 +33,7 @@
 <link rel="stylesheet" href="css/rank.css?v=1">
 <link rel="stylesheet" href="css/gate.css?v=5">
   <link rel="stylesheet" href="css/activity-notifications.css?v=4">
-  <link rel="stylesheet" href="css/sponsor.css?v=1">
+  <link rel="stylesheet" href="css/sponsor.css?v=3">
 </head>
 <body>
 
@@ -58,9 +58,14 @@
         </div>
       </div>
 
-      <div class="header-balance-chip" onclick="switchView('wallet')">
-        <i class="fa-solid fa-coins coin-icon"></i>
-        <span class="balance-amount"><span class="taka-symbol">৳</span> <span id="headerBalance">30.00</span></span>
+      <div class="header-right">
+        <button type="button" class="header-rank-btn" onclick="switchView('rank')" aria-label="র‍্যাঙ্ক">
+          <i class="fa-solid fa-trophy"></i>
+        </button>
+        <div class="header-balance-chip" onclick="switchView('wallet')">
+          <i class="fa-solid fa-coins coin-icon"></i>
+          <span class="balance-amount"><span class="taka-symbol">৳</span> <span id="headerBalance">30.00</span></span>
+        </div>
       </div>
     </header>
 
@@ -248,15 +253,6 @@
         <div class="wheel-stats">বাকি স্পিন: <b id="wheelLeft">২/২</b> • মোট জিতেছেন: ৳<b id="wheelTotal">০</b></div>
         <div class="wheel-result" id="wheelResult"></div>
         <button class="wheel-btn is-wait" id="wheelBtn" onclick="startWheelSpin()" disabled>লোড হচ্ছে...</button>
-      </div>
-
-      <div class="tcard-heading">
-        <span><i class="fa-solid fa-handshake" style="color:#fbbf24"></i> Sponsorship</span>
-        <span class="tcard-heading-note">প্রতিটি টাস্ক একবারই • Join → Verify → Claim</span>
-      </div>
-
-      <div id="sponsorList" class="tcard-list">
-        <div class="sp-empty">লোড হচ্ছে...</div>
       </div>
       </div>
     </section>
@@ -560,6 +556,65 @@
       </div>
     </section>
 
+    <!-- VIEW: SPONSORSHIP (টাস্ক • প্রমোট করুন • আমার স্পনসরশিপ) -->
+    <section id="view-sponsor" class="view-content">
+      <div class="page-nav-header">
+        <button class="nav-back-btn" onclick="switchView('home')"><i class="fa-solid fa-arrow-left"></i></button>
+        <span class="nav-page-title"><i class="fa-solid fa-handshake" style="color:#fbbf24"></i> স্পনসরশিপ</span>
+        <div style="width:36px"></div>
+      </div>
+
+      <div class="sp-page">
+        <div class="sp-tabs">
+          <button type="button" class="sp-tab active" id="spTab-tasks" onclick="spShowTab('tasks')">টাস্ক</button>
+          <button type="button" class="sp-tab" id="spTab-promote" onclick="spShowTab('promote')">প্রমোট করুন</button>
+          <button type="button" class="sp-tab" id="spTab-mine" onclick="spShowTab('mine')">আমার স্পনসরশিপ</button>
+        </div>
+
+        <!-- ট্যাব ১: টাস্ক -->
+        <div class="sp-pane active" id="spPane-tasks">
+          <div class="sp-hero">
+            <div class="sp-hero-ic"><i class="fa-solid fa-handshake"></i></div>
+            <div>
+              <h2>Sponsorship Hub</h2>
+              <p>টাস্ক সম্পন্ন করুন, আয় করুন</p>
+            </div>
+          </div>
+
+          <div class="sp-stats">
+            <div class="sp-stat"><i class="fa-solid fa-rocket" style="color:#7aa7ff"></i><b id="spStatTodo">0</b><span>বাকি টাস্ক</span></div>
+            <div class="sp-stat"><i class="fa-solid fa-circle-check" style="color:#34f08b"></i><b id="spStatDone">0</b><span>সম্পন্ন</span></div>
+            <div class="sp-stat"><i class="fa-solid fa-clock" style="color:#fbbf24"></i><b id="spStatClaim">0</b><span>Claim বাকি</span></div>
+          </div>
+
+          <div class="sp-sec-head">
+            <span class="sp-sec-title">অ্যাক্টিভ স্পনসর টাস্ক</span>
+            <span class="sp-chip" id="spRemainChip">লোড হচ্ছে</span>
+          </div>
+          <div id="sponsorList" class="sp-list"><div class="sp-empty">লোড হচ্ছে...</div></div>
+          <p class="sp-note"><i class="fa-solid fa-circle-info"></i> জয়েন করার পর চ্যানেল/গ্রুপ ছাড়বেন না, নইলে Claim করা যাবে না।</p>
+        </div>
+
+        <!-- ট্যাব ২: প্রমোট করুন -->
+        <div class="sp-pane" id="spPane-promote">
+          <div class="sp-promo">
+            <div class="sp-promo-ic"><i class="fa-solid fa-gift"></i></div>
+            <div>
+              <h2>আপনার চ্যানেল প্রমোট করুন</h2>
+              <p>বেছে নিন আপনার জন্য সেরা স্পনসর প্ল্যান</p>
+            </div>
+          </div>
+          <div class="sp-plans" id="spPlans"></div>
+          <p class="sp-note"><i class="fa-solid fa-circle-info"></i> পেমেন্ট যাচাই হলে আপনার চ্যানেলের টাস্ক চালু হবে। প্রতিটি জয়েন আমাদের বট দিয়ে যাচাই করা হয়।</p>
+        </div>
+
+        <!-- ট্যাব ৩: আমার স্পনসরশিপ -->
+        <div class="sp-pane" id="spPane-mine">
+          <div id="spOrders"></div>
+        </div>
+      </div>
+    </section>
+
     <!-- VIEW 7: SUPPORT INTERFACE -->
     <section id="view-support" class="view-content">
       <div class="page-nav-header">
@@ -677,6 +732,11 @@
     </section>
 
     <!-- BOTTOM NAVIGATION BAR -->
+    <!-- SPONSOR PLAN PURCHASE SHEET -->
+    <div class="sp-sheet-overlay" id="spSheet" onclick="if(event.target===this)spCloseSheet()">
+      <div class="sp-sheet" id="spSheetBody"></div>
+    </div>
+
     <nav class="bottom-navbar">
       <div class="nav-item active" id="nav-home" onclick="switchView('home')">
         <i class="fa-solid fa-house"></i>
@@ -686,9 +746,9 @@
         <i class="fa-solid fa-rectangle-list"></i>
         <span>আয় করুন</span>
       </div>
-      <div class="nav-item" id="nav-rank" onclick="switchView('rank')">
-        <i class="fa-solid fa-trophy"></i>
-        <span>র‍্যাঙ্ক</span>
+      <div class="nav-item" id="nav-sponsor" onclick="switchView('sponsor')">
+        <i class="fa-solid fa-handshake"></i>
+        <span>স্পনসরশিপ</span>
       </div>
       <div class="nav-item" id="nav-wallet" onclick="switchView('wallet')">
         <i class="fa-solid fa-credit-card"></i>
@@ -822,7 +882,7 @@
   <script src="js/ui.js?v=5"></script>
   <script src="js/ads.js?v=9"></script>
 <script src="js/wheel.js?v=3"></script>
-  <script src="js/sponsor.js?v=1"></script>
+  <script src="js/sponsor.js?v=3"></script>
   <script src="js/withdraw.js?v=3"></script>
   <script src="js/profile.js?v=2"></script>
   <script src="js/utils.js?v=2"></script>
