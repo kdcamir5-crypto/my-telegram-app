@@ -72,49 +72,50 @@
     return;
   }
 
-      // Find user with referralCode in Firebase
-      db.ref('users').orderByChild('referralCode').equalTo(incomingRef).once('value').then(async (snap) => {
-        console.log("Referrer database-e khuje pawa geche kina (exists):", snap.exists());
-        if (snap.exists()) {
-          const matchedIds = [];
-          snap.forEach((child) => { matchedIds.push(child.key); });
+      // রেফারারকে খুঁজতে আর পুরো users নোড নামানো হয় না।
+      // referralCode = 'REF' + সংখ্যা, তাই সরাসরি users/USR-সংখ্যা/referralCode (ছোট একটা ফিল্ড) পড়া হয়।
+      const guessedId = 'USR-' + String(incomingRef).replace(/^REF/, '');
 
-          for (const referrerId of matchedIds) {
-            if (referrerId !== currentUserId) {
-              // transaction() byabohar kora hocche jate duijon referral eksathe
-              // complete hole kono bonus hariye na jay (race condition rokkha)
-              try {
-                const txResult = await db.ref('users/' + referrerId).transaction((data) => {
-                  if (data) {
-                    data.balance = (Number(data.balance) || 0) + 30;
-                    data.referralEarning = (Number(data.referralEarning) || 0) + 30;
-                    data.referrals = (Number(data.referrals) || 0) + 1;
-                  }
-                  return data;
-                });
-                if (txResult.committed) {
-                  console.log(`Referral reward of 30 TK credited to ${referrerId}`);
-                  try {
-                    const rv = txResult.snapshot.val() || {};
-                    db.ref('leaderboard/' + referrerId).set({
-                      userId: referrerId,
-                      name: String(rv.name || 'User').slice(0, 30),
-                      referrals: Number(rv.referrals || 0),
-                      photo: rankAvatar(rv.profilePhoto, referrerId)
-                    });
-                  } catch (lbErr) { console.warn('leaderboard update failed', lbErr); }
-                }
-              } catch (txErr) {
-                console.error("Referral transaction error:", txErr);
-              }
+      db.ref('users/' + guessedId + '/referralCode').once('value').then((snap) => {
+        if (snap.val() === incomingRef) return [guessedId];
+        // পুরনো ফরম্যাটের কোড হলে ইনডেক্স-সহ কুয়েরি (Rules-এ indexOn: referralCode লাগবে), মাত্র ১টা রেজাল্ট
+        return db.ref('users').orderByChild('referralCode').equalTo(incomingRef).limitToFirst(1).once('value').then((q) => {
+          const ids = [];
+          q.forEach((child) => { ids.push(child.key); });
+          return ids;
+        });
+      }).then(async (matchedIds) => {
+        for (const referrerId of matchedIds) {
+          if (referrerId === currentUserId) continue;
+          try {
+            // পুরো নোড না নামিয়ে সার্ভারেই +যোগ করা হচ্ছে (increment)
+            await db.ref('users/' + referrerId).update({
+              balance: firebase.database.ServerValue.increment(30),
+              referralEarning: firebase.database.ServerValue.increment(30),
+              referrals: firebase.database.ServerValue.increment(1)
+            });
+            console.log(`Referral reward of 30 TK credited to ${referrerId}`);
 
-              // Log referral record
-              db.ref('users/' + referrerId + '/referralList/' + currentUserId).set({
-                referredUserId: currentUserId,
-                date: firebase.database.ServerValue.TIMESTAMP,
-                bonusAwarded: 30
+            // leaderboard-এর জন্য শুধু দরকারি দুটো ছোট ফিল্ড পড়া হয় (ছবি নয়)
+            try {
+              const [nameSnap, refSnap] = await Promise.all([
+                db.ref('users/' + referrerId + '/name').once('value'),
+                db.ref('users/' + referrerId + '/referrals').once('value')
+              ]);
+              await db.ref('leaderboard/' + referrerId).update({
+                userId: referrerId,
+                name: String(nameSnap.val() || 'User').slice(0, 30),
+                referrals: Number(refSnap.val() || 0)
               });
-            }
+            } catch (lbErr) { console.warn('leaderboard update failed', lbErr); }
+
+            await db.ref('users/' + referrerId + '/referralList/' + currentUserId).set({
+              referredUserId: currentUserId,
+              date: firebase.database.ServerValue.TIMESTAMP,
+              bonusAwarded: 30
+            });
+          } catch (err) {
+            console.error("Referral reward error:", err);
           }
         }
       }).catch(err => {

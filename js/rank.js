@@ -2,6 +2,8 @@
 const RANK_LIMIT = 50;
 let rankCache = [];
 let lastSyncedSig = '';
+let rankLoadedAt = 0;
+const RANK_CACHE_MS = 5 * 60 * 1000; // ৫ মিনিট ক্যাশ
 
 function rankBn(n) { return String(n).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]); }
 function rankMaskId(id) {
@@ -35,9 +37,14 @@ function syncLeaderboardEntry() {
   db.ref('leaderboard/' + currentUserId).set(entry).catch(() => { lastSyncedSig = ''; });
 }
 
-function loadLeaderboard() {
+function loadLeaderboard(force) {
   const list = document.getElementById('rankList');
   if (!list) return;
+  // ৫ মিনিটের মধ্যে আবার খুললে নতুন করে ডাউনলোড না করে আগেরটাই দেখায়
+  if (!force && rankCache.length && (Date.now() - rankLoadedAt) < RANK_CACHE_MS) {
+    renderPodium(); renderRankList(); loadMyRank();
+    return;
+  }
   list.replaceChildren(rkEl('div', 'rank-empty', 'লোড হচ্ছে...'));
 
   db.ref('leaderboard').orderByChild('referrals').limitToLast(RANK_LIMIT).once('value').then((snap) => {
@@ -45,6 +52,7 @@ function loadLeaderboard() {
     snap.forEach((c) => { const v = c.val(); if (v) arr.push(v); });
     arr.sort((a, b) => Number(b.referrals) - Number(a.referrals));
     rankCache = arr;
+    rankLoadedAt = Date.now();
     renderPodium();
     renderRankList();
   }).catch(() => {
@@ -59,8 +67,9 @@ function loadMyRank() {
   document.getElementById('rankMeName').textContent = currentUser.name || 'User';
   document.getElementById('rankMeSub').textContent = rankMaskId(currentUserId) + ' • ' + mine + ' রেফার';
   document.getElementById('rankMeImg').src = rankAvatar(currentUser.profilePhoto, currentUserId);
-  db.ref('leaderboard').orderByChild('referrals').startAt(mine + 1).once('value').then((s) => {
-    document.getElementById('rankMeBadge').textContent = '#' + (s.numChildren() + 1);
+  db.ref('leaderboard').orderByChild('referrals').startAt(mine + 1).limitToFirst(RANK_LIMIT + 1).once('value').then((s) => {
+    const above = s.numChildren();
+    document.getElementById('rankMeBadge').textContent = above > RANK_LIMIT ? '#' + RANK_LIMIT + '+' : '#' + (above + 1);
   }).catch(() => {});
 }
 

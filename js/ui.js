@@ -36,6 +36,7 @@
       renderAdHero();
       if (typeof renderWheel === 'function') renderWheel();
       if (typeof syncLeaderboardEntry === 'function') syncLeaderboardEntry();
+      if (typeof shrinkOldPhotoIfNeeded === 'function') shrinkOldPhotoIfNeeded();
 
       // Earning Page
       document.getElementById('earningTotalDisplay').textContent = totalIncome.toFixed(2);
